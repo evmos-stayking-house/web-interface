@@ -45,7 +45,7 @@ jobs:
           aws s3 cp \
             --recursive \
             --region ap-northeast-2 \
-           dist s3://hackathon-evmos-web
+           build s3://hackathon-evmos-web
 
      # - name: Cloudfront path invalidate # Invalidate Cloudfront
      #   uses: chetan/invalidate-cloudfront-action@master
