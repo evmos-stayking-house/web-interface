@@ -1,7 +1,7 @@
 FROM node:18-alpine
 
 # /app 디렉터리를 WORKDIR로 설정
-WORKDIR /app/web-client
+WORKDIR /app
 
 ENV NODE_OPTIONS="--max-old-space-size=8192"
 
