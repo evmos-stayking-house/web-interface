@@ -24,7 +24,7 @@ const useMetaMask = (setBalance: Function, changeAddress: Function) => {
       setAddress(address);
       changeAddress(address);
     } catch (err: any) {
-      console.log(err)
+      console.log('METAMASK ::: ', err)
       if (err.code) {
         alert(METAMASK_MESSAGE[METAMASK_CODE_NAME[err.code.toString()]]);
       } else {
@@ -35,9 +35,9 @@ const useMetaMask = (setBalance: Function, changeAddress: Function) => {
 
   function getBalance() {
     (async () => {
-      const tokenContract = getContract(Contracts.token);
-      const balance = await tokenContract.balanceOf(address)
-      setBalance(balance / Math.pow(10, 18));
+      // const tokenContract = getContract(Contracts.token);
+      // const balance = await tokenContract.balanceOf(address)
+      // setBalance(balance / Math.pow(10, 18));
     })()
   }
 

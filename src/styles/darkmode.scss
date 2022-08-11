@@ -1,7 +1,7 @@
 .body[data-theme="dark-mode"] {
-  --logo-bg-url: url("/img/logo/logo_bg_black.png");
   --background-color: #242424;
   --btn-color: #{$theme-mint};
+  --color: #{$theme-white};
   --bride-bg-color: #343434;
   --contrast-color: white;
   --contrast-color-20: #{rgba(white, 0.2)};
@@ -13,9 +13,9 @@
 }
 
 .body[data-theme="light-mode"] {
-  --logo-bg-url: url("/img/logo/logo_bg_white.png");
   --background-color: #{$theme-white};
   --btn-color: #{$theme-black};
+  --color: #{$theme-black};
   --bride-bg-color: white;
   --contrast-color: #{$theme-black};
   --contrast-color-20: #{rgba($theme-black, 0.2)};

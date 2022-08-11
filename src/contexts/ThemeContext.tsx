@@ -9,10 +9,9 @@ const defaultContext: IThemeContext = {
 const ThemeContext = React.createContext<IThemeContext>(defaultContext);
 
 export const ThemeContextProvider: React.FC<Props> = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
-  const toggleDarkMode = () => {
-  };
+  const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
   useEffect(() => {
     localStorage.setItem('isDarkMode', String(isDarkMode));

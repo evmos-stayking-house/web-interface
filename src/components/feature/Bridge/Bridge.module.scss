@@ -6,10 +6,17 @@
 
   .logoTextWrapper {
     margin-left: 10px;
+    padding-top: 10px;
+    vertical-align: top;
+  }
+
+  .logoText {
+    font-weight: bold;
+    font-size: x-large;
   }
 
   @include media(desktop) {
-    width: 720px;
+    width: 800px;
   }
 
   @include media(phone) {
