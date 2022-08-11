@@ -1,0 +1,86 @@
+@import "styles/colors.scss";
+
+$item-height: 48px;
+
+.listContainer {
+  position: relative;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+
+  ul & {
+    margin-top: -1px;
+  }
+
+  span {
+    color: var(--contrast-color);
+    font-size: 14px;
+
+    margin-left: 8px;
+  }
+}
+
+.trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  height: $item-height;
+  padding-left: 8px;
+
+  background-color: var(--theme-color);
+  border-radius: 8px;
+
+
+  &:hover {
+    background-color: var(--list-hover-color);
+    cursor: pointer;
+  }
+
+  .triggerText {
+    color: var(--contrast-color);
+    font-size: 14px;
+    opacity: 0.4;
+  }
+
+  .arrowDown {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+
+    $arrow-height: 9px;
+
+    width: 16px;
+    height: $arrow-height;
+    margin-top: -($arrow-height/2);
+  }
+}
+
+.listWrap {
+  position: absolute;
+  top: 0;
+
+  width: 100%;
+  max-height: 266px;
+  overflow-y: auto;
+
+  background-color: var(--default-color);
+  border: 1px solid $theme-mint;
+  border-radius: 8px;
+
+  z-index: 1;
+
+  li {
+    display: flex;
+    align-items: center;
+    height: $item-height;
+    padding-left: 12px;
+
+    &:hover {
+      background-color: var(--list-hover-color);
+      cursor: pointer;
+    }
+  }
+}

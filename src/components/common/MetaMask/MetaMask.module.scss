@@ -1,0 +1,44 @@
+@import "styles/colors.scss";
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 160px;
+  height: 100%;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  background-color: var(--btn-color);
+  border-radius: 16px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &.notConnected {
+    position: relative;
+    z-index: 11;
+  }
+}
+
+.dim {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  background-color: rgba(black, 0.7);
+
+  z-index: 10;
+}

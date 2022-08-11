@@ -1,0 +1,27 @@
+@import "styles/colors.scss";
+
+.btn {
+  padding: 18px;
+
+  background-color: var(--btn-color);
+  border: none;
+  border-radius: 24px;
+  color: var(--theme-color);
+  font-weight: 700;
+
+  &.full {
+    width: 100%;
+  }
+
+  &.disabled {
+    opacity: 0.2;
+
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

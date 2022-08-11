@@ -1,0 +1,120 @@
+import { ReactNode } from 'react';
+import Image from 'next/image';
+
+import Form from 'components/common/Form';
+import Dropdown from 'components/common/Dropdown';
+import { InputNumber } from 'components/common/Input';
+import Button from 'components/common/Button';
+import MetaMask from 'components/common/MetaMask';
+import Toggle from 'components/common/Toggle';
+import WalletConnect from 'components/common/WalletConnect';
+import SectionAddress from './SectionAddress';
+
+import s from './Bridge.module.scss';
+import useBridge from './Bridge.Service';
+
+interface chainItemType {
+  key: string;
+  item: ReactNode;
+}
+
+const Bridge = () => {
+  const {
+    chainList, tokenList, fee,
+    balance, setBalance,
+    address, setAddress,
+    amount, setAmount,
+    selectedChain, setSelectedChain,
+    selectedTargetChain, setSelectedTargetChain,
+    selectedToken, setSelectedToken,
+    actionBridge, renderModal
+  } = useBridge();
+
+  if (!chainList) return <div />
+
+  return (
+    <div className={s.container}>
+      <header>
+        <div>
+          <Image src="/img/logo/logo_icon.svg" alt="sooho" width={32} height={32}/>
+          <span className={s.logoTextWrapper}>
+            <Image src="/img/logo/logo_text_white.svg" alt="bridge" width={74} height={31}/>
+          </span>
+        </div>
+        <MetaMask changeBalance={setBalance} changeAddress={setAddress}/>
+      </header>
+
+      <div className={s.content}>
+        <Form>
+          <section className={s.contentChain}>
+            <Form.Item label="From Chain">
+              <Dropdown
+                placeholder="Choose Chain"
+                list={chainList!}
+                selectedId={selectedChain}
+                onChange={(el: chainItemType) => setSelectedChain(el.key)}
+              />
+            </Form.Item>
+            <Form.Item label="To Chain">
+              <Dropdown
+                placeholder="Choose Chain"
+                list={chainList!}
+                selectedId={selectedTargetChain}
+                onChange={(el: chainItemType) => setSelectedTargetChain(el.key)}
+              />
+            </Form.Item>
+          </section>
+
+          <section className={s.contentToken}>
+            <Form.Item label="Token">
+              {tokenList && (
+                <Dropdown
+                  placeholder="Choose Token"
+                  list={tokenList}
+                  selectedId={selectedToken?.key}
+                  onChange={setSelectedToken}
+                />
+              )}
+            </Form.Item>
+            <Form.Item
+              label="Amount"
+              className={s.amount}
+              extra={
+                <div>
+                  <p className={s.balance}>
+                    Balance <span className="bold">{balance}</span>
+                  </p>
+                  <p>
+                    Fee <span className="bold">{fee}</span>
+                  </p>
+                </div>
+              }
+            >
+              <InputNumber
+                decimal={6}
+                placeholder="0.000000"
+                setInputValue={setAmount}
+                max={balance}
+                inputValue={amount}
+                button={
+                  <div className={s.maxBtn} onClick={() => setAmount(balance)}>
+                    Max
+                  </div>
+                }
+              />
+            </Form.Item>
+          </section>
+
+          <SectionAddress address={address} setAddress={setAddress}/>
+          <Button full onClick={actionBridge}>BRIDGE TOKEN</Button>
+        </Form>
+        {renderModal()}
+      </div>
+      <Toggle/>
+
+      <WalletConnect/>
+    </div>
+  );
+};
+
+export default Bridge;

@@ -1,0 +1,25 @@
+.itemWrapper {
+  @include media(desktop) {
+    width: 272px;
+  }
+
+  @include media(phone) {
+    width: 100%;
+  }
+}
+
+.label {
+  margin-bottom: 8px;
+
+  color: var(--contrast-color);
+  font-size: 14px;
+  font-weight: 700;
+
+}
+
+.extra {
+  margin-top: 8px;
+
+  color: var(--contrast-color-70);
+  font-size: 12px;
+}

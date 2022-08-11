@@ -1,0 +1,27 @@
+.body[data-theme="dark-mode"] {
+  --logo-bg-url: url("/img/logo/logo_bg_black.png");
+  --background-color: #242424;
+  --btn-color: #{$theme-mint};
+  --bride-bg-color: #343434;
+  --contrast-color: white;
+  --contrast-color-20: #{rgba(white, 0.2)};
+  --contrast-color-40: #{rgba(white, 0.4)};
+  --contrast-color-70: #{rgba(white, 0.4)};
+  --theme-color: #{$theme-black};
+  --default-color: #{$theme-black};
+  --list-hover-color: #161616;;
+}
+
+.body[data-theme="light-mode"] {
+  --logo-bg-url: url("/img/logo/logo_bg_white.png");
+  --background-color: #{$theme-white};
+  --btn-color: #{$theme-black};
+  --bride-bg-color: white;
+  --contrast-color: #{$theme-black};
+  --contrast-color-20: #{rgba($theme-black, 0.2)};
+  --contrast-color-40: #{rgba($theme-black, 0.4)};
+  --contrast-color-70: #{rgba($theme-black, 0.4)};
+  --theme-color: #{$theme-white};
+  --default-color: white;
+  --list-hover-color: #161616;;
+}

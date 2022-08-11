@@ -1,0 +1,24 @@
+.inputWrapper {
+  position: relative;
+
+  input {
+    height: 48px;
+    width: 100%;
+    padding-left: 8px;
+
+    background-color: var(--theme-color);
+    border: none;
+    border-radius: 8px;
+    color: var(--contrast-color);
+  }
+
+  .deleteBtn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    cursor: pointer;
+  }
+}
