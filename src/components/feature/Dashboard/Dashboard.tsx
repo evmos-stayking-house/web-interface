@@ -12,13 +12,19 @@ const Dashboard = () => {
     <div className={s.container}>
       <header>
         <div>
-          <Image src="/img/logo/logo_icon.svg" alt="sooho.io" width={36} height={36}/>
+          <Image src="/img/logo/logo.png" alt="sooho.io" width={36} height={36}/>
           <span className={s.logoTextWrapper}>
               <span className={s.logoText}>Evmos StayKing House</span>
             </span>
         </div>
         <MetaMask changeBalance={setBalance} changeAddress={setAddress}/>
       </header>
+        <div className={s.content}>
+        </div>
+        <div className={s.content}>
+        </div>
+        <div className={s.content}>
+        </div>
     </div>
   );
 }

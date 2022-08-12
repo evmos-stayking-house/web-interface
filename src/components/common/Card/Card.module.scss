@@ -1,0 +1,27 @@
+.cardWrapper {
+  flex-direction: column;
+  color: var(--contrast-color);
+  border-radius: 5px;
+  display: inline-block;
+  background: #{$theme-white};
+  position: relative;
+  margin: 0 100px;
+  width: 300px;
+  height: auto;
+  overflow: hidden;
+  box-shadow: 0px 1px 3px #999;
+}
+
+.cardCover {
+  @include media(desktop) {
+    width: 272px;
+  }
+
+  @include media(phone) {
+    width: 100%;
+  }
+}
+
+.cardContent {
+  flex: 1;
+}

@@ -13,6 +13,7 @@
   .logoText {
     font-weight: bold;
     font-size: x-large;
+    color: #{$theme-white};
   }
 
   @include media(desktop) {
@@ -36,14 +37,13 @@
 
 }
 
-.contentChain {
+.grid {
   padding-bottom: 24px;
-
-  background: url("/img/wave.png") no-repeat center 0 / auto 90%;
   boder-bottom: 1px solid var(--contrast-color-20);
 
   @include media(desktop) {
     display: flex;
+    flex-display: row;
     align-content: center;
     justify-content: space-between;
     height: 264px;
