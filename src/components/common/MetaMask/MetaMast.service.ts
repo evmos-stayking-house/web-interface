@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { METAMASK_CODE_NAME, METAMASK_MESSAGE } from 'data/appInfo/message';
-import { getContract, getProvider } from 'config/contract';
+import { getContract, getProvider, switchEvmosChain } from 'config/contract';
 import { Contracts } from 'type/contract';
 
 const useMetaMask = (setBalance: Function, changeAddress: Function) => {
@@ -11,12 +11,16 @@ const useMetaMask = (setBalance: Function, changeAddress: Function) => {
   }, [address]);
 
   async function connectWallet() {
+
     if (address) {
-      alert('연결 해제하시겠습니까?');
+      if(confirm('연결 해제하시겠습니까?')){
+        setAddress('');
+      }
       return;
     }
 
     try {
+      await switchEvmosChain();
       const provider = getProvider();
       await provider.send('eth_requestAccounts', []);
       const address = await provider.getSigner().getAddress();

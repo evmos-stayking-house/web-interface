@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import Image from 'next/image';
 import { Input } from 'components/common/Input';
-import s from './Bridge.module.scss';
+import s from './Vault.module.scss';
 
 interface SectionAddressProps {
   address: string;

@@ -27,7 +27,7 @@ interface tokenItemType extends ListItemType {
   fee: number;
 }
 
-const useBridge = () => {
+const useVault = () => {
   const [chainList, setChainList] = useState<ListItemType[]>();
   const [tokenList, setTokenList] = useState<ListItemType[]>();
   const [balance, setBalance] = useState('0.0');
@@ -105,16 +105,16 @@ const useBridge = () => {
   }
 
   return {
-    chainList, tokenList, fee,
+    // chainList, tokenList, fee,
     balance, setBalance,
     address, setAddress,
-    amount, setAmount,
-    selectedChain, setSelectedChain,
-    selectedTargetChain, setSelectedTargetChain,
-    selectedToken, setSelectedToken,
+    // amount, setAmount,
+    // selectedChain, setSelectedChain,
+    // selectedTargetChain, setSelectedTargetChain,
+    // selectedToken, setSelectedToken,
     actionBridge,
-    renderModal
+    // renderModal
   }
 };
 
-export default useBridge;
+export default useVault;

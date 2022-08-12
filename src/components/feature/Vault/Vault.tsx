@@ -7,18 +7,17 @@ import { InputNumber } from 'components/common/Input';
 import Button from 'components/common/Button';
 import MetaMask from 'components/common/MetaMask';
 import Toggle from 'components/common/Toggle';
-import WalletConnect from 'components/common/WalletConnect';
 import SectionAddress from './SectionAddress';
 
-import s from './Bridge.module.scss';
-import useBridge from './Bridge.Service';
+import s from './Vault.module.scss';
+import useBridge from './Vault.Service';
 
 interface chainItemType {
   key: string;
   item: ReactNode;
 }
 
-const Bridge = () => {
+const Vault = () => {
   const {
     setBalance,
     setAddress,
@@ -104,9 +103,8 @@ const Bridge = () => {
       </div>
       <Toggle/>
 
-      <WalletConnect/>
     </div>
   );
 };
 
-export default Bridge;
+export default Vault;
