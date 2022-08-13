@@ -73,4 +73,76 @@
   }
 }
 
+.myInfoContainer {
+  display: flex;
+  flex-direction: column;
 
+  &__title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-left: 0;
+    color: #{$theme-white};
+  }
+
+  .balanceContainer {
+    display: flex;
+    flex-direction: row;
+
+    .balanceBox {
+      border-radius: 8px;
+      background-color: #343434;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 28px 0;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+
+      @include media(desktop) {
+        box-shadow: 0 2px 10px 0 hsla(0,0%,9%,.05);
+        padding-left: 32px;
+        padding-bottom: 25px;
+        padding-right: 36px;
+        flex: 1;
+        height: 134px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
+
+      &__left {
+        display: flex;
+        flex-direction: column;
+      }
+
+      &__right {
+
+      }
+
+      &__value {
+        @include media(desktop) {
+          font-size: 30px;
+          font-weight: 600;
+          line-height: 30px;
+        }
+      }
+
+      &__description {
+        font-size: 16px;
+        font-weight: 500;
+        color: #149c75;
+      }
+      &__image {
+        width: 64px;
+        height: 64px;
+      }
+    }
+
+  }
+
+}
+
+.rowDivider {
+  margin-left: 5px;
+  margin-right: 5px;
+}

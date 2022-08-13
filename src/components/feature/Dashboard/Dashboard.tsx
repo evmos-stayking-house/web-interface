@@ -21,6 +21,53 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <div className={s.myInfoContainer}>
+        <div className={s.myInfoContainer__title}>My Balance</div>
+        <div className={s.balanceContainer}>
+          {/*  balanceBox */}
+          <div className={s.balanceBox}>
+            <div className={s.balanceBox__left}>
+              <p className={s.balanceBox__value}>
+                300 EVMOS
+              </p>
+              <p className={s.balanceBox__description}>
+                ~ $ 600
+              </p>
+            </div>
+            <div className={s.balanceBox__right}>
+              <img className={s.balanceBox__image} src={'/img/common/icon-gt-balance.svg'} />
+            </div>
+          </div>
+          <span className={s.rowDivider} />
+          <div className={s.balanceBox}>
+            <div className={s.balanceBox__left}>
+              <p className={s.balanceBox__value}>
+                100 ibATOM
+              </p>
+              <p className={s.balanceBox__description}>
+                ~ 135 ATOM
+              </p>
+            </div>
+            <div className={s.balanceBox__right}>
+              <img className={s.balanceBox__image} src={'/img/common/icon-gt-balance.svg'} />
+            </div>
+          </div>
+          <span className={s.rowDivider} />
+          <div className={s.balanceBox}>
+            <div className={s.balanceBox__left}>
+              <p className={s.balanceBox__value}>
+                200 stEVMOS
+              </p>
+              <p className={s.balanceBox__description}>
+                ~ 310 EVMOS
+              </p>
+            </div>
+            <div className={s.balanceBox__right}>
+              <img className={s.balanceBox__image} src={'/img/common/icon-gt-balance.svg'} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
