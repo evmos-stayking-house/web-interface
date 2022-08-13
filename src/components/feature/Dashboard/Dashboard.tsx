@@ -1,30 +1,26 @@
-import Image from 'next/image';
-
-import MetaMask from '../../common/MetaMask';
 import s from './Dashboard.module.scss';
-import useDashboard from './Dashboard.Service';
-
 
 const Dashboard = () => {
-
-  const {setBalance, setAddress} = useDashboard();
   return (
     <div className={s.container}>
-      <header>
-        <div>
-          <Image src="/img/logo/logo.png" alt="sooho.io" width={36} height={36}/>
-          <span className={s.logoTextWrapper}>
-              <span className={s.logoText}>Evmos StayKing House</span>
-            </span>
+      <div className={s.tvlContainer}>
+        <div className={s.tvlBrief}>
+          <div className={s.tvlBrief__left}>
+            <p className={s.tvlBrief__title}>Total Value Locked</p>
+            <p className={s.tvlBrief__description}>
+              $ 105,122,779.73
+            </p>
+          </div>
+          <div className={s.tvlBrief__right}>
+            DeFi Pre Alpha Version
+          </div>
         </div>
-        <MetaMask changeBalance={setBalance} changeAddress={setAddress}/>
-      </header>
-        <div className={s.content}>
+        <div className={s.tvlFooter}>
+          <div className={s.tvlFooter__developedBy}>
+            Developed by Sooho
+          </div>
         </div>
-        <div className={s.content}>
-        </div>
-        <div className={s.content}>
-        </div>
+      </div>
     </div>
   );
 }

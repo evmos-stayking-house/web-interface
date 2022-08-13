@@ -2,19 +2,23 @@ import { useEffect, useState } from 'react';
 import { METAMASK_CODE_NAME, METAMASK_MESSAGE } from 'data/appInfo/message';
 import { getContract, getProvider, switchEvmosChain } from 'config/contract';
 import { Contracts } from 'type/contract';
+import { useWalletState } from '../../../contexts/WalletContext';
 
 const useMetaMask = (setBalance: Function, changeAddress: Function) => {
-  const [address, setAddress] = useState('');
+
+  const { onChangeAddress, address } = useWalletState();
 
   useEffect(() => {
-    address && getBalance();
+    if(address) {
+      getBalance();
+    }
   }, [address]);
 
   async function connectWallet() {
 
     if (address) {
       if(confirm('연결 해제하시겠습니까?')){
-        setAddress('');
+        onChangeAddress('');
       }
       return;
     }
@@ -24,9 +28,7 @@ const useMetaMask = (setBalance: Function, changeAddress: Function) => {
       const provider = getProvider();
       await provider.send('eth_requestAccounts', []);
       const address = await provider.getSigner().getAddress();
-
-      setAddress(address);
-      changeAddress(address);
+      onChangeAddress(address);
     } catch (err: any) {
       console.log('METAMASK ::: ', err)
       if (err.code) {
@@ -46,7 +48,6 @@ const useMetaMask = (setBalance: Function, changeAddress: Function) => {
   }
 
   return {
-    address,
     connectWallet
   };
 };

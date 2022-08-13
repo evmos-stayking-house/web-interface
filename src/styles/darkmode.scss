@@ -1,8 +1,12 @@
 .body[data-theme="dark-mode"] {
-  --background-color: #242424;
+  background-color: #{$theme-black};
+  background-image: var(--logo-bg-url);
+  color: #{$theme-white};
+
+  --background-color: #{$theme-black};
+  --background-size: 100%;
   --btn-color: #{$theme-mint};
-  --color: #{$theme-white};
-  --bride-bg-color: #343434;
+  --card-bg-color: #343434;
   --contrast-color: white;
   --contrast-color-20: #{rgba(white, 0.2)};
   --contrast-color-40: #{rgba(white, 0.4)};
@@ -13,7 +17,12 @@
 }
 
 .body[data-theme="light-mode"] {
+
+  background-color: #{$theme-white};
+  background-image: var(--logo-bg-url);
+
   --background-color: #{$theme-white};
+  --background-size: 100%;
   --btn-color: #{$theme-black};
   --color: #{$theme-black};
   --bride-bg-color: white;
