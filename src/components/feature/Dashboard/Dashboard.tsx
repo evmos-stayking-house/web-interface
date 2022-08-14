@@ -1,6 +1,11 @@
 import s from './Dashboard.module.scss';
+import { useWalletState } from '../../../contexts/WalletContext';
+import useCoinPrice from '../../../hooks/useCoinPrice';
 
 const Dashboard = () => {
+  const { evmosBalance } = useWalletState();
+  const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
+
   return (
     <div className={s.container}>
       <div className={s.tvlContainer}>
@@ -28,10 +33,10 @@ const Dashboard = () => {
           <div className={s.balanceBox}>
             <div className={s.balanceBox__left}>
               <p className={s.balanceBox__value}>
-                300 EVMOS
+                {Number(evmosBalance).toFixed(4)} EVMOS
               </p>
               <p className={s.balanceBox__description}>
-                ~ $ 600
+                ~ ${evmosPrice && (evmosPrice * Number(evmosBalance)).toFixed(2)}
               </p>
             </div>
             <div className={s.balanceBox__right}>

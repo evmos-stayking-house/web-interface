@@ -5,6 +5,7 @@ import Image from 'next/image';
 import MetaMask from '../common/MetaMask';
 import useDashboard from '../feature/Dashboard/Dashboard.Service';
 import Menu from './Menu';
+import useCoinPrice from '../../hooks/useCoinPrice';
 
 interface MainProps {
   children: ReactNode;
@@ -12,7 +13,10 @@ interface MainProps {
 }
 
 const Main: FC<MainProps> = ({ children, title }) => {
-  const {setBalance, setAddress} = useDashboard();
+  const { coinPrice: cosmosPrice } = useCoinPrice(`cosmos`);
+  const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
+
+
   return (
       <div className={s.container}>
         <Head>
@@ -25,7 +29,20 @@ const Main: FC<MainProps> = ({ children, title }) => {
               <span className={s.logoText}>Evmos StayKing House</span>
             </span>
           </div>
-          <MetaMask changeBalance={setBalance} changeAddress={setAddress}/>
+          <div className={s.coinPriceContainer}>
+            <div className={s.coinPriceInfo}>
+              <div className={s.coinPrice}>
+                <img className={s.coinTickerImg} src={'/img/logo/cosmos.png'}  alt={'cosmos'}/>
+                <p className={s.coinValue}>$ {cosmosPrice.toFixed(2)}</p>
+              </div>
+              <div className={s.verticalDivider}></div>
+              <div className={s.coinPrice}>
+                <img className={s.coinTickerImg} src={'/img/logo/evmos.png'}  alt={'evmos'}/>
+                <p className={s.coinValue}>$ {evmosPrice.toFixed(2)}</p>
+              </div>
+            </div>
+            <MetaMask />
+          </div>
         </header>
         <main>
           <Menu>

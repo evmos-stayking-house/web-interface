@@ -4,14 +4,11 @@ import useMetaMask from './MetaMast.service';
 import s from './MetaMask.module.scss';
 import { useWalletState } from '../../../contexts/WalletContext';
 
-interface MetaMaskProps {
-  changeAddress: Function;
-  changeBalance: Function;
-}
+interface MetaMaskProps {}
 
-const MetaMask: FC<MetaMaskProps> = ({ changeBalance, changeAddress }) => {
+const MetaMask: FC<MetaMaskProps> = () => {
   const { address } = useWalletState();
-  const { connectWallet } = useMetaMask(changeBalance, changeAddress);
+  const { connectWallet } = useMetaMask();
   return (
     <div>
       <div className={cn(s.btn, { [s.notConnected]: !address })} onClick={connectWallet}>
