@@ -18,10 +18,6 @@ interface chainItemType {
 }
 
 const Vault = () => {
-  const {
-    setBalance,
-    setAddress,
-  } = useBridge();
 
   return (
     <div className={s.container}>
@@ -32,7 +28,7 @@ const Vault = () => {
             <span className={s.logoText}>Evmos StayKing House</span>
           </span>
         </div>
-        <MetaMask changeBalance={setBalance} changeAddress={setAddress}/>
+        <MetaMask />
       </header>
 
       <div className={s.content}>
