@@ -1,0 +1,59 @@
+{
+  "family": "bq-api-server-task",
+  "taskRoleArn": "arn:aws:iam::898329626477:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::898329626477:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "1024",
+  "memory": "3072",
+  "containerDefinitions": [
+    {
+      "name": "api-server",
+      "image": "898329626477.dkr.ecr.ap-northeast-2.amazonaws.com/sooho/bq/api-server",
+      "cpu": 0,
+      "memory": null,
+      "memoryReservation": 950,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "ulimits": [
+        {
+          "softLimit": 65535,
+          "hardLimit": 65535,
+          "name": "nofile"
+        }
+      ],
+      "environment": [
+        {
+          "name": "APP_ENV",
+          "value": "development"
+        },
+        {
+          "name": "AWS_REGION",
+          "value": "ap-northeast-2"
+        }
+      ],
+      "secrets": [
+        {
+          "valueFrom": "/sooho/fairy/dev/USE_MONGO_QUERY_LOGGER",
+          "name": "USE_MONGO_QUERY_LOGGER"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/bq-api-server-task",
+          "awslogs-region": "ap-northeast-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}

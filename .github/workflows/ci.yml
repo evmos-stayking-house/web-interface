@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push: # 아래 브랜치에 PUSH 가 됐을 때 테스트 코드 실행
+    branches: [main]
+  pull_request: # 아래 브랜치에 PR이 생성 됐을 때 실행
+    branches: [main]
+
+jobs:
+  ci-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code # web-server clone
+        uses: actions/checkout@v2
+
+      - name: Cache node modules # node modules 캐싱
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install dependencies & Run test # Dependency 설치하고 테스트 실행
+        timeout-minutes: 5
+        run: yarn --frozen-lockfile && yarn test
+        env:
+          APP_ENV: test

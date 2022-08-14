@@ -1,6 +1,6 @@
 import s from './Dashboard.module.scss';
-import { useWalletState } from '../../../contexts/WalletContext';
 import useCoinPrice from '../../../hooks/useCoinPrice';
+import { useWalletState } from '../../../contexts/WalletContext';
 
 const Dashboard = () => {
   const { evmosBalance } = useWalletState();
