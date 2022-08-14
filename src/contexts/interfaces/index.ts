@@ -5,6 +5,13 @@ export interface IThemeContext {
   toggleDarkMode: () => void;
 }
 
+export interface IWalletContext {
+  address: string;
+  onChangeAddress: (_newAddress: string) => void;
+  onChangeEvmosBalance: (_evmosBalance: string) => void;
+  evmosBalance: string;
+}
+
 export interface Props {
   children: ReactNode;
 }

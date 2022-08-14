@@ -1,131 +1,148 @@
 .container {
-  header {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .logoTextWrapper {
-    margin-left: 10px;
-    padding-top: 10px;
-    vertical-align: top;
-  }
-
-  .logoText {
-    font-weight: bold;
-    font-size: x-large;
-  }
-
-  @include media(desktop) {
-    width: 800px;
-  }
-
-  @include media(phone) {
-    width: 100%;
-    margin: 20px;
-    min-width: 320px;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  width: 100%;
 }
 
-.content {
-  padding: 24px;
-  margin-top: 17px;
-  margin-bottom: 16px;
-
-  background-color: var(--bride-bg-color);
-  border-radius: 16px;
-
-}
-
-.contentChain {
-  padding-bottom: 24px;
-
-  background: url("/img/wave.png") no-repeat center 0 / auto 90%;
-  boder-bottom: 1px solid var(--contrast-color-20);
+.tvlContainer {
+  background-image: linear-gradient(90deg,#343434, #383838);
+  height: 159px;
+  border-radius: 8px;
+  margin-bottom: 20px;
 
   @include media(desktop) {
     display: flex;
-    align-content: center;
-    justify-content: space-between;
-    height: 264px;
-
-    > div {
-      margin-top: 65px;
-    }
+    flex-direction: column;
   }
 
-  @include media(phone) {
-    > div:first-child {
-      margin-bottom: 30px;
-    }
+  @include media(mobile) {
+    display: none;
   }
 }
 
-.contentToken {
-  padding-top: 24px;
-  padding-bottom: 24px;
-
-  @include media(desktop) {
-    display: flex;
-
-    .amount {
-      flex: 1;
-      margin-left: 24px;
-
-      .balance {
-        margin-bottom: 4px;
-      }
-    }
-  }
-
-  @include media(phone) {
-    > div:first-child {
-      margin-bottom: 30px;
-    }
-  }
-}
-
-.contentAddress {
-  padding-top: 28px;
-  padding-bottom: 28px;
-  margin-bottom: 24px;
-
-  border-top: 1px dotted var(--contrast-color-20);
-  border-bottom: 1px solid var(--contrast-color-20);
-  color: var(--contrast-color-40);
-}
-
-.addressInput {
-  margin-top: 20px;
-}
-
-.addressToggle {
+.tvlBrief {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  background-color: #343434;
+  padding: 16px 44px 8px 40px;
+  border-radius: 8px;
 
-  .arrowDown {
+  &__left {
     position: relative;
+    top: 12px;
+  }
 
-    width: 16px;
-    height: 9px;
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #{$theme-white};
+    margin-bottom: 4px;
+  }
+
+  &__description {
+    font-size: 40px;
+    font-weight: 600;
+    color: #{$theme-white};
+    margin-bottom: 8px;
+  }
+
+}
+
+.tvlFooter {
+  font-size: 13px;
+  font-weight: 400;
+  color: hsla(0,0%,100%,.3);
+  display: flex;
+  align-items: center;
+  height: 40px;
+  justify-content: flex-end;
+
+
+  &__developedBy {
+    margin-right: 16px;
+    position: relative;
+    top: 1px;
   }
 }
 
-.maxBtn {
-  position: absolute;
-  top: 15px;
-  right: 8px;
+.myInfoContainer {
+  display: flex;
+  flex-direction: column;
 
-  padding: 2px 8px;
-  background: #FFFFFF;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 12px;
-
-  cursor: pointer;
-  opacity: 0.7;
-
-  &:hover {
-    opacity: 1;
+  &__title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-left: 0;
+    color: #{$theme-white};
   }
+
+  .balanceContainer {
+    display: flex;
+    flex-direction: row;
+
+    .balanceBox {
+      border-radius: 8px;
+      background-color: #343434;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 28px 0;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+
+      @include media(desktop) {
+        box-shadow: 0 2px 10px 0 hsla(0,0%,9%,.05);
+        padding-left: 32px;
+        padding-bottom: 25px;
+        padding-right: 36px;
+        flex: 1;
+        height: 134px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
+
+      &__left {
+        display: flex;
+        flex-direction: column;
+      }
+
+      &__right {
+
+      }
+
+      &__value {
+        @include media(desktop) {
+          font-size: 30px;
+          font-weight: 600;
+          line-height: 30px;
+        }
+      }
+
+      &__description {
+        font-size: 16px;
+        font-weight: 500;
+        color: #149c75;
+      }
+      &__image {
+        width: 64px;
+        height: 64px;
+      }
+    }
+
+  }
+
+}
+
+.rowDivider {
+  margin-left: 5px;
+  margin-right: 5px;
 }

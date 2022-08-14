@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react';
 import { ethers } from 'ethers';
 
 const useDashboard = () => {
-  const [balance, setBalance] = useState('0.0');
+  const [balance, setBalance] = useState<number>(0);
   const [address, setAddress] = useState<string>('');
 
   // const { openModal, renderModal } = useModal({

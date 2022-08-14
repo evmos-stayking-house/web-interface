@@ -1,0 +1,45 @@
+.SidebarContainer {
+  @include media(desktop) {
+    display: flex;
+    flex-direction: column;
+    width: 185px;
+  }
+
+  @include media(phone) {
+    display: none;
+  }
+}
+
+.menuItem {
+  @include media(desktop) {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    margin-bottom: 26px;
+    cursor: pointer;
+    width: 185px;
+  }
+
+  @include media(phone) {
+    display: none;
+  }
+}
+
+.label {
+  margin-bottom: 8px;
+
+  color: var(--contrast-color);
+  font-size: 18px;
+  font-weight: 400;
+
+  &:hover {
+    font-weight: 700;
+    font-size: 19px;
+  }
+
+}
+
+.active {
+  font-weight: 700;
+  font-size: 19px;
+}
