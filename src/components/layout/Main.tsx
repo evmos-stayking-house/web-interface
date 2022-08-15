@@ -16,7 +16,6 @@ const Main: FC<MainProps> = ({ children, title }) => {
   const { coinPrice: cosmosPrice } = useCoinPrice(`cosmos`);
   const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
 
-
   return (
       <div className={s.container}>
         <Head>

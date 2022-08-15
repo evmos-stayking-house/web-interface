@@ -16,6 +16,6 @@ export const cn = (...arg: (string | cnObjType)[]) => {
       }
     }
   });
-
+  console.log(classNames.join(' '))
   return classNames.join(' ');
 };

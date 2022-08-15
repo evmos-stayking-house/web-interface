@@ -15,9 +15,13 @@ export const WalletContextProvider: React.FC<Props> = ({ children }) => {
   const [evmosBalance, setEvmosBalance] = useState<string>('0.0');
 
   function onChangeAddress(_newAddress: string) {
-    if(!_newAddress) return;
     setAddress(_newAddress);
-    localStorage.setItem('address', _newAddress);
+    if(_newAddress)
+      localStorage.setItem('address', _newAddress);
+    else {
+      localStorage.removeItem('address');
+      setEvmosBalance('0.0')
+    }
   }
 
   function onChangeEvmosBalance(_evmosBalance: string) {

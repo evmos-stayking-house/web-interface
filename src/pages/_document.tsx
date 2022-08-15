@@ -12,7 +12,7 @@ function Document() {
         />
         <meta property="og:title" content="Evmos StayKing House" />
         <meta property="og:description" content="To Earn.. Just Stake.." />
-        <meta property="og:image" content="/img/logo/logo.png" />
+        <meta property="og:image" content="https://cdn.sooho.io/img/hackathon/favicon.ico" />
       </Head>
       <body className="body">
         <Main />
