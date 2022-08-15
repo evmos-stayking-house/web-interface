@@ -13,7 +13,7 @@ const Dashboard = () => {
           <div className={s.tvlBrief__left}>
             <p className={s.tvlBrief__title}>Total Value Locked</p>
             <p className={s.tvlBrief__description}>
-              $ 105,122,779.73
+              $ 105,122
             </p>
           </div>
           <div className={s.tvlBrief__right}>
