@@ -10,6 +10,9 @@ function Document() {
           crossOrigin="true"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.4/dist/web/static/pretendard.css"
         />
+        <meta property="og:title" content="Evmos StayKing House" />
+        <meta property="og:description" content="To Earn.. Just Stake.." />
+        <meta property="og:image" content="/img/logo/logo.png" />
       </Head>
       <body className="body">
         <Main />
