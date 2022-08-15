@@ -1,22 +1,10 @@
 .container {
-  header {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .logoTextWrapper {
-    margin-left: 10px;
-    padding-top: 10px;
-    vertical-align: top;
-  }
-
-  .logoText {
-    font-weight: bold;
-    font-size: x-large;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 
   @include media(desktop) {
-    width: 800px;
+    width: 1200px;
   }
 
   @include media(phone) {
@@ -26,106 +14,188 @@
   }
 }
 
-.content {
-  padding: 24px;
-  margin-top: 17px;
-  margin-bottom: 16px;
-
-  background-color: var(--bride-bg-color);
-  border-radius: 16px;
-
-}
-
-.contentChain {
-  padding-bottom: 24px;
-
-  background: url("/img/wave.png") no-repeat center 0 / auto 90%;
-  boder-bottom: 1px solid var(--contrast-color-20);
-
+.title {
   @include media(desktop) {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 28px;
+    padding-left: 0;
+  }
+}
+
+.poolListContainerHeader {
+  border-bottom: 2px solid #383838;
+  padding: 16px 24px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  grid-template-columns: 24fr 24fr minmax(120px,14fr) minmax(120px,14fr) 86px 24fr 84px;
+  max-width: 1200px;
+  width: calc(100vw - 320px);
+  display: grid;
+  background-color: #343434;
+}
+
+.poolListContainerContents {
+  background-color: #343434;
+  grid-template-columns: 24fr 24fr minmax(120px,14fr) minmax(120px,14fr) 86px 24fr 84px;
+  box-shadow: 0 2px 10px 0 hsla(0,0%,9%,.05);
+  border-bottom: 1px solid #383838;
+  width: calc(100vw - 320px);
+  display: grid;
+  padding: 0 20px 0 24px;
+  border-radius: 0 0 8px 8px;
+
+  &__item {
+    font-size: 14px;
+    font-weight: 500;
     display: flex;
-    align-content: center;
-    justify-content: space-between;
-    height: 264px;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #383838;
+    word-break: break-all;
 
-    > div {
-      margin-top: 65px;
+    &__tokenBalance {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      align-content: center;
+      justify-content: flex-start;
     }
-  }
 
-  @include media(phone) {
-    > div:first-child {
-      margin-bottom: 30px;
+    &__totalSupply {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      align-content: center;
+      justify-content: flex-start;
     }
+
+    &__totalBorrowed {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      align-content: center;
+      justify-content: flex-start;
+    }
+
+    &__tokenValue {
+      margin-right: 4px;
+    }
+
+    &__tokenSymbol {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    &:nth-child(7n+1) {
+      padding-right: 32px;
+    }
+    &:nth-child(7n+2) {
+      padding-right: 42px;
+    }
+    &:nth-child(7n+3), &:nth-child(7n+4), &:nth-child(7n+5), &:nth-child(7n+6) {
+      padding-right: 24px;
+    }
+
   }
 }
 
-.contentToken {
-  padding-top: 24px;
-  padding-bottom: 24px;
-
-  @include media(desktop) {
-    display: flex;
-
-    .amount {
-      flex: 1;
-      margin-left: 24px;
-
-      .balance {
-        margin-bottom: 4px;
-      }
-    }
-  }
-
-  @include media(phone) {
-    > div:first-child {
-      margin-bottom: 30px;
-    }
-  }
-}
-
-.contentAddress {
-  padding-top: 28px;
-  padding-bottom: 28px;
-  margin-bottom: 24px;
-
-  border-top: 1px dotted var(--contrast-color-20);
-  border-bottom: 1px solid var(--contrast-color-20);
-  color: var(--contrast-color-40);
-}
-
-.addressInput {
-  margin-top: 20px;
-}
-
-.addressToggle {
+.assetInfo {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
-  .arrowDown {
-    position: relative;
+  &__icon {
+    width: 48px;
+    height: 48px;
+    box-shadow: 0 1px 8px 0 rgba(0,0,0,.06);
+    background-color: #343434;
+    border-radius: 50%;
+    margin-right: 12px;
 
-    width: 16px;
-    height: 9px;
+    @include media(desktop) {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    &__priceInfo {
+      font-size: 10px;
+      font-weight: 500;
+      border-radius: 8px;
+      color: #{$theme-mint};
+      padding: 1px 8px;
+    }
+  }
+
+  &__labelAndValue {
+    width: 90%;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2px;
   }
 }
 
-.maxBtn {
-  position: absolute;
-  top: 15px;
-  right: 8px;
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 
-  padding: 2px 8px;
-  background: #FFFFFF;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 12px;
+  &__depositBtn {
+    border: 0;
+    outline: 0;
+    padding: 0;
+    font-size: 14px;
+    display: flex;
+    cursor: pointer;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-weight: 600;
+    width: 84px;
+    margin-bottom: 8px;
+  }
 
-  cursor: pointer;
-  opacity: 0.7;
+  &__withdrawBtn {
+    border: 0;
+    outline: 0;
+    padding: 0;
+    font-size: 14px;
+    display: flex;
+    cursor: pointer;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-weight: 600;
+    width: 84px;
+  }
 
-  &:hover {
-    opacity: 1;
+  &__disabled {
+    background-color: #f2f3f5;
+    color: rgba(71,80,102,.3);
+    cursor: not-allowed;
+  }
+
+  &__enabled {
+    background-color: #{$theme-mint};
+    cursor: pointer;
   }
 }

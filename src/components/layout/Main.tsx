@@ -3,7 +3,6 @@ import s from './Main.module.scss';
 import Head from 'next/head';
 import Image from 'next/image';
 import MetaMask from '../common/MetaMask';
-import useDashboard from '../feature/Dashboard/Dashboard.Service';
 import Menu from './Menu';
 import useCoinPrice from '../../hooks/useCoinPrice';
 

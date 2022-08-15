@@ -1,13 +1,11 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
-import Dashboard from 'components/feature/Dashboard';
-import styles from 'styles/pages/Home.module.scss';
 import Main from '../components/layout/Main';
+import Vault from '../components/feature/Vault';
 
 const Home: NextPage = () => {
   return (
     <Main>
-      <div>Lend</div>
+      <Vault />
     </Main>
   );
 };
