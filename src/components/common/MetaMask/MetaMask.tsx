@@ -3,18 +3,24 @@ import { cn } from 'utils/style';
 import useMetaMask from './MetaMast.service';
 import s from './MetaMask.module.scss';
 import { useWalletState } from '../../../contexts/WalletContext';
+import { useModal } from '../../Modal';
+import { BridgeStatus } from '../../../type/bridge';
+import WalletSelection from '../../Modal/ModalContents/WalletSelection/WalletSelection';
 
 interface MetaMaskProps {}
 
 const MetaMask: FC<MetaMaskProps> = () => {
   const { address } = useWalletState();
   const { connectWallet } = useMetaMask();
+  const { openModal, closeModal, renderModal } = useModal({content: <WalletSelection closeModal={() => closeModal()} metaMaskLogin={connectWallet} />});
+  // connectWallet
   return (
     <div>
-      <div className={cn(s.btn, { [s.notConnected]: !address })} onClick={connectWallet}>
+      <div className={cn(s.btn, { [s.notConnected]: !address })} onClick={() => address ? connectWallet() : openModal()}>
         <span>{address || 'Connect Wallet First'}</span>
       </div>
       {!address && <div className={s.dim} />}
+      {renderModal()}
     </div>
   );
 };

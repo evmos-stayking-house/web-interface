@@ -1,9 +1,6 @@
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-
 import { cn } from 'utils/style';
-import { CHAIN_INFO } from 'data/mock/chainList';
 import useElapsedTime from 'hooks/useElapsedTime';
 import Button from 'components/common/Button';
 import { BridgeStatus } from 'type/bridge';
@@ -51,16 +48,14 @@ const BridgeResult: FC<Props> = ({ getStatus, closeModal, result }) => {
         <div className={s.selectedChainItem}>
           <p className={s.label}>From</p>
           <div className={s.chain}>
-            <Image src={CHAIN_INFO[result.sourceChain].img} alt={result.sourceChain} width={24} height={24} />
-            <span className={s.chainName}>{CHAIN_INFO[result.sourceChain].name}</span>
+            <span className={s.chainName}>123</span>
           </div>
         </div>
 
         <div className={s.selectedChainItem}>
           <p className={s.label}>To</p>
           <div className={s.chain}>
-            <Image src={CHAIN_INFO[result.targetChain].img} alt={result.targetChain} width={24} height={24} />
-            <span className={s.chainName}>{CHAIN_INFO[result.targetChain].name}</span>
+            <span className={s.chainName}>123</span>
           </div>
         </div>
       </div>

@@ -72,7 +72,7 @@ const Stake = () => {
           </div>
         </div>
         {/* OSMO Asset Leveraged Staking */}
-        <div className={cn(s.stakingItem, s.stakingItem__dim)}>
+        <div className={cn(s.stakingItem)}>
           <div className={s.stakingItem__header}>
             <div className={s.stakingItem__headerLeft}>
               <div className={s.stakingItem__tokenImages}>
@@ -132,7 +132,7 @@ const Stake = () => {
           </div>
         </div>
         {/* JUNO Asset Leveraged Staking */}
-        <div className={cn(s.stakingItem, s.stakingItem__dim)}>
+        <div className={cn(s.stakingItem)}>
           <div className={s.stakingItem__header}>
             <div className={s.stakingItem__headerLeft}>
               <div className={s.stakingItem__tokenImages}>
