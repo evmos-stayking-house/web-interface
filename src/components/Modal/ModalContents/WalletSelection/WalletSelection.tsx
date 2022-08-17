@@ -15,7 +15,7 @@ const WalletSelection: FC<Props> = ({ closeModal, metaMaskLogin }) => {
 
   function onMetaMaskLogin() {
     metaMaskLogin();
-    closeModal();
+    closeModal!();
   }
 
   return (
