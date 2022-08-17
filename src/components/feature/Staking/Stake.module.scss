@@ -1,0 +1,228 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  @include media(desktop) {
+    width: 1200px;
+  }
+
+  @include media(phone) {
+    width: 100%;
+    margin: 20px;
+    min-width: 320px;
+  }
+}
+
+.title {
+  @include media(desktop) {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 28px;
+    padding-left: 0;
+  }
+}
+
+.stakingContents {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 20px;
+}
+
+.stakingItem {
+  border-radius: 8px;
+  box-shadow: 0 2px 10px 0 hsla(0,0%,9%,.05);
+  background-color: #{$theme-white};
+  width: 100%;
+  position: relative;
+
+
+  @include media(desktop) {
+    width: 32%;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    border-bottom: 2px solid #F4F9F9;
+    height: 87px;
+  }
+
+  &__headerLeft {
+    display: flex;
+    align-items: center;
+  }
+
+  &__tokenImages {
+    display: flex;
+    margin-right: 20px;
+  }
+
+  &__tokenIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #{$theme-white};
+    box-shadow: -2px 0 3px 0 rgba(0,0,0,.06);
+  }
+
+  &__mainInfo {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #131414;
+  }
+
+  &__tvl {
+    font-size: 11px;
+    font-weight: 500;
+    color: #131414;
+    text-decoration: underline;
+  }
+
+  &__subInfo {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+  }
+
+  &__apy {
+    display: flex;
+    flex-direction: column;
+    color: #131414;
+    text-align: right;
+  }
+
+  &__poolInterest {
+    font-size: 10px;
+    font-weight: 500;
+    color: #797b80;
+  }
+
+  &__content {
+    padding: 24px;
+    @include media(desktop) {
+      min-height: 160px;
+    }
+  }
+
+  &__footer {
+    padding: 0 24px 24px;
+  }
+
+  &__button {
+    border: 0;
+    outline: 0;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    cursor: pointer;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background-color: #44edcc;
+    color: #F9F9F9;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  &__buttonDisabled {
+    background-color: #f2f3f5;
+    color: rgba(71,80,102,.3);
+    cursor: not-allowed;
+  }
+}
+
+.stakingProperty {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 2px;
+  color: #494a4d;
+
+  &__flexStart {
+    align-items: flex-start;
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  &__labelSub {
+    font-size: 10px;
+    font-weight: 500;
+    position: relative;
+    top: -2px;
+  }
+
+  &__value {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  &__totalAPR {
+    color: #3369ff;
+  }
+}
+
+.LeverageController {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  align-items: center;
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #494a4d;
+  }
+
+  &__content {
+    width: 140px;
+    height: 44px;
+    border-radius: 8px;
+    border: 1px solid #f2f2f2;
+    background-color: #fcfcfc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+
+  &__plusIcon, &__minusIcon {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+  }
+
+  &__leverageValue {
+    font-size: 15px;
+    font-weight: 700;
+    color: #444;
+
+    @include media(desktop) {
+      font-size: 14px;
+      font-weight: 700;
+    }
+  }
+}

@@ -1,22 +1,7 @@
 import { ReactNode } from 'react';
-import Image from 'next/image';
-
-import Form from 'components/common/Form';
-import Dropdown from 'components/common/Dropdown';
-import { InputNumber } from 'components/common/Input';
-import Button from 'components/common/Button';
-import MetaMask from 'components/common/MetaMask';
-import Toggle from 'components/common/Toggle';
-import SectionAddress from './SectionAddress';
 
 import s from './Vault.module.scss';
-import useBridge from './Vault.Service';
 import { cn } from '../../../utils/style';
-
-interface chainItemType {
-  key: string;
-  item: ReactNode;
-}
 
 const Vault = () => {
 
@@ -91,10 +76,10 @@ const Vault = () => {
             <img className={s.assetInfo__icon} src={'/img/logo/osmosis.png'}  alt={'lending an asset osmo symbol'}/>
             <div className={s.AssetInfo__info}>
               <p className={s.assetInfo__info__title}>
-                OSMO
+                OSMO (Upcoming)
               </p>
               <p className={s.assetInfo__info__priceInfo}>
-                1 ibOSMO= 1.0008 OSMO
+                1 ibOSMO= 1.0000 OSMO
               </p>
             </div>
           </div>
@@ -102,32 +87,32 @@ const Vault = () => {
         <div className={s.poolListContainerContents__item}>
           <div className={s.assetInfo__labelAndValue}>
             <span className={s.assetInfo__labelAndValue__label}>Lending APR</span>
-            <span className={s.assetInfo__labelAndValue__value}>0.0207%</span>
+            <span className={s.assetInfo__labelAndValue__value}>0%</span>
           </div>
           <div className={s.assetInfo__labelAndValue}>
             <span className={s.assetInfo__labelAndValue__label}>Lending APR</span>
-            <span className={s.assetInfo__labelAndValue__value}>0.0207%</span>
+            <span className={s.assetInfo__labelAndValue__value}>0%</span>
           </div>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__totalSupply)}>
-          <span className={s.poolListContainerContents__item__tokenValue}>7.33M</span>
-          <span className={s.poolListContainerContents__item__tokenSymbol}>ATOM</span>
+          <span className={s.poolListContainerContents__item__tokenValue}>0</span>
+          <span className={s.poolListContainerContents__item__tokenSymbol}>OSMO</span>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__totalBorrowed)}>
-          <span className={s.poolListContainerContents__item__tokenValue}>300,300</span>
-          <span className={s.poolListContainerContents__item__tokenSymbol}>ATOM</span>
+          <span className={s.poolListContainerContents__item__tokenValue}>0</span>
+          <span className={s.poolListContainerContents__item__tokenSymbol}>OSMO</span>
         </div>
         <div className={s.poolListContainerContents__item}>
-          40.8%
+          0%
         </div>
         <div className={s.poolListContainerContents__item}>
           <div className={s.poolListContainerContents__item__tokenBalance}>
             <span className={s.poolListContainerContents__item__tokenValue}>0</span>
-            <span className={s.poolListContainerContents__item__tokenSymbol}>ibATOM</span>
+            <span className={s.poolListContainerContents__item__tokenSymbol}>ibOSMO</span>
           </div>
           <div className={s.poolListContainerContents__item__tokenBalance}>
             <span className={s.poolListContainerContents__item__tokenValue}>0</span>
-            <span className={s.poolListContainerContents__item__tokenSymbol}>ATOM</span>
+            <span className={s.poolListContainerContents__item__tokenSymbol}>OSMO</span>
           </div>
         </div>
         <div className={s.poolListContainerContents__item}>
@@ -142,10 +127,10 @@ const Vault = () => {
             <img className={s.assetInfo__icon} src={'/img/logo/juno.png'}  alt={'lending an asset juno symbol'}/>
             <div className={s.AssetInfo__info}>
               <p className={s.assetInfo__info__title}>
-                JUNO
+                JUNO (Upcoming)
               </p>
               <p className={s.assetInfo__info__priceInfo}>
-                1 ibJUNO= 1.0011 JUNO
+                1 ibJUNO= 1.0000 JUNO
               </p>
             </div>
           </div>
@@ -153,23 +138,23 @@ const Vault = () => {
         <div className={s.poolListContainerContents__item}>
           <div className={s.assetInfo__labelAndValue}>
             <span className={s.assetInfo__labelAndValue__label}>Lending APR</span>
-            <span className={s.assetInfo__labelAndValue__value}>0.0207%</span>
+            <span className={s.assetInfo__labelAndValue__value}>0%</span>
           </div>
           <div className={s.assetInfo__labelAndValue}>
             <span className={s.assetInfo__labelAndValue__label}>Lending APR</span>
-            <span className={s.assetInfo__labelAndValue__value}>0.0207%</span>
+            <span className={s.assetInfo__labelAndValue__value}>0%</span>
           </div>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__totalSupply)}>
-          <span className={s.poolListContainerContents__item__tokenValue}>7.33M</span>
-          <span className={s.poolListContainerContents__item__tokenSymbol}>ATOM</span>
+          <span className={s.poolListContainerContents__item__tokenValue}>0</span>
+          <span className={s.poolListContainerContents__item__tokenSymbol}>JUNO</span>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__totalBorrowed)}>
-          <span className={s.poolListContainerContents__item__tokenValue}>300,300</span>
-          <span className={s.poolListContainerContents__item__tokenSymbol}>ATOM</span>
+          <span className={s.poolListContainerContents__item__tokenValue}>0</span>
+          <span className={s.poolListContainerContents__item__tokenSymbol}>JUNO</span>
         </div>
         <div className={s.poolListContainerContents__item}>
-          40.8%
+          0%
         </div>
         <div className={s.poolListContainerContents__item}>
           <div className={s.poolListContainerContents__item__tokenBalance}>
