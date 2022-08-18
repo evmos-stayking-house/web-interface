@@ -1,16 +1,16 @@
-import abi from './deployed_abi.json';
+import { Stayking, Vault, ERC20 } from './abis';
 
 export const contractsInfo = {
-  token: {
-    address: '0xF3FB839b708B596f9A02339369eA1A7C7D05448F',
-    abi: abi.ERC20
+  stayKing: {
+    address: '0x7a2088a1bFc9d81c55368AE168C2C02570cB814F',
+    abi: Stayking
   },
   vault: {
-    address: '0x708f1954CDb038102BB044c27bd32B8cC09De187',
-    abi: abi.Vault
+    address: '0xc5a5C42992dECbae36851359345FE25997F5C42d',
+    abi: Vault
   },
-  melter: {
-    address: '0xaE8235c252829514a8135F2CB96Af6e53B6509c4',
-    abi: abi.Melter
+  tATOM: {
+    address: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+    abi: ERC20
   },
 }

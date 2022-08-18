@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import s from './Vault.module.scss';
 import { cn } from '../../../utils/style';
 
@@ -173,70 +171,6 @@ const Vault = () => {
           </div>
         </div>
       </div>
-      {/*<Form>*/}
-        {/*  <section className={s.contentChain}>*/}
-        {/*    <Form.Item label="From Chain">*/}
-        {/*      <Dropdown*/}
-        {/*        placeholder="Choose Chain"*/}
-        {/*        list={chainList!}*/}
-        {/*        selectedId={selectedChain}*/}
-        {/*        onChange={(el: chainItemType) => setSelectedChain(el.key)}*/}
-        {/*      />*/}
-        {/*    </Form.Item>*/}
-        {/*    <Form.Item label="To Chain">*/}
-        {/*      <Dropdown*/}
-        {/*        placeholder="Choose Chain"*/}
-        {/*        list={chainList!}*/}
-        {/*        selectedId={selectedTargetChain}*/}
-        {/*        onChange={(el: chainItemType) => setSelectedTargetChain(el.key)}*/}
-        {/*      />*/}
-        {/*    </Form.Item>*/}
-        {/*  </section>*/}
-
-        {/*  <section className={s.contentToken}>*/}
-        {/*    <Form.Item label="Token">*/}
-        {/*      {tokenList && (*/}
-        {/*        <Dropdown*/}
-        {/*          placeholder="Choose Token"*/}
-        {/*          list={tokenList}*/}
-        {/*          selectedId={selectedToken?.key}*/}
-        {/*          onChange={setSelectedToken}*/}
-        {/*        />*/}
-        {/*      )}*/}
-        {/*    </Form.Item>*/}
-        {/*    <Form.Item*/}
-        {/*      label="Amount"*/}
-        {/*      className={s.amount}*/}
-        {/*      extra={*/}
-        {/*        <div>*/}
-        {/*          <p className={s.balance}>*/}
-        {/*            Balance <span className="bold">{balance}</span>*/}
-        {/*          </p>*/}
-        {/*          <p>*/}
-        {/*            Fee <span className="bold">{fee}</span>*/}
-        {/*          </p>*/}
-        {/*        </div>*/}
-        {/*      }*/}
-        {/*    >*/}
-        {/*      <InputNumber*/}
-        {/*        decimal={6}*/}
-        {/*        placeholder="0.000000"*/}
-        {/*        setInputValue={setAmount}*/}
-        {/*        max={balance}*/}
-        {/*        inputValue={amount}*/}
-        {/*        button={*/}
-        {/*          <div className={s.maxBtn} onClick={() => setAmount(balance)}>*/}
-        {/*            Max*/}
-        {/*          </div>*/}
-        {/*        }*/}
-        {/*      />*/}
-        {/*    </Form.Item>*/}
-        {/*  </section>*/}
-
-        {/*  <SectionAddress address={address} setAddress={setAddress}/>*/}
-        {/*  <Button full onClick={actionBridge}>BRIDGE TOKEN</Button>*/}
-        {/*</Form>*/}
-        {/*{renderModal()}*/}
     </div>
   );
 };

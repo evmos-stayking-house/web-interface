@@ -1,62 +1,38 @@
-import { ReactNode, useState } from 'react';
-import { ethers } from 'ethers';
+import { useEffect, useState } from 'react';
+import { getContract } from '../../../config/contract';
+import { Contracts } from '../../../type/contract';
+import { bigNumToNum, bigNumToStr } from '../../../utils/numberFormats';
 
-const useDashboard = () => {
+const useDashboard = (address: string) => {
   const [balance, setBalance] = useState<number>(0);
-  const [address, setAddress] = useState<string>('');
+  const [ibAtom, setIbAtom] = useState<string>('0.0');
+  const [interestRate, setInterestRate] = useState<number>(0);
 
-  // const { openModal, renderModal } = useModal({
-  //   content: (
-  //     <BridgeResult
-  //       getStatus={() => bridgeStatus}
-  //       result={{
-  //         sourceChain: selectedChain!,
-  //         targetChain: selectedTargetChain!,
-  //         symbol: selectedToken?.symbol!,
-  //         amount: amount!,
-  //         fee: fee.toString()
-  //       }}
-  //     />
-  //   )
-  // });
+  async function getIbAtom() {
+    if(address) {
+      const balOfIbAtom = await getContract(Contracts.vault).balanceOf(address);
+      setIbAtom(bigNumToStr(balOfIbAtom));
+    }
+  }
 
-  // function actionBridge() {
-  //   if (!amount) {
-  //     alert('amount 입력');
-  //     return;
-  //   }
-  //
-  //   getContract(Contracts.token).approve(contractsInfo.vault.address, (Number(amount) * 1e18).toString()/*, { gasLimit: ethers.utils.parseUnits('250', 'gwei'), gasPrice: ethers.utils.parseUnits('250', 'gwei') }*/)
-  //   getContract(Contracts.token).on('Approval', (to, from, amount) => {
-  //     openModal();
-  //     console.log('=======Approval Success=======');
-  //     console.log(to, amount, from);
-  //     console.log('=======Vault:Lock Start=======');
-  //     vault();
-  //   });
-  // }
+  async function getInterestRate() {
+    const interestRate = await getContract(Contracts.vault).getInterestRate();
+    setInterestRate(bigNumToNum(interestRate));
+  }
 
-  // function vault() {
-  //   getContract(Contracts.vault).lock((Number(amount) * 1e18).toString(), ethers.utils.formatBytes32String(selectedChain!), address, {
-  //     gasLimit: ethers.utils.parseUnits('250', 'gwei'),
-  //     gasPrice: ethers.utils.parseUnits('250', 'gwei')
-  //   })
-  //
-  //   getContract(Contracts.vault).on('Lock', (...args) => {
-  //     setBridgeStatus(BridgeStatus.complete);
-  //     console.log('=======Lock Success=======');
-  //     console.log(args)
-  //   })
-  //
-  //   getContract(Contracts.melter).on('Mint', (...args) => {
-  //     console.log('=======Mint Success=======');
-  //     console.log(args)
-  //   })
-  // }
+  useEffect(() => {
+    (async () => {
+      await getIbAtom();
+      await getInterestRate();
+    })();
+  }, [address]);
 
   return {
-    balance, setBalance,
-    address, setAddress,
+    balance,
+    setBalance,
+    address,
+    ibAtom,
+    interestRate
   }
 };
 

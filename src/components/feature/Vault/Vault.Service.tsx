@@ -70,39 +70,39 @@ const useVault = () => {
     )
   });
 
-  function actionBridge() {
-    if (!amount) {
-      alert('amount 입력');
-      return;
-    }
-
-    getContract(Contracts.token).approve(contractsInfo.vault.address, (Number(amount) * 1e18).toString()/*, { gasLimit: ethers.utils.parseUnits('250', 'gwei'), gasPrice: ethers.utils.parseUnits('250', 'gwei') }*/)
-    getContract(Contracts.token).on('Approval', (to, from, amount) => {
-      openModal();
-      console.log('=======Approval Success=======');
-      console.log(to, amount, from);
-      console.log('=======Vault:Lock Start=======');
-      vault();
-    });
-  }
-
-  function vault() {
-    getContract(Contracts.vault).lock((Number(amount) * 1e18).toString(), ethers.utils.formatBytes32String(selectedChain!), address, {
-      gasLimit: ethers.utils.parseUnits('250', 'gwei'),
-      gasPrice: ethers.utils.parseUnits('250', 'gwei')
-    })
-
-    getContract(Contracts.vault).on('Lock', (...args) => {
-      setBridgeStatus(BridgeStatus.complete);
-      console.log('=======Lock Success=======');
-      console.log(args)
-    })
-
-    getContract(Contracts.melter).on('Mint', (...args) => {
-      console.log('=======Mint Success=======');
-      console.log(args)
-    })
-  }
+  // function actionBridge() {
+  //   if (!amount) {
+  //     alert('amount 입력');
+  //     return;
+  //   }
+  //
+  //   getContract(Contracts.tATOM).approve(contractsInfo.vault.address, (Number(amount) * 1e18).toString()/*, { gasLimit: ethers.utils.parseUnits('250', 'gwei'), gasPrice: ethers.utils.parseUnits('250', 'gwei') }*/)
+  //   getContract(Contracts.tATOM).on('Approval', (to, from, amount) => {
+  //     openModal();
+  //     console.log('=======Approval Success=======');
+  //     console.log(to, amount, from);
+  //     console.log('=======Vault:Lock Start=======');
+  //     vault();
+  //   });
+  // }
+  //
+  // function vault() {
+  //   getContract(Contracts.vault).lock((Number(amount) * 1e18).toString(), ethers.utils.formatBytes32String(selectedChain!), address, {
+  //     gasLimit: ethers.utils.parseUnits('250', 'gwei'),
+  //     gasPrice: ethers.utils.parseUnits('250', 'gwei')
+  //   })
+  //
+  //   getContract(Contracts.vault).on('Lock', (...args) => {
+  //     setBridgeStatus(BridgeStatus.complete);
+  //     console.log('=======Lock Success=======');
+  //     console.log(args)
+  //   })
+  //
+  //   getContract(Contracts.melter).on('Mint', (...args) => {
+  //     console.log('=======Mint Success=======');
+  //     console.log(args)
+  //   })
+  // }
 
   return {
     // chainList, tokenList, fee,
@@ -112,7 +112,7 @@ const useVault = () => {
     // selectedChain, setSelectedChain,
     // selectedTargetChain, setSelectedTargetChain,
     // selectedToken, setSelectedToken,
-    actionBridge,
+    // actionBridge,
     // renderModal
   }
 };

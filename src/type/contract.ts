@@ -1,9 +1,9 @@
 import { Contract } from 'ethers';
 
 export enum Contracts {
-  token = 'token',
+  stayKing = 'stayKing',
   vault = 'vault',
-  melter = 'melter'
+  tATOM = 'tATOM'
 }
 
 export interface ContractsType {
