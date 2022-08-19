@@ -4,10 +4,13 @@ import { Contracts } from '../../../../type/contract';
 import { Contract } from '@ethersproject/contracts';
 import { convertDenomFrom, convertUnitFrom } from '../../../../utils/numberFormats';
 import useLendingAsset from '../../../../hooks/useLendingAsset';
+import { contractsInfo } from '../../../../data/contract/contracts';
 
-let contract: Contract;
+let vaultContract: Contract;
+let tokenContract: Contract;
 
-const useLendingDeposit = () => {
+
+const useLendingDeposit = (closeModal: VoidFunction) => {
   const [amount, setAmount] = useState<string>('');
   const [share, setShare] = useState<string>('');
   const { tokenBalance, tokenName } = useLendingAsset(Contracts.tATOM);
@@ -18,17 +21,28 @@ const useLendingDeposit = () => {
 
   async function deposit() {
     console.log('입금량', convertDenomFrom(amount));
-    const result = await contract.deposit(convertDenomFrom(amount));
-    console.log(result);
+    await tokenContract.approve(contractsInfo[Contracts.vault].address, convertDenomFrom(amount));
+    const depositedResult = await vaultContract.deposit(convertDenomFrom(amount));
+    if(depositedResult && depositedResult['hash']) {
+      closeModal();
+      alert(`txHash: ${depositedResult['hash']} \n Please wait for transaction to confirm on the network...`)
+    }
   }
 
   async function amountToShare() {
-    const _share = await contract.amountToShare(convertDenomFrom(amount));
+    const _share = await vaultContract.amountToShare(convertDenomFrom(amount));
     setShare(convertUnitFrom(_share));
   }
 
+  async function init() {
+  }
+
+
   useEffect(() => {
-    contract = getContract(Contracts.vault);
+    vaultContract = getContract(Contracts.vault);
+    tokenContract = getContract(Contracts.tATOM);
+
+    (async() => { await init()})();
   }, []);
 
 
@@ -39,7 +53,7 @@ const useLendingDeposit = () => {
     tokenBalance,
     setMaxAmount,
     share,
-    amountToShare
+    amountToShare,
   }
 
 }

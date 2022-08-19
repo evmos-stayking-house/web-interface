@@ -6,16 +6,15 @@ import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
 import Button from '../../../common/Button';
 import useLendingDeposit from './LendingDeposit.Service';
-import { useEffect } from 'react';
 
 interface Props {
-  closeModal?: VoidFunction;
   title: string;
+  closeModal: VoidFunction;
 }
 
-const LendingDeposit: FC<Props> = ({ title= 'ATOM' }) => {
+const LendingDeposit: FC<Props> = ({ title, closeModal }) => {
 
-  const { deposit, amount, share, setAmount, tokenBalance, setMaxAmount, amountToShare } = useLendingDeposit();
+  const { deposit, amount, share, setAmount, tokenBalance, setMaxAmount, amountToShare } = useLendingDeposit(closeModal);
 
   return (
     <div className={s.container}>
@@ -59,7 +58,7 @@ const LendingDeposit: FC<Props> = ({ title= 'ATOM' }) => {
           <div className={s.assetName}>ibATOM</div>
         </section>
         <div className={s.confirmBtn}>
-          <Button>Confirm</Button>
+          <Button onClick={() => deposit()}>Confirm</Button>
         </div>
       </div>
     </div>
