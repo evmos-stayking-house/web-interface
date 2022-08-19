@@ -7,6 +7,7 @@ import { Contracts } from '../../../type/contract';
 import { useModal } from '../../Modal';
 import LendingDeposit from '../../Modal/ModalContents/LendingDeposit/LendingDeposit';
 import { useWalletState } from '../../../contexts/WalletContext';
+import LendingWithdraw from '../../Modal/ModalContents/LendingWithdraw/LendingWithdraw';
 
 let vaultContract: Contract;
 let tokenContract: Contract;
@@ -27,6 +28,12 @@ const useVault = () => {
     openModal: openDepositModal,
     closeModal: closeDepositModal
   } = useModal({ content: <LendingDeposit title={'ATOM'} closeModal={() => {}} /> });
+
+  const {
+    renderModal: renderWithdrawModal,
+    openModal: openWithdrawModal,
+    closeModal: closeWithdrawModal
+  } = useModal({ content: <LendingWithdraw title={'ATOM'} closeModal={() => {}} /> });
 
   async function shareToAmount(_share = '1') {
     const _amount: BigNumber = await vaultContract.shareToAmount(convertDenomFrom(_share));
@@ -96,6 +103,9 @@ const useVault = () => {
     renderDepositModal,
     openDepositModal,
     closeDepositModal,
+    renderWithdrawModal,
+    openWithdrawModal,
+    closeWithdrawModal,
     interestRate,
     totalSupply,
     totalBorrowed,
