@@ -1,120 +1,108 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { ethers } from 'ethers';
-import useSWR from 'swr';
+import { Contract } from '@ethersproject/contracts';
+import { BigNumber } from 'ethers';
+import { convertDenomFrom, convertUnitFrom } from '../../../utils/numberFormats';
+import { useEffect, useState } from 'react';
+import { getContract } from '../../../config/contract';
+import { Contracts } from '../../../type/contract';
+import { useModal } from '../../Modal';
+import LendingDeposit from '../../Modal/ModalContents/LendingDeposit/LendingDeposit';
+import { useWalletState } from '../../../contexts/WalletContext';
 
-import { contractsInfo } from 'data/contract/contracts';
-import { getContract } from 'config/contract';
-import { fetcher } from 'utils/fetcher';
-import { Contracts } from 'type/contract';
-import { BridgeStatus } from 'type/bridge';
-import { BridgeResult, useModal } from 'components/Modal';
-import { calculateFee, getChainInfo, getTokenList } from './utils';
-
-interface ListItemType {
-  key: string;
-  item: ReactNode;
-}
-
-interface tokenItemType extends ListItemType {
-  objectId: string;
-  symbol: string;
-  address: string;
-  type: string;
-  melter: string;
-  vault: string;
-  partnerObjectId: string;
-  feeDecimal: number;
-  fee: number;
-}
+let vaultContract: Contract;
+let tokenContract: Contract;
 
 const useVault = () => {
-  const [chainList, setChainList] = useState<ListItemType[]>();
-  const [tokenList, setTokenList] = useState<ListItemType[]>();
-  const [balance, setBalance] = useState('0.0');
-  const [address, setAddress] = useState<string>('');
-  const [amount, setAmount] = useState<string>();
-  const [selectedChain, setSelectedChain] = useState<string>();
-  const [selectedTargetChain, setSelectedTargetChain] = useState<string>();
-  const [selectedToken, setSelectedToken] = useState<tokenItemType>();
-  const [fee, setFee] = useState(0);
-  const [bridgeStatus, setBridgeStatus] = useState(BridgeStatus.yet);
-  const { data } = useSWR('/api/config', fetcher);
+  const { address } = useWalletState();
+  const [ibTokenRatioWithToken, setIbTokenRatioWithToken] = useState<string>('1 ibATOM = 1.0000 ATOM');
+  const [interestRate, setInterestRate] = useState<string>('0.0');
+  const [totalSupply, setTotalSupply] = useState<string>('0');
+  const [totalBorrowed, setTotalBorrowed] = useState<string>('0');
+  const [utilizationRate, setUtilizationRate] = useState<string>('0');
 
-  useEffect(() => {
-    data && setChainList(getChainInfo(data.data.chains));
-  }, [data]);
+  const [ibBalance, setIbBalance] = useState<string>('0');
+  const [vaultTokenBalance, setVaultTokenBalance] = useState<string>('0');
 
-  useEffect(() => {
-    chainList && setTokenList(getTokenList(data.data.tokens, selectedChain));
-  }, [chainList, selectedChain]);
+  const {
+    renderModal: renderDepositModal,
+    openModal: openDepositModal,
+    closeModal: closeDepositModal
+  } = useModal({ content: <LendingDeposit title={'ATOM'} closeModal={() => {}} /> });
 
-  useEffect(() => {
-    if (selectedToken) {
-      const { fee, feeDecimal } = selectedToken;
-      setFee(calculateFee(Number(amount), Number(fee), Number(feeDecimal)));
-    }
-  }, [selectedToken, amount]);
-
-  const { openModal, renderModal } = useModal({
-    content: (
-      <BridgeResult
-        getStatus={() => bridgeStatus}
-        result={{
-          sourceChain: selectedChain!,
-          targetChain: selectedTargetChain!,
-          symbol: selectedToken?.symbol!,
-          amount: amount!,
-          fee: fee.toString()
-        }}
-      />
-    )
-  });
-
-  function actionBridge() {
-    if (!amount) {
-      alert('amount 입력');
-      return;
-    }
-
-    getContract(Contracts.token).approve(contractsInfo.vault.address, (Number(amount) * 1e18).toString()/*, { gasLimit: ethers.utils.parseUnits('250', 'gwei'), gasPrice: ethers.utils.parseUnits('250', 'gwei') }*/)
-    getContract(Contracts.token).on('Approval', (to, from, amount) => {
-      openModal();
-      console.log('=======Approval Success=======');
-      console.log(to, amount, from);
-      console.log('=======Vault:Lock Start=======');
-      vault();
-    });
+  async function shareToAmount(_share = '1') {
+    const _amount: BigNumber = await vaultContract.shareToAmount(convertDenomFrom(_share));
+    return convertUnitFrom(_amount.toString(), '18');
   }
 
-  function vault() {
-    getContract(Contracts.vault).lock((Number(amount) * 1e18).toString(), ethers.utils.formatBytes32String(selectedChain!), address, {
-      gasLimit: ethers.utils.parseUnits('250', 'gwei'),
-      gasPrice: ethers.utils.parseUnits('250', 'gwei')
-    })
-
-    getContract(Contracts.vault).on('Lock', (...args) => {
-      setBridgeStatus(BridgeStatus.complete);
-      console.log('=======Lock Success=======');
-      console.log(args)
-    })
-
-    getContract(Contracts.melter).on('Mint', (...args) => {
-      console.log('=======Mint Success=======');
-      console.log(args)
-    })
+  async function ibTokenRatioWithVaultToken() {
+    const amount = await shareToAmount();
+    setIbTokenRatioWithToken(`1 ibATOM = ${amount} ATOM`);
   }
+
+  async function getInterestRate() {
+    const _interestRate: BigNumber = await vaultContract.getInterestRate();
+    const interestRate = convertUnitFrom(_interestRate.toString(), '0');
+    setInterestRate(interestRate);
+  }
+
+  async function getTotalSupply() {
+    const _totalAmount: BigNumber = await vaultContract.totalAmount();
+    const totalAmount = convertUnitFrom(_totalAmount.toString(), '18');
+    setTotalSupply(totalAmount);
+  }
+
+  async function getTotalBorrowed() {
+    const _totalDebtAmount: BigNumber = await vaultContract.totalDebtAmount();
+    const totalDebtAmount = convertUnitFrom(_totalDebtAmount.toString(), '18');
+    setTotalBorrowed(totalDebtAmount);
+  }
+
+  async function getUtilizationRateBps() {
+    const _utilizationRateBps: BigNumber = await vaultContract.utilizationRateBps();
+    const utilizationRateBps = convertUnitFrom(_utilizationRateBps.toString(), '2');
+    setUtilizationRate(utilizationRateBps);
+  }
+
+  async function getIbBalance() {
+    if (!address) return;
+    const _ibBalance: BigNumber = await vaultContract.balanceOf(address);
+    const ibBalance = convertUnitFrom(_ibBalance.toString(), '18');
+    const vaultToken = await shareToAmount(ibBalance);
+    setIbBalance(ibBalance);
+    setVaultTokenBalance(vaultToken);
+  }
+
+  async function init() {
+    await ibTokenRatioWithVaultToken();
+    await getInterestRate();
+    await getTotalSupply();
+    await getTotalBorrowed();
+    await getUtilizationRateBps();
+    await getIbBalance();
+  }
+
+  useEffect(() => {
+    vaultContract = getContract(Contracts.vault);
+    tokenContract = getContract(Contracts.tATOM);
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      await init();
+    })();
+  }, [address]);
 
   return {
-    // chainList, tokenList, fee,
-    balance, setBalance,
-    address, setAddress,
-    // amount, setAmount,
-    // selectedChain, setSelectedChain,
-    // selectedTargetChain, setSelectedTargetChain,
-    // selectedToken, setSelectedToken,
-    actionBridge,
-    // renderModal
-  }
+    ibTokenRatioWithToken,
+    renderDepositModal,
+    openDepositModal,
+    closeDepositModal,
+    interestRate,
+    totalSupply,
+    totalBorrowed,
+    utilizationRate,
+    ibBalance,
+    vaultTokenBalance
+  };
 };
 
 export default useVault;

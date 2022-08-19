@@ -1,13 +1,14 @@
 import { ethers,  } from 'ethers';
 import { Contracts, ContractsType } from 'type/contract';
-import { contractsInfo } from 'data/contract/contracts';
+import { contractsInfo } from '../data/contract/contracts';
+import { chains } from '../data/chain';
 
 let contract: ContractsType = {};
 let provider: ethers.providers.Web3Provider | null = null;
 
+
 export function initMetaMaskProvider() {
-  provider = new ethers.providers.Web3Provider(window.ethereum)
-  return provider;
+  return new ethers.providers.Web3Provider(window.ethereum);
 }
 
 export function getProvider() {
@@ -18,7 +19,7 @@ export async function switchEvmosChain() {
   try {
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId: '0x2328' }],
+      params: [{ chainId: chains[1].chainId }],
     });
   } catch (e: any) {
     if (e.code === 4902) {
@@ -26,17 +27,7 @@ export async function switchEvmosChain() {
         await window.ethereum.request({
           method: 'wallet_addEthereumChain',
           params: [
-            {
-              chainId: '0x2328',
-              chainName: 'Evmos - Testnet',
-              nativeCurrency: {
-                name: 'tEVMOS',
-                symbol: 'tEVMOS', // 2-6 characters long
-                decimals: 18
-              },
-              blockExplorerUrls: ['https://evm.evmos.dev'],
-              rpcUrls: ['https://eth.bd.evmos.dev:8545'],
-            },
+            chains[1]
           ],
         });
       } catch (addError) {
@@ -47,10 +38,6 @@ export async function switchEvmosChain() {
 }
 
 export function getContract(contractName: Contracts) {
-  if (!contract[contractName]) {
-    const signer = getProvider().getSigner()
-    contract[contractName] = new ethers.Contract(contractsInfo[contractName].address, contractsInfo[contractName].abi, signer);
-  }
-
-  return contract[contractName];
+  const signer = getProvider().getSigner()
+  return new ethers.Contract(contractsInfo[contractName].address, contractsInfo[contractName].abi, signer);
 }

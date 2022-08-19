@@ -1,4 +1,3 @@
-import { string } from 'prop-types';
 
 interface stringObjType {
   [name: string]: string;

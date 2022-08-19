@@ -1,13 +1,31 @@
 import s from './Dashboard.module.scss';
 import useCoinPrice from '../../../hooks/useCoinPrice';
 import { useWalletState } from '../../../contexts/WalletContext';
+import useDashboard from './Dashboard.Service';
+import { cn } from '../../../utils/style';
+import { useState } from 'react';
+
+export enum PositionTab {
+  Active = 'Active',
+  Liquidated = 'Liquidated',
+}
 
 const Dashboard = () => {
-  const { evmosBalance } = useWalletState();
-  const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
 
+  const [selectedTab, setSelectedTab] = useState<PositionTab>(PositionTab.Active);
+
+  const { evmosBalance, address } = useWalletState();
+  const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
+  const { ibAtom, interestRate } = useDashboard(address);
+
+  function onSetSelectedTab(_selTab: PositionTab) {
+    setSelectedTab(_selTab);
+  }
+
+  // console.log(ibAtom, interestRate);
   return (
     <div className={s.container}>
+      {/*TVL Section*/}
       <div className={s.tvlContainer}>
         <div className={s.tvlBrief}>
           <div className={s.tvlBrief__left}>
@@ -22,10 +40,11 @@ const Dashboard = () => {
         </div>
         <div className={s.tvlFooter}>
           <div className={s.tvlFooter__developedBy}>
-            Developed by Sooho
+            Developed by SooHo
           </div>
         </div>
       </div>
+      {/*My Balance Section*/}
       <div className={s.myInfoContainer}>
         <div className={s.myInfoContainer__title}>My Balance</div>
         <div className={s.balanceContainer}>
@@ -47,7 +66,7 @@ const Dashboard = () => {
           <div className={s.balanceBox}>
             <div className={s.balanceBox__left}>
               <p className={s.balanceBox__value}>
-                100 ibATOM
+                {ibAtom} ibATOM
               </p>
               <p className={s.balanceBox__description}>
                 ~ 135 ATOM
@@ -71,6 +90,34 @@ const Dashboard = () => {
               <img className={s.balanceBox__image} src={'/img/common/icon-gt-balance.svg'} />
             </div>
           </div>
+        </div>
+      </div>
+      {/*My Positions*/}
+      <div className={s.myPositionContainer}>
+        <span className={s.myPositionContainer__title}>
+          My Positions
+        </span>
+        <div className={s.tabsContainer}>
+          <div className={cn(s.tab, { [s.activeTab]: selectedTab === PositionTab.Active})} onClick={() => onSetSelectedTab(PositionTab.Active)}>
+            <span className={s.label}>Active Positions</span>
+          </div>
+          <div className={cn(s.tab, { [s.activeTab]: selectedTab === PositionTab.Liquidated} )} onClick={() => onSetSelectedTab(PositionTab.Liquidated)}>
+            <span className={s.label}>Liquidated Positions</span>
+          </div>
+        </div>
+        <div className={s.positionContainerHeader}>
+          <div>Pool</div>
+          <div className={s.alignToCenter}>Position<br/>Value</div>
+          <div className={s.alignToCenter}>Dept<br/>Value</div>
+          <div className={s.alignToCenter}>Equity<br/>Value</div>
+          <div className={s.alignToCenter}>Current<br/>APY</div>
+          <div className={s.alignToCenter}>Dept<br/>Ratio</div>
+          <div className={s.alignToCenter}>Liquidation<br/>Threshold</div>
+          <div className={s.alignToCenter}>Safety<br/>Buffer</div>
+          <div>&nbsp;</div>
+        </div>
+        <div className={s.positionEmptyContainer}>
+          No Active Positions
         </div>
       </div>
     </div>
