@@ -15,9 +15,10 @@ const Vault = () => {
     totalSupply,
     totalBorrowed,
     interestRate,
-    closeDepositModal,
     openDepositModal,
+    openWithdrawModal,
     renderDepositModal,
+    renderWithdrawModal,
     ibTokenRatioWithToken
   } = useVault();
 
@@ -79,7 +80,11 @@ const Vault = () => {
               onClick={() => openDepositModal()}>
               Deposit
             </div>
-            <div className={cn(s.buttonGroup__withdrawBtn, { [s.buttonGroup__enabled]: true })}>Withdraw</div>
+            <div
+              className={cn(s.buttonGroup__withdrawBtn, { [s.buttonGroup__enabled]: true })}
+              onClick={() => openWithdrawModal()}>
+              Withdraw
+            </div>
           </div>
         </div>
 
@@ -174,6 +179,7 @@ const Vault = () => {
         </div>
       </div>
       {renderDepositModal()}
+      {renderWithdrawModal()}
     </div>
   );
 };
