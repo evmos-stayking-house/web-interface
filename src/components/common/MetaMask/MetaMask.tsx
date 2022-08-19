@@ -4,7 +4,6 @@ import useMetaMask from './MetaMast.service';
 import s from './MetaMask.module.scss';
 import { useWalletState } from '../../../contexts/WalletContext';
 import { useModal } from '../../Modal';
-import { BridgeStatus } from '../../../type/bridge';
 import WalletSelection from '../../Modal/ModalContents/WalletSelection/WalletSelection';
 
 interface MetaMaskProps {}
