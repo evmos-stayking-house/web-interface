@@ -34,7 +34,6 @@ const useLendingWithdraw = (closeModal: VoidFunction) => {
   }
 
   async function getBalanceIbToken() {
-    if (!address) return;
     const _ibBalance = await vaultContract.balanceOf(address);
     setIbTokenBalance(convertUnitFrom(_ibBalance));
   }
@@ -49,9 +48,10 @@ const useLendingWithdraw = (closeModal: VoidFunction) => {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      await init();
-    })();
+    (async (address) => {
+      console.log(address);
+      address && (await init());
+    })(address);
   }, [address]);
 
   return {

@@ -3,7 +3,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "delegator",
         "type": "address"
@@ -22,13 +22,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "vault",
         "type": "address"
@@ -85,50 +85,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "minDebtInBase",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "killFactorBps",
-        "type": "uint256"
-      }
-    ],
-    "name": "ChangeConfigs",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "address",
-        "name": "swapHelper",
+        "name": "delegator",
         "type": "address"
       }
     ],
-    "name": "ChangeSwapHelper",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "vault",
-        "type": "address"
-      }
-    ],
-    "name": "ChangeVault",
+    "name": "ChangeDelegator",
     "type": "event"
   },
   {
@@ -148,10 +110,46 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
+        "internalType": "address",
+        "name": "killer",
+        "type": "address"
+      },
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "vault",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "equity",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "debtInBase",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "debt",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "share",
+        "type": "uint256"
       }
     ],
     "name": "Kill",
@@ -180,13 +178,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "vault",
         "type": "address"
@@ -217,13 +215,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "vault",
         "type": "address"
@@ -260,7 +258,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
+        "internalType": "address",
+        "name": "delegator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
@@ -285,7 +289,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
+        "internalType": "address",
+        "name": "delegator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
@@ -307,23 +317,53 @@
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "BASE_TOKEN",
-    "outputs": [
+    "anonymous": false,
+    "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minDebtInBase",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "killFactorBps",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateConfigs",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "address",
-        "name": "",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "vault",
         "type": "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "name": "UpdateVault",
+    "type": "event"
   },
   {
     "inputs": [
       {
         "internalType": "address",
-        "name": "swapHelper_",
+        "name": "delegator_",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "uEVMOS_",
         "type": "address"
       }
     ],
@@ -336,7 +376,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "currentTotalStaked",
         "type": "uint256"
       }
     ],
@@ -427,11 +467,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_newSwapHelper",
+        "name": "_delegator",
         "type": "address"
       }
     ],
-    "name": "changeSwapHelper",
+    "name": "changeDelegator",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -461,16 +501,16 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "delegator",
+    "outputs": [
       {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
-    "name": "delegate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -490,7 +530,7 @@
     "outputs": [
       {
         "internalType": "bool",
-        "name": "",
+        "name": "healthy",
         "type": "bool"
       }
     ],
@@ -667,55 +707,19 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "debtToken",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
-        "name": "_minDebtInBase",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_killFactorBps",
+        "name": "minRepaid",
         "type": "uint256"
       }
     ],
-    "name": "setConfigs",
+    "name": "repayDebtInBase",
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "vault",
-        "type": "address"
-      }
-    ],
-    "name": "setVault",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "delegator",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "status",
-        "type": "bool"
-      }
-    ],
-    "name": "setWhitelistDelegatorStatus",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -732,19 +736,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "swapHelper",
-    "outputs": [
-      {
-        "internalType": "contract ISwapHelper",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -828,22 +819,52 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "uEVMOS",
+    "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IUnbondedEvmos",
         "name": "",
         "type": "address"
       }
     ],
-    "name": "whitelistedDelegator",
-    "outputs": [
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "_minDebtInBase",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_killFactorBps",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "updateConfigs",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "vault",
+        "type": "address"
+      }
+    ],
+    "name": "updateVault",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

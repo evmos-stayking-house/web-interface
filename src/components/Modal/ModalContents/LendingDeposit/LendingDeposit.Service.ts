@@ -9,7 +9,6 @@ import { contractsInfo } from '../../../../data/contract/contracts';
 let vaultContract: Contract;
 let tokenContract: Contract;
 
-
 const useLendingDeposit = (closeModal: VoidFunction) => {
   const [amount, setAmount] = useState<string>('');
   const [share, setShare] = useState<string>('');
@@ -21,11 +20,16 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
 
   async function deposit() {
     console.log('입금량', convertDenomFrom(amount));
-    await tokenContract.approve(contractsInfo[Contracts.vault].address, convertDenomFrom(amount));
+    const approvedResult = await tokenContract.approve(
+      contractsInfo[Contracts.vault].address,
+      convertDenomFrom(amount)
+    );
+    console.log(approvedResult);
     const depositedResult = await vaultContract.deposit(convertDenomFrom(amount));
-    if(depositedResult && depositedResult['hash']) {
+    console.log(depositedResult);
+    if (depositedResult && depositedResult['hash']) {
       closeModal();
-      alert(`txHash: ${depositedResult['hash']} \n Please wait for transaction to confirm on the network...`)
+      alert(`txHash: ${depositedResult['hash']} \n Please wait for transaction to confirm on the network...`);
     }
   }
 
@@ -34,17 +38,16 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
     setShare(convertUnitFrom(_share));
   }
 
-  async function init() {
-  }
-
+  async function init() {}
 
   useEffect(() => {
     vaultContract = getContract(Contracts.vault);
     tokenContract = getContract(Contracts.tATOM);
 
-    (async() => { await init()})();
+    (async () => {
+      await init();
+    })();
   }, []);
-
 
   return {
     deposit,
@@ -53,9 +56,8 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
     tokenBalance,
     setMaxAmount,
     share,
-    amountToShare,
-  }
-
-}
+    amountToShare
+  };
+};
 
 export default useLendingDeposit;

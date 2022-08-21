@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getContract } from '../../../config/contract';
 import { Contracts } from '../../../type/contract';
-import { bigNumToNum, bigNumToStr } from '../../../utils/numberFormats';
+import { bigNumToNum, bigNumToStr, convertUnitFrom } from '../../../utils/numberFormats';
 
 const useDashboard = (address: string) => {
   const [balance, setBalance] = useState<number>(0);
@@ -9,22 +9,29 @@ const useDashboard = (address: string) => {
   const [interestRate, setInterestRate] = useState<number>(0);
 
   async function getIbAtom() {
-    if(address) {
+    try {
       const balOfIbAtom = await getContract(Contracts.vault).balanceOf(address);
-      setIbAtom(bigNumToStr(balOfIbAtom));
+      setIbAtom(convertUnitFrom(balOfIbAtom, 18));
+    } catch (e) {
+      setIbAtom('0');
     }
   }
 
   async function getInterestRate() {
-    const interestRate = await getContract(Contracts.vault).getInterestRate();
-    setInterestRate(bigNumToNum(interestRate));
+    try {
+      const interestRate = await getContract(Contracts.vault).getInterestRate();
+      setInterestRate(bigNumToNum(interestRate));
+    } catch (e) {
+      setInterestRate(0);
+    }
   }
 
   useEffect(() => {
-    (async () => {
+    (async (address) => {
+      if (!address) return;
       await getIbAtom();
       await getInterestRate();
-    })();
+    })(address);
   }, [address]);
 
   return {
@@ -33,7 +40,7 @@ const useDashboard = (address: string) => {
     address,
     ibAtom,
     interestRate
-  }
+  };
 };
 
 export default useDashboard;

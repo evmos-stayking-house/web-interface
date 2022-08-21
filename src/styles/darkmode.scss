@@ -2,7 +2,9 @@
   background-color: #{$theme-black};
   background-image: var(--logo-bg-url);
   color: #{$theme-white};
-
+  height: 100vh;
+  margin-top: 0;
+  --nextui-colors-background: #{$theme-black};
   --background-color: #{$theme-black};
   --background-size: 100%;
   --btn-color: #{$theme-mint};
