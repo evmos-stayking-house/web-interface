@@ -22,8 +22,10 @@ const useLendingAsset = (contractKey: Contracts) => {
 
   useEffect(() => {
     contract = getContract(contractKey);
-    (async () => {await init()})();
-  }, []);
+    (async (address) => {
+      address && (await init());
+    })();
+  }, [address]);
 
   return {
     tokenName: contractKey,

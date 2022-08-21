@@ -1,23 +1,20 @@
 import { useEffect, useState } from 'react';
 import { METAMASK_CODE_NAME, METAMASK_MESSAGE } from 'data/appInfo/message';
-import { getContract, getProvider, switchEvmosChain } from 'config/contract';
-import { Contracts } from 'type/contract';
+import { getProvider, switchEvmosChain } from 'config/contract';
 import { useWalletState } from '../../../contexts/WalletContext';
 import { Web3Provider } from '@ethersproject/providers';
 import { BigNumber, ethers } from 'ethers';
 
-
 const useMetaMask = () => {
-
   const { onChangeAddress, address, onChangeEvmosBalance } = useWalletState();
 
   useEffect(() => {
-    address && getBalance();
+    address && loadBalances();
   }, [address]);
 
   async function connectWallet() {
     if (address) {
-      if(confirm('연결 해제하시겠습니까?')){
+      if (confirm('연결 해제하시겠습니까?')) {
         onChangeAddress('');
       }
       return;
@@ -30,7 +27,7 @@ const useMetaMask = () => {
       const address = await provider.getSigner().getAddress();
       onChangeAddress(address);
     } catch (err: any) {
-      console.log('METAMASK ::: ', err)
+      console.log('METAMASK ::: ', err);
       if (err.code) {
         alert(METAMASK_MESSAGE[METAMASK_CODE_NAME[err.code.toString()]]);
       } else {
@@ -39,20 +36,19 @@ const useMetaMask = () => {
     }
   }
 
-  function getBalance() {
-    (async () => {
+  function loadBalances() {
+    (async (address) => {
+      if (!address) return;
+
       const provider: Web3Provider = getProvider();
       const balance: BigNumber = await provider.getBalance(address);
-      console.log(ethers.utils.formatEther(balance));
       onChangeEvmosBalance(ethers.utils.formatEther(balance));
-      // const tokenContract = getContract(Contracts.token);
-      // const balance = await tokenContract.balanceOf(address)
-      // setBalance(balance / Math.pow(10, 18));
-    })()
+    })(address);
   }
 
   return {
-    connectWallet
+    connectWallet,
+    loadBalances
   };
 };
 

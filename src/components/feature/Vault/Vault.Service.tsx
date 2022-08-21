@@ -64,7 +64,8 @@ const useVault = () => {
   }
 
   async function getUtilizationRateBps() {
-    const _utilizationRateBps: BigNumber = await vaultContract.utilizationRateBps();
+    const _utilizationRateBps = await vaultContract.utilizationRateBps();
+    console.log(_utilizationRateBps);
     const utilizationRateBps = convertUnitFrom(_utilizationRateBps.toString(), '2');
     setUtilizationRate(utilizationRateBps);
   }
@@ -93,9 +94,9 @@ const useVault = () => {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      await init();
-    })();
+    (async (_address) => {
+      _address && (await init());
+    })(address);
   }, [address]);
 
   return {

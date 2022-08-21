@@ -13,43 +13,39 @@ interface Props {
 }
 
 const LendingDeposit: FC<Props> = ({ title, closeModal }) => {
-
-  const { deposit, amount, share, setAmount, tokenBalance, setMaxAmount, amountToShare } = useLendingDeposit(closeModal);
+  const { deposit, amount, share, setAmount, tokenBalance, setMaxAmount, amountToShare } =
+    useLendingDeposit(closeModal);
 
   return (
     <div className={s.container}>
       <div className={s.logoContainer}>
-        <div className={s.logoContainer__title}>
-          Deposit {title}
-        </div>
-        <img className={s.logoContainer__logo} src={'/img/logo/cosmos.png'} alt={'cosmos coin logo'}/>
+        <div className={s.logoContainer__title}>Deposit {title}</div>
+        <img className={s.logoContainer__logo} src={'/img/logo/cosmos.png'} alt={'cosmos coin logo'} />
       </div>
       <div className={s.divider}></div>
-      <span className={cn(s.desc, s.desc__lg)}>
-        Available ATOM Balance: {tokenBalance} ATOM
-      </span>
+      <span className={cn(s.desc, s.desc__lg)}>Available ATOM Balance: {tokenBalance} ATOM</span>
       <Form>
         <section className={s.depositTokenContainer} onBlur={() => amountToShare()}>
           <Form.Item label="" className={s.input}>
             <InputNumber max={tokenBalance} setInputValue={setAmount} inputValue={amount} />
           </Form.Item>
           <div className={s.assetName}>ATOM</div>
-          <button className={s.maxBtn} onClick={(e)=> {
-            e.preventDefault();
-            setMaxAmount();
-          }}>max</button>
+          <button
+            className={s.maxBtn}
+            onClick={(e) => {
+              e.preventDefault();
+              setMaxAmount();
+            }}>
+            max
+          </button>
         </section>
       </Form>
+      <span className={s.desc}>Please note that ibToken exchange rate is not 1:1.</span>
       <span className={s.desc}>
-        Please note that ibToken exchange rate is not 1:1.
-      </span>
-      <span className={s.desc}>
-        The amount of ibTokens you'll receive is worth the same as the amount of tokens you deposited.
+        The amount of ibTokens you will receive is worth the same as the amount of tokens you deposited.
       </span>
       <div className={s.colSpace}></div>
-      <span className={cn(s.desc, s.desc__lg)}>
-        You will receive
-      </span>
+      <span className={cn(s.desc, s.desc__lg)}>You will receive</span>
       <div className={s.ibTokenContainerWrapper}>
         <section className={s.ibTokenContainer}>
           <Form.Item label="" className={s.input}>

@@ -1,198 +1,78 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import s from './Stake.module.scss';
 import { cn } from '../../../utils/style';
+import { Dropdown } from '@nextui-org/react';
+import useStake from './Stake.Service';
 
 const Stake = () => {
+  const { leverage, onChangeLeverage, renderStakeModal, openStakeModal } = useStake();
+
   return (
     <div className={s.container}>
-      <div className={s.title}>
-        Leveraged Staking
+      <div className={s.title}>Staking Pools</div>
+      <div className={s.poolListContainerHeader}>
+        <div>Asset/Chain</div>
+        <div>APY</div>
+        <div>Yield</div>
+        <div>Leverage</div>
+        <div>&nbsp;</div>
       </div>
-      <div className={s.stakingContents}>
-        {/* ATOM Asset Leveraged Staking */}
-        <div className={s.stakingItem}>
-          <div className={s.stakingItem__header}>
-            <div className={s.stakingItem__headerLeft}>
-              <div className={s.stakingItem__tokenImages}>
-                <img className={s.stakingItem__tokenIcon} src={'/img/logo/cosmos.png'} alt={'atom token symbol'}/>
-              </div>
-              <div className={s.stakingItem__mainInfo}>
-                <p className={s.stakingItem__title}>
-                  Leveraged ATOM
-                </p>
-                <p className={s.stakingItem__tvl}>
-                  TVL {'$10M'}
-                </p>
-              </div>
+      <div className={s.poolListContainerContents}>
+        <div className={s.poolListContainerContents__item}>
+          <div className={s.assetInfo}>
+            <img className={s.assetInfo__icon} src={'/img/logo/evmos.png'} alt={'evmos symbol'} />
+            <div className={s.AssetInfo__info}>
+              <p className={s.assetInfo__info__title}>EVMOS</p>
+              <p className={s.assetInfo__info__priceInfo}>Evmos</p>
+              <p className={s.assetInfo__info__priceInfo}></p>
             </div>
-            <div className={s.stakingItem__subInfo}>
-              <p className={s.stakingItem__apy}>200%</p>
-              <p className={s.stakingItem__poolInterest}>Staking Interest</p>
-            </div>
-
-          </div>
-          <div className={s.stakingItem__content}>
-            <div className={cn(s.stakingProperty, s.stakingProperty__flexStart)}>
-              <div className={s.stakingProperty__label}>
-                Yield Staking
-                <p className={s.stakingProperty__labelSub}>Performance Fee 30% Applied</p>
-              </div>
-              <div className={s.stakingProperty__value}>140%</div>
-            </div>
-            <div className={s.stakingProperty}>
-              <div className={s.stakingProperty__label}>
-                EVMOS Rewards
-              </div>
-              <div className={s.stakingProperty__value}>0%</div>
-            </div>
-            <div className={s.stakingProperty}>
-              <div className={s.stakingProperty__label}>
-                Borrowing Interest
-              </div>
-              <div className={s.stakingProperty__value}>0%</div>
-            </div>
-            <div className={cn(s.stakingProperty, s.stakingProperty__totalAPR)}>
-              <div className={s.stakingProperty__label}>
-                Total APR
-              </div>
-              <div className={s.stakingProperty__value}>140%</div>
-            </div>
-          </div>
-          <div className={s.stakingItem__footer}>
-            <div className={s.LeverageController}>
-              <span className={s.LeverageController__title}>Leverage</span>
-              <div className={s.LeverageController__content}>
-                <img className={s.LeverageController__minusIcon} src={'/img/common/minus.svg'} alt={'minus icon'} />
-                <span className={s.LeverageController__leverageValue}>1</span>
-                <img className={s.LeverageController__plusIcon} src={'/img/common/plus.svg'} alt={'plus icon'} />
-              </div>
-            </div>
-            <button className={s.stakingItem__button}>Leveraged Staking 1x</button>
           </div>
         </div>
-        {/* OSMO Asset Leveraged Staking */}
-        <div className={cn(s.stakingItem)}>
-          <div className={s.stakingItem__header}>
-            <div className={s.stakingItem__headerLeft}>
-              <div className={s.stakingItem__tokenImages}>
-                <img className={s.stakingItem__tokenIcon} src={'/img/logo/osmosis.png'} alt={'osmosis token symbol'}/>
-              </div>
-              <div className={s.stakingItem__mainInfo}>
-                <p className={s.stakingItem__title}>
-                  Leveraged OSMO
-                </p>
-                <p className={s.stakingItem__tvl}>
-                  TVL {'$0M'}
-                </p>
-              </div>
-            </div>
-            <div className={s.stakingItem__subInfo}>
-              <p className={s.stakingItem__apy}>0%</p>
-              <p className={s.stakingItem__poolInterest}>Staking Interest</p>
-            </div>
-          </div>
-          <div className={s.stakingItem__content}>
-            <div className={cn(s.stakingProperty, s.stakingProperty__flexStart)}>
-              <div className={s.stakingProperty__label}>
-                Yield Staking
-                <p className={s.stakingProperty__labelSub}>Performance Fee 30% Applied</p>
-              </div>
-              <div className={s.stakingProperty__value}>0%</div>
-            </div>
-            <div className={s.stakingProperty}>
-              <div className={s.stakingProperty__label}>
-                EVMOS Rewards
-              </div>
-              <div className={s.stakingProperty__value}>0%</div>
-            </div>
-            <div className={s.stakingProperty}>
-              <div className={s.stakingProperty__label}>
-                Borrowing Interest
-              </div>
-              <div className={s.stakingProperty__value}>0%</div>
-            </div>
-            <div className={cn(s.stakingProperty, s.stakingProperty__totalAPR)}>
-              <div className={s.stakingProperty__label}>
-                Total APR
-              </div>
-              <div className={s.stakingProperty__value}>0%</div>
-            </div>
-          </div>
-          <div className={s.stakingItem__footer}>
-            <div className={s.LeverageController}>
-              <span className={s.LeverageController__title}>Leverage</span>
-              <div className={s.LeverageController__content}>
-                <img className={s.LeverageController__minusIcon} src={'/img/common/minus.svg'} alt={'minus icon'} />
-                <span className={s.LeverageController__leverageValue}>1</span>
-                <img className={s.LeverageController__plusIcon} src={'/img/common/plus.svg'} alt={'plus icon'} />
-              </div>
-            </div>
-            <button className={cn(s.stakingItem__button, s.stakingItem__buttonDisabled)}>Upcoming</button>
+        <div className={s.poolListContainerContents__item}>
+          <div className={s.assetInfo__labelAndValue}>
+            <span className={s.assetInfo__labelAndValue__label}>APY</span>
+            <span className={s.assetInfo__labelAndValue__value}>0%</span>
           </div>
         </div>
-        {/* JUNO Asset Leveraged Staking */}
-        <div className={cn(s.stakingItem)}>
-          <div className={s.stakingItem__header}>
-            <div className={s.stakingItem__headerLeft}>
-              <div className={s.stakingItem__tokenImages}>
-                <img className={s.stakingItem__tokenIcon} src={'/img/logo/juno.png'} alt={'juno token symbol'}/>
-              </div>
-              <div className={s.stakingItem__mainInfo}>
-                <p className={s.stakingItem__title}>
-                  Leveraged JUNO
-                </p>
-                <p className={s.stakingItem__tvl}>
-                  TVL {'$0M'}
-                </p>
-              </div>
+        <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__yield)}>
+          <span className={s.poolListContainerContents__item__text}>Yield Staking : 0.00%</span>
+          <span className={s.poolListContainerContents__item__text}>Borrowing Interest : ATOM 0.00%</span>
+          <span className={s.poolListContainerContents__item__text}>Total APR : 0.00%</span>
+        </div>
+        <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__leverage)}>
+          <Dropdown>
+            <Dropdown.Button flat color="secondary" css={{ tt: 'capitalize' }}>
+              {leverage}
+            </Dropdown.Button>
+            <Dropdown.Menu
+              aria-label="Single selection actions"
+              color="secondary"
+              disallowEmptySelection
+              selectionMode="single"
+              selectedKeys={leverage}
+              onSelectionChange={onChangeLeverage}>
+              <Dropdown.Item key="1.0">1.0</Dropdown.Item>
+              <Dropdown.Item key="1.5">1.5</Dropdown.Item>
+              <Dropdown.Item key="2.0">2.0</Dropdown.Item>
+              <Dropdown.Item key="2.5">2.5</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+        <div className={s.poolListContainerContents__item}>
+          <div className={s.buttonGroup}>
+            <div
+              className={cn(s.buttonGroup__depositBtn, { [s.buttonGroup__enabled]: true })}
+              onClick={() => openStakeModal()}>
+              Stake
             </div>
-            <div className={s.stakingItem__subInfo}>
-              <p className={s.stakingItem__apy}>0%</p>
-              <p className={s.stakingItem__poolInterest}>Staking Interest</p>
+            <div className={cn(s.buttonGroup__withdrawBtn, { [s.buttonGroup__enabled]: true })} onClick={() => {}}>
+              Unstake
             </div>
-
-          </div>
-          <div className={s.stakingItem__content}>
-            <div className={cn(s.stakingProperty, s.stakingProperty__flexStart)}>
-              <div className={s.stakingProperty__label}>
-                Yield Staking
-                <p className={s.stakingProperty__labelSub}>Performance Fee 30% Applied</p>
-              </div>
-              <div className={s.stakingProperty__value}>0%</div>
-            </div>
-            <div className={s.stakingProperty}>
-              <div className={s.stakingProperty__label}>
-                EVMOS Rewards
-              </div>
-              <div className={s.stakingProperty__value}>0%</div>
-            </div>
-            <div className={s.stakingProperty}>
-              <div className={s.stakingProperty__label}>
-                Borrowing Interest
-              </div>
-              <div className={s.stakingProperty__value}>0%</div>
-            </div>
-            <div className={cn(s.stakingProperty, s.stakingProperty__totalAPR)}>
-              <div className={s.stakingProperty__label}>
-                Total APR
-              </div>
-              <div className={s.stakingProperty__value}>0%</div>
-            </div>
-          </div>
-          <div className={s.stakingItem__footer}>
-            <div className={s.LeverageController}>
-              <span className={s.LeverageController__title}>Leverage</span>
-              <div className={s.LeverageController__content}>
-                <img className={s.LeverageController__minusIcon} src={'/img/common/minus.svg'} alt={'minus icon'} />
-                <span className={s.LeverageController__leverageValue}>1</span>
-                <img className={s.LeverageController__plusIcon} src={'/img/common/plus.svg'} alt={'plus icon'} />
-              </div>
-            </div>
-            <button className={cn(s.stakingItem__button, s.stakingItem__buttonDisabled)}>Upcoming</button>
           </div>
         </div>
       </div>
+      {renderStakeModal()}
     </div>
   );
 };
