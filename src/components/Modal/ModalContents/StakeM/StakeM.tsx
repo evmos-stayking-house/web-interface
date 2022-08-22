@@ -10,9 +10,10 @@ import React from 'react';
 
 interface Props {
   closeModal: VoidFunction;
+  parentLeverage: string;
 }
 
-const StakeM: FC<Props> = ({ closeModal }) => {
+const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
   const {
     evmosBalance,
     deptInBase,
@@ -28,7 +29,7 @@ const StakeM: FC<Props> = ({ closeModal }) => {
     setMaxAmount,
     onChangeSuppliedAmount,
     addPosition
-  } = useStakeM(closeModal);
+  } = useStakeM(closeModal, parentLeverage);
 
   return (
     <div className={s.container}>

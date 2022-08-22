@@ -20,13 +20,8 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
 
   async function deposit() {
     console.log('입금량', convertDenomFrom(amount));
-    const approvedResult = await tokenContract.approve(
-      contractsInfo[Contracts.vault].address,
-      convertDenomFrom(amount)
-    );
-    console.log(approvedResult);
+    await tokenContract.approve(contractsInfo[Contracts.vault].address, convertDenomFrom(amount));
     const depositedResult = await vaultContract.deposit(convertDenomFrom(amount));
-    console.log(depositedResult);
     if (depositedResult && depositedResult['hash']) {
       closeModal();
       alert(`txHash: ${depositedResult['hash']} \n Please wait for transaction to confirm on the network...`);

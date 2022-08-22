@@ -4,19 +4,21 @@ import { useWalletState } from '../../../contexts/WalletContext';
 import useDashboard from './Dashboard.Service';
 import { cn } from '../../../utils/style';
 import { useState } from 'react';
+import { numberFormat } from '../../../utils/numberFormats';
+import ActivePosition from './ActivePosition';
+import LiquidatedPosition from './LiquidatedPosition';
 
 export enum PositionTab {
   Active = 'Active',
-  Liquidated = 'Liquidated',
+  Liquidated = 'Liquidated'
 }
 
 const Dashboard = () => {
-
   const [selectedTab, setSelectedTab] = useState<PositionTab>(PositionTab.Active);
 
   const { evmosBalance, address } = useWalletState();
   const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
-  const { ibAtom, interestRate } = useDashboard(address);
+  const { tvl, ibAtom, atomAmount } = useDashboard(address);
 
   function onSetSelectedTab(_selTab: PositionTab) {
     setSelectedTab(_selTab);
@@ -30,18 +32,12 @@ const Dashboard = () => {
         <div className={s.tvlBrief}>
           <div className={s.tvlBrief__left}>
             <p className={s.tvlBrief__title}>Total Value Locked</p>
-            <p className={s.tvlBrief__description}>
-              $ 105,122
-            </p>
+            <p className={s.tvlBrief__description}>$ {numberFormat(tvl)}</p>
           </div>
-          <div className={s.tvlBrief__right}>
-            DeFi Pre Alpha Version
-          </div>
+          <div className={s.tvlBrief__right}>DeFi Pre Alpha Version</div>
         </div>
         <div className={s.tvlFooter}>
-          <div className={s.tvlFooter__developedBy}>
-            Developed by SooHo
-          </div>
+          <div className={s.tvlFooter__developedBy}>Developed by SooHo</div>
         </div>
       </div>
       {/*My Balance Section*/}
@@ -52,11 +48,25 @@ const Dashboard = () => {
           <div className={s.balanceBox}>
             <div className={s.balanceBox__left}>
               <p className={s.balanceBox__value}>
-                {Number(evmosBalance).toFixed(4)} EVMOS
+                {numberFormat(Number(evmosBalance).toFixed(3))}
+                <span className={s.balanceBox__value__unit}>EVMOS</span>
               </p>
               <p className={s.balanceBox__description}>
-                ~ ${evmosPrice && (evmosPrice * Number(evmosBalance)).toFixed(2)}
+                ~ ${evmosPrice && numberFormat((evmosPrice * Number(evmosBalance)).toFixed(0))}
               </p>
+            </div>
+            <div className={s.balanceBox__right}>
+              <img className={s.balanceBox__image} src={'/img/logo/evmos.png'} />
+            </div>
+          </div>
+          <span className={s.rowDivider} />
+          <div className={s.balanceBox}>
+            <div className={s.balanceBox__left}>
+              <p className={s.balanceBox__value}>
+                {numberFormat(ibAtom)}
+                <span className={s.balanceBox__value__unit}>ibATOM</span>
+              </p>
+              <p className={s.balanceBox__description}>~ {numberFormat(atomAmount)} ATOM</p>
             </div>
             <div className={s.balanceBox__right}>
               <img className={s.balanceBox__image} src={'/img/common/icon-gt-balance.svg'} />
@@ -66,25 +76,9 @@ const Dashboard = () => {
           <div className={s.balanceBox}>
             <div className={s.balanceBox__left}>
               <p className={s.balanceBox__value}>
-                {ibAtom} ibATOM
+                0<span className={s.balanceBox__value__unit}>uEVMOS</span>
               </p>
-              <p className={s.balanceBox__description}>
-                ~ 135 ATOM
-              </p>
-            </div>
-            <div className={s.balanceBox__right}>
-              <img className={s.balanceBox__image} src={'/img/common/icon-gt-balance.svg'} />
-            </div>
-          </div>
-          <span className={s.rowDivider} />
-          <div className={s.balanceBox}>
-            <div className={s.balanceBox__left}>
-              <p className={s.balanceBox__value}>
-                200 stEVMOS
-              </p>
-              <p className={s.balanceBox__description}>
-                ~ 310 EVMOS
-              </p>
+              <p className={s.balanceBox__description}>~ 0 EVMOS</p>
             </div>
             <div className={s.balanceBox__right}>
               <img className={s.balanceBox__image} src={'/img/common/icon-gt-balance.svg'} />
@@ -94,34 +88,24 @@ const Dashboard = () => {
       </div>
       {/*My Positions*/}
       <div className={s.myPositionContainer}>
-        <span className={s.myPositionContainer__title}>
-          My Positions
-        </span>
+        <span className={s.myPositionContainer__title}>My Positions</span>
         <div className={s.tabsContainer}>
-          <div className={cn(s.tab, { [s.activeTab]: selectedTab === PositionTab.Active})} onClick={() => onSetSelectedTab(PositionTab.Active)}>
+          <div
+            className={cn(s.tab, { [s.activeTab]: selectedTab === PositionTab.Active })}
+            onClick={() => onSetSelectedTab(PositionTab.Active)}>
             <span className={s.label}>Active Positions</span>
           </div>
-          <div className={cn(s.tab, { [s.activeTab]: selectedTab === PositionTab.Liquidated} )} onClick={() => onSetSelectedTab(PositionTab.Liquidated)}>
+          <div
+            className={cn(s.tab, { [s.activeTab]: selectedTab === PositionTab.Liquidated })}
+            onClick={() => onSetSelectedTab(PositionTab.Liquidated)}>
             <span className={s.label}>Liquidated Positions</span>
           </div>
         </div>
-        <div className={s.positionContainerHeader}>
-          <div>Pool</div>
-          <div className={s.alignToCenter}>Position<br/>Value</div>
-          <div className={s.alignToCenter}>Dept<br/>Value</div>
-          <div className={s.alignToCenter}>Equity<br/>Value</div>
-          <div className={s.alignToCenter}>Current<br/>APY</div>
-          <div className={s.alignToCenter}>Dept<br/>Ratio</div>
-          <div className={s.alignToCenter}>Liquidation<br/>Threshold</div>
-          <div className={s.alignToCenter}>Safety<br/>Buffer</div>
-          <div>&nbsp;</div>
-        </div>
-        <div className={s.positionEmptyContainer}>
-          No Active Positions
-        </div>
+        {selectedTab === PositionTab.Active && <ActivePosition address={address} />}
+        {selectedTab === PositionTab.Liquidated && <LiquidatedPosition />}
       </div>
     </div>
   );
-}
+};
 
 export default Dashboard;

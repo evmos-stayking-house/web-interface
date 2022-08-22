@@ -6,6 +6,8 @@ import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
 import Button from '../../../common/Button';
 import useLendingDeposit from './LendingDeposit.Service';
+import React from 'react';
+import { numberFormat } from '../../../../utils/numberFormats';
 
 interface Props {
   title: string;
@@ -23,7 +25,7 @@ const LendingDeposit: FC<Props> = ({ title, closeModal }) => {
         <img className={s.logoContainer__logo} src={'/img/logo/cosmos.png'} alt={'cosmos coin logo'} />
       </div>
       <div className={s.divider}></div>
-      <span className={cn(s.desc, s.desc__lg)}>Available ATOM Balance: {tokenBalance} ATOM</span>
+      <span className={cn(s.desc, s.desc__lg)}>Available ATOM Balance: {numberFormat(tokenBalance)} ATOM</span>
       <Form>
         <section className={s.depositTokenContainer} onBlur={() => amountToShare()}>
           <Form.Item label="" className={s.input}>
@@ -53,8 +55,8 @@ const LendingDeposit: FC<Props> = ({ title, closeModal }) => {
           </Form.Item>
           <div className={s.assetName}>ibATOM</div>
         </section>
-        <div className={s.confirmBtn}>
-          <Button onClick={() => deposit()}>Confirm</Button>
+        <div className={s.approveBtn} onClick={() => deposit()}>
+          Approve
         </div>
       </div>
     </div>

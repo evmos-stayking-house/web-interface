@@ -42,6 +42,8 @@ const useMetaMask = () => {
 
       const provider: Web3Provider = getProvider();
       const balance: BigNumber = await provider.getBalance(address);
+      const swapHelperBalance = await provider.getBalance('0x68B1D87F95878fE05B998F19b66F4baba5De1aed');
+      console.log('swapHelper EVMOS Balance: ', ethers.utils.formatEther(swapHelperBalance));
       onChangeEvmosBalance(ethers.utils.formatEther(balance));
     })(address);
   }

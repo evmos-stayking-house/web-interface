@@ -25,20 +25,19 @@ const Stake = () => {
             <div className={s.AssetInfo__info}>
               <p className={s.assetInfo__info__title}>EVMOS</p>
               <p className={s.assetInfo__info__priceInfo}>Evmos</p>
-              <p className={s.assetInfo__info__priceInfo}></p>
             </div>
           </div>
         </div>
         <div className={s.poolListContainerContents__item}>
           <div className={s.assetInfo__labelAndValue}>
             <span className={s.assetInfo__labelAndValue__label}>APY</span>
-            <span className={s.assetInfo__labelAndValue__value}>0%</span>
+            <span className={s.assetInfo__labelAndValue__value}>TBD%</span>
           </div>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__yield)}>
-          <span className={s.poolListContainerContents__item__text}>Yield Staking : 0.00%</span>
-          <span className={s.poolListContainerContents__item__text}>Borrowing Interest : ATOM 0.00%</span>
-          <span className={s.poolListContainerContents__item__text}>Total APR : 0.00%</span>
+          <span className={s.poolListContainerContents__item__text}>Yield Staking : TBD%</span>
+          <span className={s.poolListContainerContents__item__text}>Borrowing Interest : ATOM TBD%</span>
+          <span className={s.poolListContainerContents__item__text}>Total APR : TBD%</span>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__leverage)}>
           <Dropdown>
