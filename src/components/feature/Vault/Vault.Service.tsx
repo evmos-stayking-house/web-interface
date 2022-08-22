@@ -54,6 +54,8 @@ const useVault = () => {
   async function getTotalSupply() {
     const _totalAmount: BigNumber = await vaultContract.totalAmount();
     const totalAmount = convertUnitFrom(_totalAmount.toString(), '18');
+    if (Number(totalAmount) > 0) await getUtilizationRateBps();
+
     setTotalSupply(totalAmount);
   }
 
@@ -84,7 +86,6 @@ const useVault = () => {
     await getInterestRate();
     await getTotalSupply();
     await getTotalBorrowed();
-    await getUtilizationRateBps();
     await getIbBalance();
   }
 

@@ -24,7 +24,7 @@ const useLendingAsset = (contractKey: Contracts) => {
     contract = getContract(contractKey);
     (async (address) => {
       address && (await init());
-    })();
+    })(address);
   }, [address]);
 
   return {

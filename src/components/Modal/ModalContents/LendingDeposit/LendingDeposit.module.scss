@@ -77,6 +77,7 @@
   .maxBtn {
     width: 10%;
     background-color: #{$theme-mint};
+    cursor: pointer;
     color: var(--contrast-color);
     font-size: 18px;
     border: 0;
@@ -99,7 +100,6 @@
     justify-items: center;
     align-self: center;
     justify-content: center;
-    margin-top: 5px;
     margin-left: 10px;
     height: 48px;
   }
@@ -131,6 +131,24 @@
     border-radius: 8px;
     color: var(--contrast-color);
   }
+}
 
-
+.approveBtn {
+  border: 0;
+  outline: 0;
+  padding: 0;
+  font-size: 16px;
+  display: flex;
+  height: 48px;
+  margin-top: 15px;
+  margin-left: 10px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #111827;
+  font-weight: 600;
+  width: 120px;
+  margin-bottom: 8px;
 }

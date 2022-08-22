@@ -1,10 +1,10 @@
 import type { FC } from 'react';
 import { cn } from 'utils/style';
-import useMetaMask from './MetaMask.service';
 import s from './MetaMask.module.scss';
 import { useWalletState } from '../../../contexts/WalletContext';
 import { useModal } from '../../Modal';
 import WalletSelection from '../../Modal/ModalContents/WalletSelection/WalletSelection';
+import useMetaMask from './MetaMask.service';
 
 interface MetaMaskProps {}
 
