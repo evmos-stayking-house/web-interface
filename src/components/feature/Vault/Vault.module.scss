@@ -74,20 +74,23 @@
     }
 
     &__totalBorrowed {
-      flex-direction: row;
+      display: flex;
+      flex-direction: column;
       flex-wrap: wrap;
       align-items: center;
       align-content: center;
-      justify-content: flex-start;
+      justify-content: center;
     }
 
     &__tokenValue {
       margin-right: 4px;
+      text-align: center;
     }
 
     &__tokenSymbol {
       font-size: 12px;
       font-weight: 500;
+      text-align: right;
     }
 
     &:nth-child(7n+1) {

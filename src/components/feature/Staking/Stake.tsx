@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 
 import s from './Stake.module.scss';
 import { cn } from '../../../utils/style';
-import { Dropdown } from '@nextui-org/react';
-import useStake from './Stake.Service';
+import useStake from './Stake.service';
+import { Autocomplete, TextField } from '@mui/material';
 
 const Stake = () => {
-  const { leverage, onChangeLeverage, renderStakeModal, openStakeModal } = useStake();
+  const { leverage, setLeverage, renderStakeModal, hasPosition, openStakeModal, renderUnStakeModal, openUnStakeModal } =
+    useStake();
 
   return (
     <div className={s.container}>
@@ -40,38 +41,37 @@ const Stake = () => {
           <span className={s.poolListContainerContents__item__text}>Total APR : TBD%</span>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__leverage)}>
-          <Dropdown>
-            <Dropdown.Button flat color="secondary" css={{ tt: 'capitalize' }}>
-              {leverage}
-            </Dropdown.Button>
-            <Dropdown.Menu
-              aria-label="Single selection actions"
-              color="secondary"
-              disallowEmptySelection
-              selectionMode="single"
-              selectedKeys={leverage}
-              onSelectionChange={onChangeLeverage}>
-              <Dropdown.Item key="1.0">1.0</Dropdown.Item>
-              <Dropdown.Item key="1.5">1.5</Dropdown.Item>
-              <Dropdown.Item key="2.0">2.0</Dropdown.Item>
-              <Dropdown.Item key="2.5">2.5</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <Autocomplete
+            value={leverage}
+            onChange={(event: any, newValue: string | null) => {
+              event.preventDefault();
+              setLeverage(newValue);
+            }}
+            id="leverage-adjust-modal"
+            options={['1.0', '1.5', '2.0', '2.5']}
+            style={{ width: 80, background: '#D9D9D9', color: '#4D4545', borderRadius: 8 }}
+            renderInput={(params) => <TextField {...params} variant="outlined" />}
+          />
         </div>
         <div className={s.poolListContainerContents__item}>
           <div className={s.buttonGroup}>
+            {!hasPosition && (
+              <div
+                className={cn(s.buttonGroup__depositBtn, { [s.buttonGroup__enabled]: true })}
+                onClick={() => openStakeModal()}>
+                Stake
+              </div>
+            )}
             <div
-              className={cn(s.buttonGroup__depositBtn, { [s.buttonGroup__enabled]: true })}
-              onClick={() => openStakeModal()}>
-              Stake
-            </div>
-            <div className={cn(s.buttonGroup__withdrawBtn, { [s.buttonGroup__enabled]: true })} onClick={() => {}}>
+              className={cn(s.buttonGroup__withdrawBtn, { [s.buttonGroup__enabled]: true })}
+              onClick={() => openUnStakeModal()}>
               Unstake
             </div>
           </div>
         </div>
       </div>
       {renderStakeModal()}
+      {renderUnStakeModal()}
     </div>
   );
 };

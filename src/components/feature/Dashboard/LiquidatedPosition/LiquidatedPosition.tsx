@@ -12,7 +12,7 @@ const LiquidatedPosition = () => {
           Value
         </div>
         <div className={s.alignToCenter}>
-          Dept
+          Debt
           <br />
           Value
         </div>
@@ -27,7 +27,7 @@ const LiquidatedPosition = () => {
           APY
         </div>
         <div className={s.alignToCenter}>
-          Dept
+          Debt
           <br />
           Ratio
         </div>
@@ -43,7 +43,7 @@ const LiquidatedPosition = () => {
         </div>
         <div>&nbsp;</div>
       </div>
-      <div className={s.positionEmptyContainer}>No Liquidated Positions</div>
+      <div className={s.positionEmptyContainer}>Coming Soon</div>
     </div>
   );
 };

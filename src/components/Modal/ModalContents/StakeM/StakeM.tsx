@@ -4,13 +4,14 @@ import s from './StakeM.module.scss';
 import { InputNumber } from '../../../common/Input';
 import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
-import useStakeM from './StakeM.Service';
+import useStakeM from './StakeM.service';
 import { Button, Dropdown } from '@nextui-org/react';
 import React from 'react';
+import { Autocomplete, TextField } from '@mui/material';
 
 interface Props {
   closeModal: VoidFunction;
-  parentLeverage: string;
+  parentLeverage: string | null;
 }
 
 const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
@@ -19,15 +20,15 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
     deptInBase,
     positionValue,
     leverage,
-    onChangeLeverage,
     borrowingAsset,
-    onChangeBorrowingAsset,
+    onChangeLeverage,
     amount,
     setAmount,
     deptInToken,
     borrowingAssetBalance,
     setMaxAmount,
     onChangeSuppliedAmount,
+    onChangeBorrowingAsset,
     addPosition
   } = useStakeM(closeModal, parentLeverage);
 
@@ -106,33 +107,17 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
       </Form>
       <div className={s.leverageContainer}>
         <span className={cn(s.desc, s.desc__lg)}>Leverage</span>
-        <Dropdown>
-          <Dropdown.Button
-            color="secondary"
-            css={{
-              tt: 'capitalize',
-              height: '48px',
-              background: '#D9D9D9',
-              color: '#4D4545',
-              flexDirection: 'row',
-              width: '20%',
-              justifyContent: 'space-between'
-            }}>
-            {leverage}
-          </Dropdown.Button>
-          <Dropdown.Menu
-            aria-label="Single selection actions"
-            color="secondary"
-            disallowEmptySelection
-            selectionMode="single"
-            selectedKeys={leverage}
-            onSelectionChange={onChangeLeverage}>
-            <Dropdown.Item key="1.0">1.0</Dropdown.Item>
-            <Dropdown.Item key="1.5">1.5</Dropdown.Item>
-            <Dropdown.Item key="2.0">2.0</Dropdown.Item>
-            <Dropdown.Item key="2.5">2.5</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+        <Autocomplete
+          value={leverage}
+          onChange={(event: any, newValue: string | null) => {
+            event.preventDefault();
+            onChangeLeverage(newValue);
+          }}
+          id="leverage-adjust-modal"
+          options={['1.0', '1.5', '2.0', '2.5']}
+          style={{ width: 150, background: '#D9D9D9', color: '#4D4545', borderRadius: 8 }}
+          renderInput={(params) => <TextField {...params} variant="outlined" />}
+        />
       </div>
       <div className={s.divider}></div>
       <div className={s.summaryWrapper}>

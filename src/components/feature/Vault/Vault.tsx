@@ -1,11 +1,7 @@
 import s from './Vault.module.scss';
 import { cn } from '../../../utils/style';
 import useVault from './Vault.Service';
-
-enum ModalType {
-  deposit = 'deposit',
-  withdraw = 'withdraw'
-}
+import { numberFormat } from '../../../utils/numberFormats';
 
 const Vault = () => {
   const {
@@ -47,12 +43,11 @@ const Vault = () => {
         </div>
         <div className={s.poolListContainerContents__item}>
           <div className={s.assetInfo__labelAndValue}>
-            <span className={s.assetInfo__labelAndValue__label}>APY</span>
-            <span className={s.assetInfo__labelAndValue__value}>{interestRate}%</span>
+            <span className={s.assetInfo__labelAndValue__value}>{numberFormat(interestRate)}%</span>
           </div>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__totalSupply)}>
-          <span className={s.poolListContainerContents__item__tokenValue}>{totalSupply}</span>
+          <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(totalSupply)}</span>
           <span className={s.poolListContainerContents__item__tokenSymbol}>ATOM</span>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__totalBorrowed)}>
@@ -65,11 +60,11 @@ const Vault = () => {
         </div>
         <div className={s.poolListContainerContents__item}>
           <div className={s.poolListContainerContents__item__tokenBalance}>
-            <span className={s.poolListContainerContents__item__tokenValue}>{ibBalance}</span>
+            <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(ibBalance)}</span>
             <span className={s.poolListContainerContents__item__tokenSymbol}>ibATOM</span>
           </div>
           <div className={s.poolListContainerContents__item__tokenBalance}>
-            <span className={s.poolListContainerContents__item__tokenValue}>{vaultTokenBalance}</span>
+            <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(vaultTokenBalance)}</span>
             <span className={s.poolListContainerContents__item__tokenSymbol}>ATOM</span>
           </div>
         </div>

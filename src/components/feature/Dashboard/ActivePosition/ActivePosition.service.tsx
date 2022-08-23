@@ -4,6 +4,9 @@ import { Contracts } from '../../../../type/contract';
 import { Contract } from 'ethers';
 import { convertUnitFrom } from '../../../../utils/numberFormats';
 import { contractsInfo } from '../../../../data/contract/contracts';
+import { useModal } from '../../../Modal';
+import Adjust from '../../../Modal/ModalContents/Position/Adjust';
+import Close from '../../../Modal/ModalContents/Position/Close';
 
 let stayKingContract: Contract;
 let vaultContract: Contract;
@@ -27,6 +30,10 @@ export interface Position {
 
 const useActivePosition = (address: string) => {
   const [position, setPosition] = useState<Position[]>([]);
+
+  const { openModal: openAdjustModal, renderModal: renderAdjustModal } = useModal({ content: <Adjust /> });
+  const { openModal: openCloseModal, renderModal: renderCloseModal } = useModal({ content: <Close /> });
+
   async function getPositionFrom() {
     const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tATOM].address);
     const _killFactor = await stayKingContract.killFactorBps();
@@ -62,7 +69,11 @@ const useActivePosition = (address: string) => {
   }, [address]);
 
   return {
-    position
+    position,
+    renderAdjustModal,
+    openAdjustModal,
+    renderCloseModal,
+    openCloseModal
   };
 };
 

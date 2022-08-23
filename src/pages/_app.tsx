@@ -1,10 +1,11 @@
 import type { AppProps } from 'next/app';
-import useSWR from 'swr';
 import 'config/contract';
 import 'styles/globals.scss';
 import { ThemeContextProvider } from '../contexts/ThemeContext';
 import { WalletContextProvider } from '../contexts/WalletContext';
-import { createTheme, NextUIProvider } from '@nextui-org/react';
+import { CacheProvider } from '@emotion/react';
+import createEmotionCache from '../createEmotionCache';
+import PropTypes from 'prop-types';
 
 declare global {
   interface Window {
@@ -12,28 +13,24 @@ declare global {
   }
 }
 
-function MyApp({ Component, pageProps }: AppProps) {
+const clientSideEmotionCache = createEmotionCache();
+
+export default function MyApp(props: any) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+
   return (
-    <NextUIProvider theme={theme}>
+    <CacheProvider value={emotionCache}>
       <ThemeContextProvider>
         <WalletContextProvider>
           <Component {...pageProps} />
         </WalletContextProvider>
       </ThemeContextProvider>
-    </NextUIProvider>
+    </CacheProvider>
   );
 }
 
-const theme = createTheme({
-  type: 'dark', // it could be "light" or "dark"
-  theme: {
-    colors: {
-      primary: '#242424',
-      background: '#242424'
-    },
-    space: {},
-    fonts: {}
-  }
-});
-
-export default MyApp;
+MyApp.propTypes = {
+  Component: PropTypes.elementType.isRequired,
+  emotionCache: PropTypes.object,
+  pageProps: PropTypes.object.isRequired
+};

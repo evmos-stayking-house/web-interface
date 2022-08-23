@@ -8,7 +8,7 @@ interface Props {
 }
 
 const ActivePosition: FC<Props> = ({ address }) => {
-  const { position } = useActivePosition(address);
+  const { position, renderAdjustModal, openAdjustModal, renderCloseModal, openCloseModal } = useActivePosition(address);
 
   return (
     <div className={s.activePositionContainer}>
@@ -20,7 +20,7 @@ const ActivePosition: FC<Props> = ({ address }) => {
           Value
         </div>
         <div className={s.alignToCenter}>
-          Dept
+          Debt
           <br />
           Value
         </div>
@@ -35,7 +35,7 @@ const ActivePosition: FC<Props> = ({ address }) => {
           APY
         </div>
         <div className={s.alignToCenter}>
-          Dept
+          Debt
           <br />
           Ratio
         </div>
@@ -124,12 +124,12 @@ const ActivePosition: FC<Props> = ({ address }) => {
                   <div className={s.buttonGroup}>
                     <div
                       className={cn(s.buttonGroup__adjustPositionBtn, { [s.buttonGroup__enabled]: true })}
-                      onClick={() => {}}>
+                      onClick={() => openAdjustModal()}>
                       Adjust Position
                     </div>
                     <div
                       className={cn(s.buttonGroup__closePositionBtn, { [s.buttonGroup__enabled]: true })}
-                      onClick={() => {}}>
+                      onClick={() => openCloseModal()}>
                       Close Position
                     </div>
                   </div>
@@ -139,6 +139,8 @@ const ActivePosition: FC<Props> = ({ address }) => {
           )}
       </div>
       {position.length === 0 && <div className={s.positionEmptyContainer}>No Active Positions</div>}
+      {renderAdjustModal()}
+      {renderCloseModal()}
     </div>
   );
 };
