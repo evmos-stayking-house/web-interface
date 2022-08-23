@@ -15,8 +15,8 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string) => {
   const { evmosBalance } = useWalletState();
   const [amount, setAmount] = useState<string>('');
   const [borrowingAssetBalance, setBorrowingAssetBalance] = useState<string>('0.0');
-  const [deptInToken, setDeptInToken] = useState<string>('0');
-  const [deptInBase, setDeptInBase] = useState<string>('0.0');
+  const [deptInToken, setDebtInToken] = useState<string>('0');
+  const [deptInBase, setDebtInBase] = useState<string>('0.0');
   const [positionValue, setPositionValue] = useState<string>('0.0');
   const [borrowingAsset, setBorrowingAsset] = useState<any>('ATOM');
   const [leverage, setLeverage] = useState<any>(parentLeverage);
@@ -33,16 +33,16 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string) => {
 
   async function onChangeSuppliedAmount() {
     const deptInBase = (Number(leverage) - 1) * Number(amount);
-    setDeptInBase(deptInBase.toFixed(1));
-    await onChangeDeptInToken(deptInBase.toFixed(0));
+    setDebtInBase(deptInBase.toFixed(1));
+    await onChangeDebtInToken(deptInBase.toFixed(0));
     setPositionValue((Number(amount) + deptInBase).toFixed(1));
   }
 
   async function onChangeLeverage(e: any) {
     const _leverage = getValueFromSet(e);
     const deptInBase = (Number(_leverage) - 1) * Number(amount);
-    setDeptInBase(deptInBase.toFixed(1));
-    await onChangeDeptInToken(deptInBase.toFixed(0));
+    setDebtInBase(deptInBase.toFixed(1));
+    await onChangeDebtInToken(deptInBase.toFixed(0));
     setPositionValue((Number(amount) + deptInBase).toFixed(1));
 
     setLeverage(getValueFromSet(e));
@@ -62,9 +62,9 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string) => {
     setBorrowingAssetBalance(convertUnitFrom(_balance, 18));
   }
 
-  async function onChangeDeptInToken(_deptInBase: string) {
+  async function onChangeDebtInToken(_deptInBase: string) {
     const _deptInToken = await vaultContract.getTokenIn(_deptInBase);
-    setDeptInToken(convertUnitFrom(_deptInToken, 0));
+    setDebtInToken(convertUnitFrom(_deptInToken, 0));
   }
 
   async function addPosition() {

@@ -4,9 +4,10 @@ import s from './Stake.module.scss';
 import { cn } from '../../../utils/style';
 import { Dropdown } from '@nextui-org/react';
 import useStake from './Stake.Service';
+import { getValueFromSet } from '../../../utils/utils';
 
 const Stake = () => {
-  const { leverage, onChangeLeverage, renderStakeModal, openStakeModal } = useStake();
+  const { leverage, setLeverage, renderStakeModal, openStakeModal } = useStake();
 
   return (
     <div className={s.container}>
@@ -42,7 +43,7 @@ const Stake = () => {
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__leverage)}>
           <Dropdown>
             <Dropdown.Button flat color="secondary" css={{ tt: 'capitalize' }}>
-              {leverage}
+              {getValueFromSet(leverage)}
             </Dropdown.Button>
             <Dropdown.Menu
               aria-label="Single selection actions"
@@ -50,7 +51,7 @@ const Stake = () => {
               disallowEmptySelection
               selectionMode="single"
               selectedKeys={leverage}
-              onSelectionChange={onChangeLeverage}>
+              onSelectionChange={setLeverage}>
               <Dropdown.Item key="1.0">1.0</Dropdown.Item>
               <Dropdown.Item key="1.5">1.5</Dropdown.Item>
               <Dropdown.Item key="2.0">2.0</Dropdown.Item>

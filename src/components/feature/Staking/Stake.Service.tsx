@@ -12,13 +12,9 @@ const useStake = () => {
     closeModal: closeStakeModal
   } = useModal({ content: <StakeM closeModal={() => {}} parentLeverage={leverage} /> });
 
-  function onChangeLeverage(e: any) {
-    setLeverage(getValueFromSet(e));
-  }
-
   return {
     leverage,
-    onChangeLeverage,
+    setLeverage,
     renderStakeModal,
     openStakeModal
   };
