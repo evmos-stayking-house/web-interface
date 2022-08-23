@@ -10,10 +10,10 @@
     "test": "jest --watch"
   },
   "dependencies": {
-    "@emotion/cache": "latest",
-    "@emotion/react": "latest",
+    "@emotion/cache": "^11.10.2",
+    "@emotion/react": "^11.10.0",
     "@emotion/server": "latest",
-    "@emotion/styled": "latest",
+    "@emotion/styled": "^11.10.0",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@walletconnect/client": "^1.7.8",

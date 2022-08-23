@@ -5,9 +5,8 @@ import { InputNumber } from '../../../common/Input';
 import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
 import useStakeM from './StakeM.service';
-import { Button, Dropdown } from '@nextui-org/react';
 import React from 'react';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, Button, TextField } from '@mui/material';
 
 interface Props {
   closeModal: VoidFunction;
@@ -60,42 +59,42 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
       <div className={s.colSpace}></div>
       <span className={cn(s.desc, s.desc__lg)}>Borrowing Asset</span>
       <div className={s.ibTokenContainerWrapper}>
-        <Dropdown>
-          <Dropdown.Button
-            css={{
-              tt: 'capitalize',
-              height: '48px',
-              background: '#D9D9D9',
-              color: '#4D4545',
-              flexDirection: 'row',
-              width: '100%',
-              justifyContent: 'space-between'
-            }}>
-            <img className={s.icon} src={`/img/common/token/${borrowingAsset || 'ATOM'}.png`} alt={'cosmos icon'} />
-            <span className={s.label}>{borrowingAsset}</span>
-          </Dropdown.Button>
-          <Dropdown.Menu
-            aria-label="Single selection actions"
-            color="secondary"
-            disallowEmptySelection
-            selectionMode="single"
-            selectedKeys={borrowingAsset}
-            onSelectionChange={onChangeBorrowingAsset}>
-            <Dropdown.Item
-              icon={<img className={s.icon} src={'/img/logo/cosmos.png'} alt={'cosmos icon'} />}
-              key="ATOM">
-              ATOM
-            </Dropdown.Item>
-            <Dropdown.Item
-              icon={<img className={s.icon} src={'/img/logo/osmosis.png'} alt={'osmosis icon'} />}
-              key="OSMO">
-              OSMO
-            </Dropdown.Item>
-            <Dropdown.Item icon={<img className={s.icon} src={'/img/logo/juno.png'} alt={'juno icon'} />} key="JUNO">
-              JUNO
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+        {/*<Dropdown>*/}
+        {/*  <Dropdown.Button*/}
+        {/*    css={{*/}
+        {/*      tt: 'capitalize',*/}
+        {/*      height: '48px',*/}
+        {/*      background: '#D9D9D9',*/}
+        {/*      color: '#4D4545',*/}
+        {/*      flexDirection: 'row',*/}
+        {/*      width: '100%',*/}
+        {/*      justifyContent: 'space-between'*/}
+        {/*    }}>*/}
+        {/*    <img className={s.icon} src={`/img/common/token/${borrowingAsset || 'ATOM'}.png`} alt={'cosmos icon'} />*/}
+        {/*    <span className={s.label}>{borrowingAsset}</span>*/}
+        {/*  </Dropdown.Button>*/}
+        {/*  <Dropdown.Menu*/}
+        {/*    aria-label="Single selection actions"*/}
+        {/*    color="secondary"*/}
+        {/*    disallowEmptySelection*/}
+        {/*    selectionMode="single"*/}
+        {/*    selectedKeys={borrowingAsset}*/}
+        {/*    onSelectionChange={onChangeBorrowingAsset}>*/}
+        {/*    <Dropdown.Item*/}
+        {/*      icon={<img className={s.icon} src={'/img/logo/cosmos.png'} alt={'cosmos icon'} />}*/}
+        {/*      key="ATOM">*/}
+        {/*      ATOM*/}
+        {/*    </Dropdown.Item>*/}
+        {/*    <Dropdown.Item*/}
+        {/*      icon={<img className={s.icon} src={'/img/logo/osmosis.png'} alt={'osmosis icon'} />}*/}
+        {/*      key="OSMO">*/}
+        {/*      OSMO*/}
+        {/*    </Dropdown.Item>*/}
+        {/*    <Dropdown.Item icon={<img className={s.icon} src={'/img/logo/juno.png'} alt={'juno icon'} />} key="JUNO">*/}
+        {/*      JUNO*/}
+        {/*    </Dropdown.Item>*/}
+        {/*  </Dropdown.Menu>*/}
+        {/*</Dropdown>*/}
       </div>
       <span className={cn(s.desc)}>Available Balance: {borrowingAssetBalance} ATOM</span>
       <Form>
@@ -161,9 +160,9 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
         </div>
       </div>
       <div className={s.btnWrapper}>
-        <Button className={s.stakeBtn} onPress={() => addPosition()}>
-          STAKE
-        </Button>
+        {/*<Button className={s.stakeBtn} onPress={() => addPosition()}>*/}
+        {/*  STAKE*/}
+        {/*</Button>*/}
       </div>
     </div>
   );
