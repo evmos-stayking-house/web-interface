@@ -11,7 +11,7 @@ let tokenContract: Contract;
 let vaultContract: Contract;
 let stayKingContract: Contract;
 
-const useStakeM = (closeModal: VoidFunction, parentLeverage: string) => {
+const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
   const { evmosBalance } = useWalletState();
   const [amount, setAmount] = useState<string>('');
   const [borrowingAssetBalance, setBorrowingAssetBalance] = useState<string>('0.0');
@@ -19,7 +19,7 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string) => {
   const [deptInBase, setDebtInBase] = useState<string>('0.0');
   const [positionValue, setPositionValue] = useState<string>('0.0');
   const [borrowingAsset, setBorrowingAsset] = useState<any>('ATOM');
-  const [leverage, setLeverage] = useState<any>(parentLeverage);
+  const [leverage, setLeverage] = useState<string | null>(parentLeverage);
 
   function setMaxAmount() {
     setAmount(evmosBalance);
@@ -38,14 +38,12 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string) => {
     setPositionValue((Number(amount) + deptInBase).toFixed(1));
   }
 
-  async function onChangeLeverage(e: any) {
-    const _leverage = getValueFromSet(e);
+  async function onChangeLeverage(_leverage: string | null) {
     const deptInBase = (Number(_leverage) - 1) * Number(amount);
     setDebtInBase(deptInBase.toFixed(1));
     await onChangeDebtInToken(deptInBase.toFixed(0));
     setPositionValue((Number(amount) + deptInBase).toFixed(1));
-
-    setLeverage(getValueFromSet(e));
+    setLeverage(_leverage);
   }
 
   function onChangeBorrowingAsset(e: any) {
@@ -110,8 +108,8 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string) => {
     amount,
     setMaxAmount,
     borrowingAssetBalance,
-    borrowingAsset,
     onChangeBorrowingAsset,
+    borrowingAsset,
     deptInToken,
     leverage,
     onChangeLeverage,

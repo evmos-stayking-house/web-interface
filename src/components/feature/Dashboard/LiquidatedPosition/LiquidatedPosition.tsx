@@ -43,7 +43,7 @@ const LiquidatedPosition = () => {
         </div>
         <div>&nbsp;</div>
       </div>
-      <div className={s.positionEmptyContainer}>No Liquidated Positions</div>
+      <div className={s.positionEmptyContainer}>Coming Soon</div>
     </div>
   );
 };

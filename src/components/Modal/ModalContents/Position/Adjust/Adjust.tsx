@@ -3,9 +3,12 @@ import s from './Adjust.module.scss';
 import { cn } from '../../../../../utils/style';
 import Form from '../../../../common/Form';
 import { InputNumber } from '../../../../common/Input';
-import { Dropdown, Input } from '@nextui-org/react';
+import { Autocomplete, Button, TextField } from '@mui/material';
+import useAdjust from './Adjust.service';
 
 const Adjust = () => {
+  const { leverage, setLeverage } = useAdjust();
+
   return (
     <div className={s.container}>
       <div className={s.logoContainer}>
@@ -45,9 +48,83 @@ const Adjust = () => {
       </Form>
       <div className={s.leverageContainer}>
         <span className={cn(s.desc, s.desc__lg)}></span>
-        <Input type="number" max={2.5} min={1.0} initialValue={'1.0'} />
+        <Autocomplete
+          value={leverage}
+          onChange={(event: any, newValue: string | null) => {
+            event.preventDefault();
+            setLeverage(newValue);
+          }}
+          id="leverage-adjust-modal"
+          options={['1.0', '1.5', '2.0', '2.5']}
+          style={{ width: 150, background: '#D9D9D9', color: '#4D4545', borderRadius: 8 }}
+          renderInput={(params) => <TextField {...params} variant="outlined" />}
+        />
       </div>
       <div className={s.colSpace}></div>
+      <div className={s.adjustSummaryContainer}>
+        <div className={s.adjustSummaryContainer__item}>
+          <div className={s.adjustSummaryContainer__item__label}>Updated Equity Value</div>
+          <div className={s.adjustSummaryContainer__item__value}>0.00 EVMOS → 0.00 EVMOS</div>
+        </div>
+        <div className={s.adjustSummaryContainer__item}>
+          <div className={s.adjustSummaryContainer__item__label}>Updated Debt Value</div>
+          <div className={s.adjustSummaryContainer__item__value}>0.00 ATOM → 0.00 ATOM</div>
+        </div>
+        <div className={s.adjustSummaryContainer__item}>
+          <div className={s.adjustSummaryContainer__item__label}>Updated Debt Ratio</div>
+          <div className={s.adjustSummaryContainer__item__value}>0.00% → 0.00%</div>
+        </div>
+        <div className={s.adjustSummaryContainer__item}>
+          <div className={s.adjustSummaryContainer__item__label}>Updated Safety Buffer</div>
+          <div className={s.adjustSummaryContainer__item__value}>0.00% → 0.00%</div>
+        </div>
+      </div>
+
+      <div className={s.summaryWrapper}>
+        <div className={s.total}>
+          <div className={s.totalRow}>
+            <span className={s.totalRow__title}>Total APY/APR</span>
+          </div>
+          <div className={s.totalRow}>
+            <span className={s.totalRow__label}>Yield Staking</span>
+            <span className={s.totalRow__value}>TBD</span>
+          </div>
+          <div className={s.totalRow}>
+            <span className={s.totalRow__label}>Borrowing Interest</span>
+            <span className={s.totalRow__value}>TBD</span>
+          </div>
+          <div className={s.totalRow}>
+            <span className={s.totalRow__label}>Total APR</span>
+            <span className={s.totalRow__value}>TBD</span>
+          </div>
+          <div className={s.totalRow}>
+            <span className={s.totalRow__label}>Total APY</span>
+            <span className={s.totalRow__value}>TBD</span>
+          </div>
+        </div>
+        <div className={s.summary}>
+          <div className={s.summaryRow}>
+            <span className={s.summaryRow__title}>Summary</span>
+          </div>
+          <div className={s.summaryRow}>
+            <span className={s.summaryRow__label}>Asset Supplied</span>
+            <span className={s.summaryRow__value}>{''} EVMOS</span>
+          </div>
+          <div className={s.summaryRow}>
+            <span className={s.summaryRow__label}>Asset Borrowed</span>
+            <span className={s.summaryRow__value}>{''} EVMOS</span>
+          </div>
+          <div className={s.summaryRow}>
+            <span className={s.summaryRow__label}>Total Position Value</span>
+            <span className={s.summaryRow__value}>{''} EVMOS</span>
+          </div>
+        </div>
+      </div>
+      <div className={s.btnWrapper}>
+        <Button className={s.adjustBtn} autoCapitalize={'false'} onClick={() => {}}>
+          Adjust Position
+        </Button>
+      </div>
     </div>
   );
 };
