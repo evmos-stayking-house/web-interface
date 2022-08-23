@@ -6,7 +6,7 @@ import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
 import useStakeM from './StakeM.service';
 import React from 'react';
-import { Autocomplete, Button, TextField } from '@mui/material';
+import { Autocomplete, TextField } from '@mui/material';
 
 interface Props {
   closeModal: VoidFunction;
@@ -26,9 +26,7 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
     deptInToken,
     borrowingAssetBalance,
     setMaxAmount,
-    onChangeSuppliedAmount,
-    onChangeBorrowingAsset,
-    addPosition
+    onChangeSuppliedAmount
   } = useStakeM(closeModal, parentLeverage);
 
   return (

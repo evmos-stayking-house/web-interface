@@ -83,6 +83,7 @@
 
   .maxBtn {
     width: 10%;
+    cursor: pointer;
     background-color: #{$theme-mint};
     color: var(--contrast-color);
     font-size: 18px;
@@ -91,6 +92,17 @@
     border-bottom-right-radius: 8px;
   }
 
+
+  .swapBtn {
+    width: 10%;
+    cursor: pointer;
+    background-color: #FF6B4A;
+    color: var(--contrast-color);
+    font-size: 18px;
+    border: 0;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
 
 }
 
