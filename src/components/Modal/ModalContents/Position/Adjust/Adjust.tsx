@@ -1,13 +1,31 @@
-import React from 'react';
+import React, { FC } from 'react';
 import s from './Adjust.module.scss';
 import { cn } from '../../../../../utils/style';
 import Form from '../../../../common/Form';
 import { InputNumber } from '../../../../common/Input';
-import { Autocomplete, Button, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import useAdjust from './Adjust.service';
+import { numberFormat } from '../../../../../utils/numberFormats';
 
-const Adjust = () => {
-  const { leverage, setLeverage } = useAdjust();
+interface Props {
+  closeModal: VoidFunction;
+}
+
+const Adjust: FC<Props> = ({ closeModal }) => {
+  const {
+    evmosBalance,
+    max,
+    amount,
+    setAmount,
+    position,
+    onChangeDebtInBase,
+    setDebtInToken,
+    updatedPosition,
+    onChangeAmount,
+    adjust,
+    borrowingAssetBalance,
+    deptInToken
+  } = useAdjust(closeModal);
 
   return (
     <div className={s.container}>
@@ -16,67 +34,87 @@ const Adjust = () => {
       </div>
       <div className={s.divider}></div>
       <span className={cn(s.desc, s.desc__lg)}>Add Collateral</span>
-      <span className={cn(s.desc)}>Available Balance: {0} EVMOS</span>
+      <span className={cn(s.desc)}>Available Balance: {numberFormat(evmosBalance)} EVMOS</span>
       <Form>
-        <section className={s.adjustPositionContainer} onBlur={() => {}}>
+        <section className={s.adjustPositionContainer}>
           <img className={s.btnIcon} src={`/img/logo/evmos.png`} alt={'evmos icon'} />
           <Form.Item label="" className={s.input}>
-            <InputNumber max={'0'} setInputValue={() => {}} inputValue={'0'} />
+            <InputNumber max={max} setInputValue={onChangeAmount} inputValue={amount} />
           </Form.Item>
-          <div className={s.assetName}>EVMOS</div>
+          <div className={s.assetName} style={{ marginRight: -26 }}>
+            EVMOS
+          </div>
           <button
             className={s.maxBtn}
             onClick={(e) => {
               e.preventDefault();
+              setAmount(evmosBalance);
             }}>
-            max
+            Max
           </button>
         </section>
       </Form>
       <span className={cn(s.desc, s.desc__lg)}>Add Debt Value or Adjust Target Leverage</span>
-      <span className={cn(s.desc)}>Available Balance: {0} ATOM</span>
+      <span className={cn(s.desc)}>Available Balance: {borrowingAssetBalance} ATOM</span>
       <Form>
-        <section className={s.adjustPositionContainer} onBlur={() => {}}>
+        <section className={s.adjustPositionContainer}>
           <img className={s.btnIcon} src={`/img/logo/cosmos.png`} alt={'atom icon'} />
           <Form.Item label="" className={s.input}>
-            <InputNumber max={'0'} setInputValue={() => {}} inputValue={'0'} />
+            <InputNumber max={borrowingAssetBalance} setInputValue={setDebtInToken} inputValue={deptInToken} />
           </Form.Item>
           <div className={s.assetName} style={{ marginRight: -30 }}>
             ATOM
           </div>
+          <button
+            className={s.swapBtn}
+            onClick={(e) => {
+              e.preventDefault();
+              setAmount('0');
+              onChangeDebtInBase();
+            }}>
+            Swap
+          </button>
         </section>
       </Form>
-      <div className={s.leverageContainer}>
-        <span className={cn(s.desc, s.desc__lg)}></span>
-        <Autocomplete
-          value={leverage}
-          onChange={(event: any, newValue: string | null) => {
-            event.preventDefault();
-            setLeverage(newValue);
-          }}
-          id="leverage-adjust-modal"
-          options={['1.0', '1.5', '2.0', '2.5']}
-          style={{ width: 150, background: '#D9D9D9', color: '#4D4545', borderRadius: 8 }}
-          renderInput={(params) => <TextField {...params} variant="outlined" />}
-        />
-      </div>
+      {/*<div className={s.leverageContainer}>*/}
+      {/*  <span className={cn(s.desc, s.desc__lg)}></span>*/}
+      {/*  <Autocomplete*/}
+      {/*    value={leverage}*/}
+      {/*    onChange={(event: any, newValue: string | null) => {*/}
+      {/*      event.preventDefault();*/}
+      {/*      onChangeLeverage(newValue);*/}
+      {/*    }}*/}
+      {/*    id="leverage-adjust-modal"*/}
+      {/*    options={['1.0', '1.5', '2.0', '2.5']}*/}
+      {/*    style={{ width: 150, background: '#D9D9D9', color: '#4D4545', borderRadius: 8 }}*/}
+      {/*    renderInput={(params) => <TextField {...params} variant="outlined" />}*/}
+      {/*  />*/}
+      {/*</div>*/}
       <div className={s.colSpace}></div>
       <div className={s.adjustSummaryContainer}>
         <div className={s.adjustSummaryContainer__item}>
           <div className={s.adjustSummaryContainer__item__label}>Updated Equity Value</div>
-          <div className={s.adjustSummaryContainer__item__value}>0.00 EVMOS → 0.00 EVMOS</div>
+          <div className={s.adjustSummaryContainer__item__value}>
+            {position?.equityValue} EVMOS → {updatedPosition?.equityValue} EVMOS
+          </div>
         </div>
         <div className={s.adjustSummaryContainer__item}>
           <div className={s.adjustSummaryContainer__item__label}>Updated Debt Value</div>
-          <div className={s.adjustSummaryContainer__item__value}>0.00 ATOM → 0.00 ATOM</div>
+          <div className={s.adjustSummaryContainer__item__value}>
+            {position?.debtInBase} EVMOS → {updatedPosition?.debtInBase} EVMOS
+          </div>
         </div>
         <div className={s.adjustSummaryContainer__item}>
           <div className={s.adjustSummaryContainer__item__label}>Updated Debt Ratio</div>
-          <div className={s.adjustSummaryContainer__item__value}>0.00% → 0.00%</div>
+          <div className={s.adjustSummaryContainer__item__value}>
+            {position?.deptRatio}% → {updatedPosition?.deptRatio}%
+          </div>
         </div>
         <div className={s.adjustSummaryContainer__item}>
           <div className={s.adjustSummaryContainer__item__label}>Updated Safety Buffer</div>
-          <div className={s.adjustSummaryContainer__item__value}>0.00% → 0.00%</div>
+          <div className={s.adjustSummaryContainer__item__value}>
+            {position?.safetyBuffer}% → {updatedPosition?.safetyBuffer}%
+          </div>
         </div>
       </div>
 
@@ -108,20 +146,20 @@ const Adjust = () => {
           </div>
           <div className={s.summaryRow}>
             <span className={s.summaryRow__label}>Asset Supplied</span>
-            <span className={s.summaryRow__value}>{''} EVMOS</span>
+            <span className={s.summaryRow__value}>{updatedPosition?.equityValue} EVMOS</span>
           </div>
           <div className={s.summaryRow}>
             <span className={s.summaryRow__label}>Asset Borrowed</span>
-            <span className={s.summaryRow__value}>{''} EVMOS</span>
+            <span className={s.summaryRow__value}>{updatedPosition?.debtInBase} EVMOS</span>
           </div>
           <div className={s.summaryRow}>
             <span className={s.summaryRow__label}>Total Position Value</span>
-            <span className={s.summaryRow__value}>{''} EVMOS</span>
+            <span className={s.summaryRow__value}>{updatedPosition?.positionValueInBase} EVMOS</span>
           </div>
         </div>
       </div>
       <div className={s.btnWrapper}>
-        <Button className={s.adjustBtn} autoCapitalize={'false'} onClick={() => {}}>
+        <Button className={s.adjustBtn} autoCapitalize={'false'} onClick={() => adjust()}>
           Adjust Position
         </Button>
       </div>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import s from './ActivePosition.module.scss';
 import useActivePosition from './ActivePosition.service';
 import { cn } from '../../../../utils/style';

@@ -31,7 +31,11 @@ export interface Position {
 const useActivePosition = (address: string) => {
   const [position, setPosition] = useState<Position[]>([]);
 
-  const { openModal: openAdjustModal, renderModal: renderAdjustModal } = useModal({ content: <Adjust /> });
+  const {
+    openModal: openAdjustModal,
+    renderModal: renderAdjustModal,
+    closeModal: closeAdjustModal
+  } = useModal({ content: <Adjust closeModal={() => closeAdjustModal()} /> });
   const { openModal: openCloseModal, renderModal: renderCloseModal } = useModal({ content: <Close /> });
 
   async function getPositionFrom() {

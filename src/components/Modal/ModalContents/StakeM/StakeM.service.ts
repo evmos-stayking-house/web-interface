@@ -66,11 +66,6 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
   }
 
   async function addPosition() {
-    console.log('스테이크량', {
-      toKenAddress: contractsInfo[Contracts.tATOM].address,
-      equity: convertDenomFrom(amount),
-      deptInBase: convertDenomFrom(deptInBase)
-    });
     const result = await stayKingContract.addPosition(
       contractsInfo[Contracts.tATOM].address,
       convertDenomFrom(amount),
