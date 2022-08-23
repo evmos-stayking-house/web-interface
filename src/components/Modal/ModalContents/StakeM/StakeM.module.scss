@@ -174,7 +174,8 @@
   justify-content: space-between;
   margin-top: 30px;
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 400;
 
   .total {
     display: flex;
@@ -185,10 +186,11 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      margin-top: 10px;
+      margin-bottom: 5px;
 
       &__title {
         font-weight: bold;
-        margin-bottom: 10px;
       }
 
       &__label {
@@ -203,15 +205,17 @@
     display: flex;
     flex-direction: column;
     width: 45%;
+    font-size: 14px;
+    font-weight: 400;
 
     .summaryRow {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-
+      margin-top: 10px;
+      margin-bottom: 5px;
       &__title {
         font-weight: bold;
-        margin-bottom: 10px;
       }
 
       &__label {
@@ -230,6 +234,11 @@
 
   .stakeBtn {
     width: 100%;
+    height: 48px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #f1f1f1;
+    border-radius: 8px;
     background: #111827;
   }
 }

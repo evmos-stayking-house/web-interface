@@ -24,8 +24,8 @@ export interface Position {
   equityValue: string;
   debtInBase: string;
   deptRatio: string;
-  killFactor: string;
-  safetyBuffer: string;
+  killFactor?: string;
+  safetyBuffer?: string;
 }
 
 const useActivePosition = (address: string) => {
@@ -36,7 +36,14 @@ const useActivePosition = (address: string) => {
     renderModal: renderAdjustModal,
     closeModal: closeAdjustModal
   } = useModal({ content: <Adjust closeModal={() => closeAdjustModal()} /> });
-  const { openModal: openCloseModal, renderModal: renderCloseModal } = useModal({ content: <Close /> });
+
+  const {
+    openModal: openCloseModal,
+    renderModal: renderCloseModal,
+    closeModal: closeModal
+  } = useModal({
+    content: <Close closeModal={() => closeModal()} />
+  });
 
   async function getPositionFrom() {
     const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tATOM].address);
