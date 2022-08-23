@@ -53,6 +53,7 @@ const ActivePosition: FC<Props> = ({ address }) => {
       </div>
       <div className={s.positionContainerContents}>
         {position.length > 0 &&
+          Number(position[0].positionValueInBase) > 0 &&
           position.map(
             ({ debtInBase, positionValueInBase, equityValue, deptRatio, killFactor, safetyBuffer }, index) => (
               <React.Fragment key={index}>
@@ -138,7 +139,9 @@ const ActivePosition: FC<Props> = ({ address }) => {
             )
           )}
       </div>
-      {position.length === 0 && <div className={s.positionEmptyContainer}>No Active Positions</div>}
+      {position.length > 0 && Number(position[0].positionValueInBase) === 0 && (
+        <div className={s.positionEmptyContainer}>No Active Positions</div>
+      )}
       {renderAdjustModal()}
       {renderCloseModal()}
     </div>

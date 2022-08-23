@@ -49,7 +49,7 @@ const Stake = () => {
             }}
             id="leverage-adjust-modal"
             options={['1.0', '1.5', '2.0', '2.5']}
-            style={{ width: 80, background: '#D9D9D9', color: '#4D4545', borderRadius: 8 }}
+            style={{ width: 120, background: '#D9D9D9', color: '#4D4545', borderRadius: 8 }}
             renderInput={(params) => <TextField {...params} variant="outlined" />}
           />
         </div>
