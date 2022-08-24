@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { numberFormat } from '../../../utils/numberFormats';
 import ActivePosition from './ActivePosition';
 import LiquidatedPosition from './LiquidatedPosition';
+import Image from 'next/image';
 
 export enum PositionTab {
   Active = 'Active',
@@ -15,16 +16,14 @@ export enum PositionTab {
 
 const Dashboard = () => {
   const [selectedTab, setSelectedTab] = useState<PositionTab>(PositionTab.Active);
-
   const { evmosBalance, address } = useWalletState();
   const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
-  const { tvl, ibAtom, atomAmount } = useDashboard(address);
+  const { tvl, ibUSDC, usdcAmount } = useDashboard(address);
 
   function onSetSelectedTab(_selTab: PositionTab) {
     setSelectedTab(_selTab);
   }
 
-  // console.log(ibAtom, interestRate);
   return (
     <div className={s.container}>
       {/*TVL Section*/}
@@ -34,61 +33,56 @@ const Dashboard = () => {
             <p className={s.tvlBrief__title}>Total Value Locked</p>
             <p className={s.tvlBrief__description}>$ {numberFormat(tvl)}</p>
           </div>
-          <div className={s.tvlBrief__right}>DeFi Pre Alpha Version</div>
+          <div className={s.tvlBrief__right}>Stayking Pre-Alpha Ver.</div>
         </div>
         <div className={s.tvlFooter}>
-          <div className={s.tvlFooter__developedBy}>Developed by SooHo</div>
+          <div className={s.tvlFooter__developedBy}>Developed by SOOHO.IO INC.</div>
         </div>
       </div>
       {/*My Balance Section*/}
       <div className={s.myInfoContainer}>
-        <div className={s.myInfoContainer__title}>My Balance</div>
+        <div className={s.myInfoContainer__title}>Your Balance</div>
         <div className={s.balanceContainer}>
-          {/*  balanceBox */}
+          {/*  EVMOS balanceBox */}
           <div className={s.balanceBox}>
             <div className={s.balanceBox__left}>
-              <p className={s.balanceBox__value}>
+              <div className={s.tabs}>
+                <span className={cn(s.tabs__tab, { [s.tabs__tab__selected]: true })}>Earned</span>
+                <span className={cn(s.tabs__tab, { [s.tabs__tab__selected]: false })}>Locked</span>
+                <span className={cn(s.tabs__tab, { [s.tabs__tab__selected]: false })}>Unlockable</span>
+              </div>
+              <p className={s.value}>
                 {numberFormat(Number(evmosBalance).toFixed(3))}
-                <span className={s.balanceBox__value__unit}>EVMOS</span>
+                <span className={s.balanceBox__value__unit}>&nbsp;EVMOS</span>
               </p>
-              <p className={s.balanceBox__description}>
+              <p className={s.description}>
                 ~ ${evmosPrice && numberFormat((evmosPrice * Number(evmosBalance)).toFixed(0))}
               </p>
             </div>
             <div className={s.balanceBox__right}>
-              <img className={s.balanceBox__image} src={'/img/logo/evmos.png'} />
+              <Image width={64} height={64} src={'/img/logo/evmos.png'} />
             </div>
           </div>
+          {/*  Space */}
           <span className={s.rowDivider} />
+          {/*  USDC balanceBox */}
           <div className={s.balanceBox}>
-            <div className={s.balanceBox__left}>
-              <p className={s.balanceBox__value}>
-                {numberFormat(ibAtom)}
-                <span className={s.balanceBox__value__unit}>ibATOM</span>
+            <div className={cn(s.balanceBox__left, s.padTop)}>
+              <p className={s.value}>
+                {numberFormat(ibUSDC)}
+                <span className={s.balanceBox__value__unit}>&nbsp;ibUSDC</span>
               </p>
-              <p className={s.balanceBox__description}>~ {numberFormat(atomAmount)} ATOM</p>
+              <p className={s.description}>~ {numberFormat(usdcAmount)}&nbsp;USDC</p>
             </div>
             <div className={s.balanceBox__right}>
-              <img className={s.balanceBox__image} src={'/img/common/icon-gt-balance.svg'} />
-            </div>
-          </div>
-          <span className={s.rowDivider} />
-          <div className={s.balanceBox}>
-            <div className={s.balanceBox__left}>
-              <p className={s.balanceBox__value}>
-                0<span className={s.balanceBox__value__unit}>uEVMOS</span>
-              </p>
-              <p className={s.balanceBox__description}>~ 0 EVMOS</p>
-            </div>
-            <div className={s.balanceBox__right}>
-              <img className={s.balanceBox__image} src={'/img/common/icon-gt-balance.svg'} />
+              <Image width={64} height={64} src={'/img/logo/usdc.png'} />
             </div>
           </div>
         </div>
       </div>
       {/*My Positions*/}
       <div className={s.myPositionContainer}>
-        <span className={s.myPositionContainer__title}>My Positions</span>
+        <span className={s.myPositionContainer__title}>Your Positions</span>
         <div className={s.tabsContainer}>
           <div
             className={cn(s.tab, { [s.activeTab]: selectedTab === PositionTab.Active })}

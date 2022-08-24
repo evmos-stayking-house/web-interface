@@ -2,23 +2,23 @@ import { Stayking, Vault, ERC20 } from './abis';
 
 export const contractsInfo = {
   stayKing: {
-    address: '0xc5a5C42992dECbae36851359345FE25997F5C42d',
+    address: '0xfE32C16436587f26D4E90F0AB3698480316d8753',
     abi: Stayking
   },
   vault: {
-    address: '0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690',
+    address: '0x42504f053d05D68Af721081221Aa6dB18422C6b1',
     abi: Vault
   },
   tATOM: {
-    address: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+    address: '0x7E6173E373308023d1B06ad43edeB165E229eE97',
     abi: ERC20
   },
   tUSDC: {
-    address: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
+    address: '0x07582D65d6739AE74B0B5264AF6c2bc6AA5FEE03',
     abi: ERC20
   },
   tUSDT: {
-    address: '0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0',
+    address: '0xDAc762E9c729704784986F939585a6A628394292',
     abi: ERC20
   }
 };

@@ -27,7 +27,7 @@
   justify-content: space-between;
   width: 100%;
   background-color: #343434;
-  padding: 16px 44px 8px 40px;
+  padding: 16px 15px 8px 40px;
   border-radius: 8px;
 
   &__left {
@@ -38,6 +38,7 @@
   &__right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
   }
 
   &__title {
@@ -69,6 +70,7 @@
   &__developedBy {
     margin-right: 16px;
     position: relative;
+    margin-top: 13px;
     top: 1px;
   }
 }
@@ -76,10 +78,10 @@
 .myInfoContainer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px
-;
+  margin-bottom: 20px;
+
   &__title {
-    font-size: 20px;
+    font-size: 28px;
     font-weight: 700;
     margin-bottom: 20px;
     padding-left: 0;
@@ -95,8 +97,7 @@
       background-color: #343434;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding: 24px 28px 0;
+      padding: 10px 28px 0;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
 
@@ -111,41 +112,57 @@
         border-bottom-right-radius: 8px;
       }
 
+      .padTop {
+        margin-top: 33px;
+      }
+
       &__left {
         display: flex;
         flex-direction: column;
-      }
+        justify-items: flex-start;
 
-      &__right {
+        .tabs {
+          display: flex;
+          width: 80%;
+          justify-content: space-between;
+          justify-items: flex-start;
+          margin-bottom: 15px;
+          font-size: 16px;
 
-      }
+          &__tab {
+            cursor: pointer;
 
-      &__value {
-        @include media(desktop) {
+            &__selected {
+              font-weight: 800;
+              border-bottom: #FF6B4A solid 1.5px;
+            }
+          }
+        }
+
+
+        .value {
           font-size: 24px;
           font-weight: 600;
           line-height: 30px;
+
+          &__unit {
+            margin-left: 5px;
+            font-size: 18px;
+          }
         }
 
-        &__unit {
-          margin-left: 5px;
-          font-size: 18px;
+        .description {
+          font-size: 16px;
+          font-weight: 500;
+          color: #149c75;
         }
       }
 
-      &__description {
-        font-size: 16px;
-        font-weight: 500;
-        color: #149c75;
-      }
-      &__image {
-        width: 64px;
-        height: 64px;
+      &__right {
+        margin-top: 24px;
       }
     }
-
   }
-
 }
 
 .rowDivider {
@@ -159,10 +176,9 @@
   flex-direction: column;
 
   &__title {
-    font-size: 20px;
+    font-size: 28px;
     font-weight: 700;
     margin-bottom: 20px;
-    padding-left: 0;
     color: #{$theme-white};
   }
 

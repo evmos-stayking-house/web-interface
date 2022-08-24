@@ -26,15 +26,16 @@ const useInputNumber = ({ max, defaultPlaceholder = '', decimal = 0, inputValue,
   }, []);
 
   useEffect(() => {
-    setValue(inputValue)
-  }, [inputValue])
+    setValue(inputValue);
+  }, [inputValue]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
 
     if (validateNumberInProgress(value, decimal)) {
-      setValue(e.target.value);
-      setInputValue!(e.target.value);
+      const num = String(Number(e.target.value));
+      setValue(num);
+      setInputValue!(num);
     }
   };
 
