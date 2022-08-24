@@ -3,7 +3,7 @@ import { Contract } from '@ethersproject/contracts';
 import { getContract } from '../config/contract';
 import { Contracts } from '../type/contract';
 import { useWalletState } from '../contexts/WalletContext';
-import { bigNumToStr } from '../utils/numberFormats';
+import { bigNumToStr, convertUnitFrom } from '../utils/numberFormats';
 
 let contract: Contract;
 
@@ -13,7 +13,7 @@ const useLendingAsset = (contractKey: Contracts) => {
 
   async function balanceOf() {
     const balance = await contract.balanceOf(address);
-    setTokenBalance(bigNumToStr(balance));
+    setTokenBalance(convertUnitFrom(balance, '18'));
   }
 
   async function init() {

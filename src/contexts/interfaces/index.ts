@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 export interface IThemeContext {
   isDarkMode: boolean;
-  toggleDarkMode: () => void;
+  toggleDarkMode: VoidFunction;
 }
 
 export interface IWalletContext {
@@ -10,6 +10,8 @@ export interface IWalletContext {
   onChangeAddress: (_newAddress: string) => void;
   onChangeEvmosBalance: (_evmosBalance: string) => void;
   evmosBalance: string;
+  isPending: boolean;
+  onChangeIsPendingState: (_isPending: boolean) => void;
 }
 
 export interface Props {

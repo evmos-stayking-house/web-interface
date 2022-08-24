@@ -19,6 +19,7 @@
     align-items: center;
     font-weight: 700;
     text-align: left;
+    margin-right: 10px;
   }
 
   &__logo {
@@ -76,10 +77,11 @@
 
   .maxBtn {
     width: 10%;
-    background-color: #{$theme-mint};
+    background-color: #FF6B4A;
     color: var(--contrast-color);
     font-size: 18px;
     border: 0;
+    text-transform: none;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
   }
@@ -94,7 +96,7 @@
   display: flex;
   flex-direction: row;
 
-  .confirmBtn {
+  .confirmBtnWrapper {
     display: flex;
     justify-items: center;
     align-self: center;
@@ -102,6 +104,21 @@
     margin-top: 5px;
     margin-left: 10px;
     height: 48px;
+    width: 15%;
+
+    &__btn {
+      width: 100%;
+      height: 48px;
+      text-transform: none;
+      font-size: 14px;
+      font-weight: 700;
+      color: #f1f1f1;
+      border-radius: 8px;
+      background: #111827;
+      &:hover {
+        background: #182134;
+      }
+    }
   }
 }
 
@@ -131,6 +148,4 @@
     border-radius: 8px;
     color: var(--contrast-color);
   }
-
-
 }

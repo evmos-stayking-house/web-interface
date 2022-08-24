@@ -90,9 +90,9 @@ const useDashboard = (address: string) => {
     balance,
     setBalance,
     address,
-    ibAtom,
+    ibUSDC: ibAtom,
     interestRate,
-    atomAmount
+    usdcAmount: atomAmount
   };
 };
 

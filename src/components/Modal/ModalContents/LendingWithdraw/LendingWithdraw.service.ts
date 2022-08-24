@@ -11,9 +11,9 @@ let tokenContract: Contract;
 const useLendingWithdraw = (closeModal: VoidFunction) => {
   const { address } = useWalletState();
 
-  const [amount, setAmount] = useState<string>('');
-  const [ibTokenBalance, setIbTokenBalance] = useState<string>('');
-  const [ibTokenWithdraw, setIbTokenWithdraw] = useState<string>('');
+  const [amount, setAmount] = useState<string>('0.0');
+  const [ibTokenBalance, setIbTokenBalance] = useState<string>('0.0');
+  const [ibTokenWithdraw, setIbTokenWithdraw] = useState<string>('0.0');
 
   function setMaxAmount() {
     setAmount(ibTokenBalance);
@@ -29,6 +29,7 @@ const useLendingWithdraw = (closeModal: VoidFunction) => {
   }
 
   async function shareToAmount() {
+    // if (Number(ibTokenWithdraw) > Number(ibTokenBalance)) return;
     const _amount = await vaultContract.shareToAmount(convertDenomFrom(ibTokenWithdraw));
     setAmount(convertUnitFrom(_amount));
   }

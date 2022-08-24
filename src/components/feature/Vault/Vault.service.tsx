@@ -14,7 +14,7 @@ let tokenContract: Contract;
 
 const useVault = () => {
   const { address } = useWalletState();
-  const [ibTokenRatioWithToken, setIbTokenRatioWithToken] = useState<string>('1 ibATOM = 1.0000 ATOM');
+  const [ibTokenRatioWithToken, setIbTokenRatioWithToken] = useState<string>('1 ibUSDC = 1.0000 USDC');
   const [interestRate, setInterestRate] = useState<string>('0.0');
   const [totalSupply, setTotalSupply] = useState<string>('0');
   const [totalBorrowed, setTotalBorrowed] = useState<string>('0');
@@ -27,13 +27,18 @@ const useVault = () => {
     renderModal: renderDepositModal,
     openModal: openDepositModal,
     closeModal: closeDepositModal
-  } = useModal({ content: <LendingDeposit title={'ATOM'} closeModal={() => {}} /> });
+  } = useModal({ content: <LendingDeposit title={'USDC'} closeModal={handleCloseDepositModal} /> });
+
+  async function handleCloseDepositModal(txHash: string) {
+    console.log('txHash ::: ', txHash);
+    await init();
+  }
 
   const {
     renderModal: renderWithdrawModal,
     openModal: openWithdrawModal,
     closeModal: closeWithdrawModal
-  } = useModal({ content: <LendingWithdraw title={'ATOM'} closeModal={() => {}} /> });
+  } = useModal({ content: <LendingWithdraw title={'USDC'} closeModal={() => {}} /> });
 
   async function shareToAmount(_share = '1') {
     const _amount: BigNumber = await vaultContract.shareToAmount(convertDenomFrom(_share));
@@ -42,7 +47,7 @@ const useVault = () => {
 
   async function ibTokenRatioWithVaultToken() {
     const amount = await shareToAmount();
-    setIbTokenRatioWithToken(`1 ibATOM = ${amount} ATOM`);
+    setIbTokenRatioWithToken(`1 ibUSDC = ${amount} USDC`);
   }
 
   async function getInterestRate() {
@@ -91,7 +96,7 @@ const useVault = () => {
 
   useEffect(() => {
     vaultContract = getContract(Contracts.vault);
-    tokenContract = getContract(Contracts.tATOM);
+    tokenContract = getContract(Contracts.tUSDC);
   }, []);
 
   useEffect(() => {
