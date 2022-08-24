@@ -7,6 +7,7 @@ import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
 import useLendingWithdraw from './LendingWithdraw.service';
 import { Button } from '@mui/material';
+import { numberFormat } from '../../../../utils/numberFormats';
 
 interface Props {
   title: string;
@@ -25,7 +26,7 @@ const LendingWithdraw: FC<Props> = ({ title, closeModal }) => {
       </div>
       <div className={s.divider}></div>
       <span className={cn(s.desc, s.desc__lg)}>
-        Available ib{title} Balance: {ibTokenBalance} ib{title}
+        Available ib{title} Balance: {numberFormat(ibTokenBalance)} ib{title}
       </span>
       <Form>
         <section className={s.depositTokenContainer} onBlur={() => shareToAmount()}>

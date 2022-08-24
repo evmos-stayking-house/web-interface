@@ -11,9 +11,9 @@ let tokenContract: Contract;
 const useLendingWithdraw = (closeModal: VoidFunction) => {
   const { address } = useWalletState();
 
-  const [amount, setAmount] = useState<string>('0.0');
-  const [ibTokenBalance, setIbTokenBalance] = useState<string>('0.0');
-  const [ibTokenWithdraw, setIbTokenWithdraw] = useState<string>('0.0');
+  const [amount, setAmount] = useState<string>('0');
+  const [ibTokenBalance, setIbTokenBalance] = useState<string>('0');
+  const [ibTokenWithdraw, setIbTokenWithdraw] = useState<string>('0');
 
   function setMaxAmount() {
     setAmount(ibTokenBalance);
