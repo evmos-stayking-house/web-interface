@@ -6,6 +6,8 @@ import { WalletContextProvider } from '../contexts/WalletContext';
 import { CacheProvider } from '@emotion/react';
 import createEmotionCache from '../createEmotionCache';
 import PropTypes from 'prop-types';
+import { SnackbarProvider } from 'notistack';
+import { useRouter } from 'next/router';
 
 declare global {
   interface Window {
@@ -17,14 +19,22 @@ const clientSideEmotionCache = createEmotionCache();
 
 export default function MyApp(props: any) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const router = useRouter();
 
   return (
     <CacheProvider value={emotionCache}>
-      <ThemeContextProvider>
-        <WalletContextProvider>
-          <Component {...pageProps} />
-        </WalletContextProvider>
-      </ThemeContextProvider>
+      <SnackbarProvider
+        maxSnack={3}
+        autoHideDuration={10000}
+        onClose={() => {
+          console.log('closed...');
+        }}>
+        <ThemeContextProvider>
+          <WalletContextProvider>
+            <Component {...pageProps} />
+          </WalletContextProvider>
+        </ThemeContextProvider>
+      </SnackbarProvider>
     </CacheProvider>
   );
 }

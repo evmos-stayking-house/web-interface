@@ -6,15 +6,19 @@ import { convertDenomFrom, convertUnitFrom } from '../../../../utils/numberForma
 import useLendingAsset from '../../../../hooks/useLendingAsset';
 import { contractsInfo } from '../../../../data/contract/contracts';
 import { useWalletState } from '../../../../contexts/WalletContext';
+import useVault from '../../../feature/Vault/Vault.service';
+import { sleep } from '../../../../utils/utils';
+import { useSnackbar, VariantType } from 'notistack';
 
 let vaultContract: Contract;
 let tokenContract: Contract;
 
-const useLendingDeposit = (closeModal: (txHash: string) => void) => {
+const useLendingDeposit = (closeModal: VoidFunction) => {
   const { onChangeIsPendingState } = useWalletState();
   const [amount, setAmount] = useState<string>('0');
   const [share, setShare] = useState<string>('0');
   const { tokenBalance } = useLendingAsset(Contracts.tUSDC);
+  const { enqueueSnackbar } = useSnackbar();
 
   function setMaxAmount() {
     setAmount(tokenBalance);
@@ -25,10 +29,11 @@ const useLendingDeposit = (closeModal: (txHash: string) => void) => {
     try {
       await tokenContract.approve(contractsInfo[Contracts.vault].address, convertDenomFrom(amount));
       const depositedResult = await vaultContract.deposit(convertDenomFrom(amount));
-      closeModal(depositedResult['hash']);
-    } catch (e) {
-      console.log(`ERROR: `, e);
+      closeModal();
+      enqueueSnackbar(`Transaction Hash: ${depositedResult['hash']}`, { variant: 'success' });
+    } catch (e: any) {
       onChangeIsPendingState(false);
+      enqueueSnackbar(e.toString(), { variant: 'error' });
     }
   }
 
@@ -37,9 +42,10 @@ const useLendingDeposit = (closeModal: (txHash: string) => void) => {
     setShare(convertUnitFrom(_share));
   }
 
-  async function init() {
-    vaultContract.on('Deposit', (...args) => {
+  async function registerContractEvents() {
+    vaultContract.on('Deposit', async (...args) => {
       onChangeIsPendingState(false);
+      // await sleep(3000);
     });
   }
 
@@ -48,7 +54,7 @@ const useLendingDeposit = (closeModal: (txHash: string) => void) => {
     tokenContract = getContract(Contracts.tUSDC);
 
     (async () => {
-      await init();
+      await registerContractEvents();
     })();
   }, []);
 

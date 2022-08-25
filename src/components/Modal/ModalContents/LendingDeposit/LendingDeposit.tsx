@@ -12,7 +12,7 @@ import { Button } from '@mui/material';
 
 interface Props {
   title: string;
-  closeModal: (txHash: string) => void;
+  closeModal: VoidFunction;
 }
 
 const LendingDeposit: FC<Props> = ({ title, closeModal }) => {

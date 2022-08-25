@@ -27,12 +27,7 @@ const useVault = () => {
     renderModal: renderDepositModal,
     openModal: openDepositModal,
     closeModal: closeDepositModal
-  } = useModal({ content: <LendingDeposit title={'USDC'} closeModal={handleCloseDepositModal} /> });
-
-  async function handleCloseDepositModal(txHash: string) {
-    console.log('txHash ::: ', txHash);
-    await init();
-  }
+  } = useModal({ content: <LendingDeposit title={'USDC'} closeModal={() => closeDepositModal()} /> });
 
   const {
     renderModal: renderWithdrawModal,
@@ -60,7 +55,6 @@ const useVault = () => {
     const _totalAmount: BigNumber = await vaultContract.totalAmount();
     const totalAmount = convertUnitFrom(_totalAmount.toString(), '18');
     if (Number(totalAmount) > 0) await getUtilizationRateBps();
-
     setTotalSupply(totalAmount);
   }
 
@@ -72,7 +66,6 @@ const useVault = () => {
 
   async function getUtilizationRateBps() {
     const _utilizationRateBps = await vaultContract.utilizationRateBps();
-    console.log(_utilizationRateBps);
     const utilizationRateBps = convertUnitFrom(_utilizationRateBps.toString(), '2');
     setUtilizationRate(utilizationRateBps);
   }
@@ -86,7 +79,7 @@ const useVault = () => {
     setVaultTokenBalance(vaultToken);
   }
 
-  async function init() {
+  async function loadData() {
     await ibTokenRatioWithVaultToken();
     await getInterestRate();
     await getTotalSupply();
@@ -101,7 +94,7 @@ const useVault = () => {
 
   useEffect(() => {
     (async (_address) => {
-      _address && (await init());
+      _address && (await loadData());
     })(address);
   }, [address]);
 
@@ -118,7 +111,8 @@ const useVault = () => {
     totalBorrowed,
     utilizationRate,
     ibBalance,
-    vaultTokenBalance
+    vaultTokenBalance,
+    loadData
   };
 };
 

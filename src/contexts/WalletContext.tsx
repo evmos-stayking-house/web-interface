@@ -27,8 +27,7 @@ export const WalletContextProvider: React.FC<Props> = ({ children }) => {
   }
 
   function onChangeIsPendingState(_isPending: boolean) {
-    if (_isPending) return setIsPending(_isPending);
-    setTimeout(() => setIsPending(_isPending), 100);
+    setIsPending(_isPending);
   }
 
   function onChangeEvmosBalance(_evmosBalance: string) {
