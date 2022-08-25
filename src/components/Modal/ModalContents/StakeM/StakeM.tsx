@@ -6,7 +6,9 @@ import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
 import useStakeM from './StakeM.service';
 import React from 'react';
-import { Autocomplete, Button, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, TextField } from '@mui/material';
+import { numberFormat } from '../../../../utils/numberFormats';
+import { LEVERAGE_OPTIONS } from '../../../../config/constants';
 
 interface Props {
   closeModal: VoidFunction;
@@ -24,8 +26,10 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
     amount,
     setAmount,
     deptInToken,
-    addPosition,
+    stake,
     borrowingAssetBalance,
+    onChangeBorrowingAsset,
+    renderStakeConfirmModal,
     setMaxAmount,
     onChangeSuppliedAmount
   } = useStakeM(closeModal, parentLeverage);
@@ -37,14 +41,16 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
       </div>
       <div className={s.divider}></div>
       <span className={cn(s.desc, s.desc__lg)}>Staking Asset</span>
-      <span className={cn(s.desc)}>Available Balance: {evmosBalance} EVMOS</span>
+      <span className={cn(s.desc)}>Available Balance: {numberFormat(evmosBalance)} EVMOS</span>
       <Form>
         <section className={s.depositTokenContainer} onBlur={() => onChangeSuppliedAmount()}>
           <img className={s.btnIcon} src={`/img/logo/evmos.png`} alt={'evmos icon'} />
           <Form.Item label="" className={s.input}>
             <InputNumber max={evmosBalance} setInputValue={setAmount} inputValue={amount} />
           </Form.Item>
-          <div className={s.assetName}>EVMOS</div>
+          <div className={s.assetName} style={{ marginRight: -20 }}>
+            EVMOS
+          </div>
           <button
             className={s.maxBtn}
             onClick={(e) => {
@@ -58,61 +64,73 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
       <div className={s.colSpace}></div>
       <span className={cn(s.desc, s.desc__lg)}>Borrowing Asset</span>
       <div className={s.ibTokenContainerWrapper}>
-        {/*<Dropdown>*/}
-        {/*  <Dropdown.Button*/}
-        {/*    css={{*/}
-        {/*      tt: 'capitalize',*/}
-        {/*      height: '48px',*/}
-        {/*      background: '#D9D9D9',*/}
-        {/*      color: '#4D4545',*/}
-        {/*      flexDirection: 'row',*/}
-        {/*      width: '100%',*/}
-        {/*      justifyContent: 'space-between'*/}
-        {/*    }}>*/}
-        {/*    <img className={s.icon} src={`/img/common/token/${borrowingAsset || 'ATOM'}.png`} alt={'cosmos icon'} />*/}
-        {/*    <span className={s.label}>{borrowingAsset}</span>*/}
-        {/*  </Dropdown.Button>*/}
-        {/*  <Dropdown.Menu*/}
-        {/*    aria-label="Single selection actions"*/}
-        {/*    color="secondary"*/}
-        {/*    disallowEmptySelection*/}
-        {/*    selectionMode="single"*/}
-        {/*    selectedKeys={borrowingAsset}*/}
-        {/*    onSelectionChange={onChangeBorrowingAsset}>*/}
-        {/*    <Dropdown.Item*/}
-        {/*      icon={<img className={s.icon} src={'/img/logo/cosmos.png'} alt={'cosmos icon'} />}*/}
-        {/*      key="ATOM">*/}
-        {/*      ATOM*/}
-        {/*    </Dropdown.Item>*/}
-        {/*    <Dropdown.Item*/}
-        {/*      icon={<img className={s.icon} src={'/img/logo/osmosis.png'} alt={'osmosis icon'} />}*/}
-        {/*      key="OSMO">*/}
-        {/*      OSMO*/}
-        {/*    </Dropdown.Item>*/}
-        {/*    <Dropdown.Item icon={<img className={s.icon} src={'/img/logo/juno.png'} alt={'juno icon'} />} key="JUNO">*/}
-        {/*      JUNO*/}
-        {/*    </Dropdown.Item>*/}
-        {/*  </Dropdown.Menu>*/}
-        {/*</Dropdown>*/}
+        <Autocomplete
+          sx={{
+            width: '100%',
+            border: 0,
+            borderColor: 'transparent',
+            background: '#D9D9D9',
+            color: '#4D4545',
+            borderRadius: 3
+          }}
+          style={{ border: 0 }}
+          options={tokens}
+          disableClearable={true}
+          value={borrowingAsset}
+          getOptionLabel={(option) => option}
+          getOptionDisabled={(option) => option === 'ATOM' || option === 'OSMO'}
+          onChange={onChangeBorrowingAsset}
+          autoHighlight
+          renderOption={(props, option) => (
+            <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+              <img loading="lazy" width="20" src={`/img/common/token/${option}.png`} alt="" />
+              {option}
+            </Box>
+          )}
+          renderInput={(params) => {
+            return (
+              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', justifyItems: 'center' }}>
+                <img
+                  loading="lazy"
+                  style={{ marginLeft: 8, marginTop: 11 }}
+                  width={34}
+                  height={34}
+                  src={`/img/common/token/${borrowingAsset}.png`}
+                  alt=""
+                />
+                {
+                  <TextField
+                    sx={{ border: 0, marginLeft: 0 }}
+                    {...params}
+                    inputProps={{
+                      ...params.inputProps
+                    }}
+                  />
+                }
+              </Box>
+            );
+          }}
+        />
       </div>
-      <span className={cn(s.desc)}>Available Balance: {borrowingAssetBalance} ATOM</span>
+      <span className={cn(s.desc)}>Available Balance: {numberFormat(borrowingAssetBalance)} USDC</span>
       <Form>
         <section className={s.borrowingTokenContainer}>
-          <img className={s.btnIcon} src={`/img/common/token/${borrowingAsset || 'ATOM'}.png`} alt={'cosmos icon'} />
+          <img className={s.btnIcon} src={`/img/common/token/${borrowingAsset || 'USDC'}.png`} alt={'cosmos icon'} />
           <span className={s.input}>{deptInToken}</span>
-          <div className={s.assetName}>ATOM</div>
+          <div className={s.assetName}>{borrowingAsset}</div>
         </section>
       </Form>
       <div className={s.leverageContainer}>
         <span className={cn(s.desc, s.desc__lg)}>Leverage</span>
         <Autocomplete
-          value={leverage}
-          onChange={(event: any, newValue: string | null) => {
+          value={leverage || '1.0'}
+          disableClearable={true}
+          onChange={async (event: any, newValue: string | null) => {
             event.preventDefault();
-            onChangeLeverage(newValue);
+            await onChangeLeverage(newValue);
           }}
           id="leverage-adjust-modal"
-          options={['1.0', '1.5', '2.0', '2.5']}
+          options={LEVERAGE_OPTIONS}
           style={{ width: 150, background: '#D9D9D9', color: '#4D4545', borderRadius: 8 }}
           renderInput={(params) => <TextField {...params} variant="outlined" />}
         />
@@ -150,7 +168,9 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
           </div>
           <div className={s.summaryRow}>
             <span className={s.summaryRow__label}>Asset Borrowed</span>
-            <span className={s.summaryRow__value}>{deptInBase} EVMOS</span>
+            <span className={s.summaryRow__value}>
+              {deptInToken} USDC <span style={{ fontSize: 10 }}>(≈ {deptInBase} EVMOS )</span>
+            </span>
           </div>
           <div className={s.summaryRow}>
             <span className={s.summaryRow__label}>Total Position Value</span>
@@ -159,12 +179,15 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
         </div>
       </div>
       <div className={s.btnWrapper}>
-        <Button className={s.stakeBtn} onClick={() => addPosition()}>
+        <Button className={s.stakeBtn} onClick={() => stake()}>
           STAKE
         </Button>
       </div>
+      {renderStakeConfirmModal()}
     </div>
   );
 };
+
+const tokens: readonly string[] = ['USDC', 'ATOM', 'OSMO'];
 
 export default StakeM;

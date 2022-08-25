@@ -83,7 +83,7 @@
 
   .maxBtn {
     width: 10%;
-    background-color: #{$theme-mint};
+    background-color: #FF6B4A;
     color: var(--contrast-color);
     font-size: 18px;
     border: 0;
@@ -140,7 +140,7 @@
     flex-direction: row;
     justify-content: flex-start;
     align-content: center;
-    margin-top: 11px;
+    margin-top: 13px;
     margin-left: 10px;
   }
 
@@ -167,6 +167,10 @@
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
+
+  .desc {
+    margin-top: 20px;
+  }
 }
 
 .summaryWrapper {

@@ -55,7 +55,7 @@ const Adjust: FC<Props> = ({ closeModal }) => {
         </section>
       </Form>
       <span className={cn(s.desc, s.desc__lg)}>Add Debt Value or Adjust Target Leverage</span>
-      <span className={cn(s.desc)}>Available Balance: {borrowingAssetBalance} ATOM</span>
+      <span className={cn(s.desc)}>Available Balance: {borrowingAssetBalance} USDC</span>
       <Form>
         <section className={s.adjustPositionContainer}>
           <img className={s.btnIcon} src={`/img/logo/cosmos.png`} alt={'atom icon'} />
@@ -63,7 +63,7 @@ const Adjust: FC<Props> = ({ closeModal }) => {
             <InputNumber max={borrowingAssetBalance} setInputValue={setDebtInToken} inputValue={deptInToken} />
           </Form.Item>
           <div className={s.assetName} style={{ marginRight: -30 }}>
-            ATOM
+            USDC
           </div>
           <button
             className={s.swapBtn}

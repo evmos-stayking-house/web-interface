@@ -14,7 +14,7 @@ const useClosePosition = (closeModal: VoidFunction) => {
   const [evmosQuantity, setEvmosQuantity] = useState<string>('0');
 
   async function getPosition(): Promise<Position | null> {
-    const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tATOM].address);
+    const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tUSDC].address);
 
     if (position && position.length > 0) {
       const _positionValueInBase = Number(convertUnitFrom(position[0], '18')) || 0;
@@ -52,7 +52,7 @@ const useClosePosition = (closeModal: VoidFunction) => {
   }
 
   async function removePosition() {
-    const result = await stayKingContract.removePosition(contractsInfo[Contracts.tATOM].address);
+    const result = await stayKingContract.removePosition(contractsInfo[Contracts.tUSDC].address);
     if (result && result['hash']) {
       closeModal();
       alert(`txHash: ${result['hash']} \n Please wait for transaction to confirm on the network...`);

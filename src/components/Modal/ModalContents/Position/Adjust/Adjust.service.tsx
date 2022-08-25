@@ -76,7 +76,7 @@ const useAdjust = (closeModal: VoidFunction) => {
   }
 
   async function getPositionFrom() {
-    const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tATOM].address);
+    const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tUSDC].address);
     const _killFactor = await stayKingContract.killFactorBps();
 
     if (position && position.length > 0) {
@@ -101,7 +101,7 @@ const useAdjust = (closeModal: VoidFunction) => {
   async function adjust() {
     if (Number(amount) > 0) {
       const result = await stayKingContract.addEquity(
-        contractsInfo[Contracts.tATOM].address,
+        contractsInfo[Contracts.tUSDC].address,
         convertDenomFrom(amount),
         {
           value: convertDenomFrom(amount)
@@ -116,7 +116,7 @@ const useAdjust = (closeModal: VoidFunction) => {
 
     if (Number(deptInBase) > 0) {
       const result = await stayKingContract.addDebt(
-        contractsInfo[Contracts.tATOM].address,
+        contractsInfo[Contracts.tUSDC].address,
         convertDenomFrom(deptInBase)
       );
       if (result && result['hash']) {
@@ -135,7 +135,7 @@ const useAdjust = (closeModal: VoidFunction) => {
   useEffect(() => {
     stayKingContract = getContract(Contracts.stayKing);
     vaultContract = getContract(Contracts.vault);
-    tokenContract = getContract(Contracts.tATOM);
+    tokenContract = getContract(Contracts.tUSDC);
 
     (async (address) => {
       address && (await init());

@@ -18,7 +18,7 @@ const Dashboard = () => {
   const [selectedTab, setSelectedTab] = useState<PositionTab>(PositionTab.Active);
   const { evmosBalance, address } = useWalletState();
   const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
-  const { tvl, ibUSDC, usdcAmount } = useDashboard(address);
+  const { tvl, ibToken, tokenAmount } = useDashboard(address);
 
   function onSetSelectedTab(_selTab: PositionTab) {
     setSelectedTab(_selTab);
@@ -69,10 +69,10 @@ const Dashboard = () => {
           <div className={s.balanceBox}>
             <div className={cn(s.balanceBox__left, s.padTop)}>
               <p className={s.value}>
-                {numberFormat(ibUSDC)}
+                {numberFormat(ibToken)}
                 <span className={s.balanceBox__value__unit}>&nbsp;ibUSDC</span>
               </p>
-              <p className={s.description}>~ {numberFormat(usdcAmount)}&nbsp;USDC</p>
+              <p className={s.description}>~ {numberFormat(tokenAmount)}&nbsp;USDC</p>
             </div>
             <div className={s.balanceBox__right}>
               <Image width={64} height={64} src={'/img/logo/usdc.png'} />

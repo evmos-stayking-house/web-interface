@@ -484,6 +484,34 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "debtToken",
+        "type": "address"
+      },
+      {
+        "internalType": "int256",
+        "name": "changeEquityInBase",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "changeDebtInBase",
+        "type": "int256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "repayDebt",
+        "type": "uint256"
+      }
+    ],
+    "name": "changePosition",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "user",
         "type": "address"
       },

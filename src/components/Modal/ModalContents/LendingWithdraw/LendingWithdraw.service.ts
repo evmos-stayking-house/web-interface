@@ -45,7 +45,7 @@ const useLendingWithdraw = (closeModal: VoidFunction) => {
 
   useEffect(() => {
     vaultContract = getContract(Contracts.vault);
-    tokenContract = getContract(Contracts.tATOM);
+    tokenContract = getContract(Contracts.tUSDC);
   }, []);
 
   useEffect(() => {

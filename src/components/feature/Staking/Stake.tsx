@@ -37,7 +37,7 @@ const Stake = () => {
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__yield)}>
           <span className={s.poolListContainerContents__item__text}>Yield Staking : TBD%</span>
-          <span className={s.poolListContainerContents__item__text}>Borrowing Interest : ATOM TBD%</span>
+          <span className={s.poolListContainerContents__item__text}>Borrowing Interest : USDC TBD%</span>
           <span className={s.poolListContainerContents__item__text}>Total APR : TBD%</span>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__leverage)}>

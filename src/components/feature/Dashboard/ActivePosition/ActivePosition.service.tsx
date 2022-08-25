@@ -46,7 +46,7 @@ const useActivePosition = (address: string) => {
   });
 
   async function getPositionFrom() {
-    const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tATOM].address);
+    const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tUSDC].address);
     const _killFactor = await stayKingContract.killFactorBps();
 
     if (position && position.length > 0) {

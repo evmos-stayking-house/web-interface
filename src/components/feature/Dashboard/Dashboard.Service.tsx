@@ -11,26 +11,26 @@ let stayKingContract: Contract;
 
 const useDashboard = (address: string) => {
   const [balance, setBalance] = useState<number>(0);
-  const [ibAtom, setIbAtom] = useState<string>('0.0');
-  const [atomAmount, setAtomAmount] = useState<string>('0.0');
+  const [ibToken, setIbToken] = useState<string>('0');
+  const [tokenAmount, setTokenAmount] = useState<string>('0');
   const [interestRate, setInterestRate] = useState<number>(0);
   const [tvl, setTvl] = useState<string>('0');
-  const { coinPrice: atomPrice } = useCoinPrice('cosmos');
+  const { coinPrice: tokenPrice } = useCoinPrice('cosmos');
   const { coinPrice: evmosPrice } = useCoinPrice('evmos');
 
-  async function getIbAtom() {
+  async function getIbToken() {
     try {
-      const balOfIbAtom = await vaultContract.balanceOf(address);
-      setIbAtom(convertUnitFrom(balOfIbAtom, 18));
-      await shareToAmount(convertUnitFrom(balOfIbAtom, 18));
+      const balOfIbToken = await vaultContract.balanceOf(address);
+      setIbToken(convertUnitFrom(balOfIbToken, 18));
+      await shareToAmount(convertUnitFrom(balOfIbToken, 18));
     } catch (e) {
-      setIbAtom('0');
+      setIbToken('0');
     }
   }
 
   async function shareToAmount(_share: string) {
     const _amount = await vaultContract.shareToAmount(convertDenomFrom(_share));
-    setAtomAmount(convertUnitFrom(_amount));
+    setTokenAmount(convertUnitFrom(_amount));
   }
 
   async function getInterestRate() {
@@ -46,16 +46,16 @@ const useDashboard = (address: string) => {
     const _totalAmount = await getTotalAmountFromStayKing();
     const totalAmountOfEvmos = convertUnitFrom(_totalAmount, '18');
     const _balanceOf = await balanceOf();
-    const totalBalanceOfATOM = convertUnitFrom(_balanceOf, '18');
+    const totalBalanceOfToken = convertUnitFrom(_balanceOf, '18');
 
     const tvlOfEVMOS = Number(totalAmountOfEvmos) * (evmosPrice ?? 0);
-    const tvlOfATOM = Number(totalBalanceOfATOM) * (atomPrice ?? 0);
+    const tvlOfToken = Number(totalBalanceOfToken) * (tokenPrice ?? 0);
 
-    setTvl((tvlOfATOM + tvlOfEVMOS).toFixed(0));
+    setTvl((tvlOfToken + tvlOfEVMOS).toFixed(0));
   }
 
   async function balanceOf() {
-    return getContract(Contracts.tATOM).balanceOf(contractsInfo[Contracts.vault].address);
+    return getContract(Contracts.tUSDC).balanceOf(contractsInfo[Contracts.vault].address);
   }
 
   function getTotalAmountFromStayKing() {
@@ -63,7 +63,7 @@ const useDashboard = (address: string) => {
   }
 
   async function init() {
-    await getIbAtom();
+    await getIbToken();
     await getInterestRate();
   }
 
@@ -83,16 +83,16 @@ const useDashboard = (address: string) => {
     (async () => {
       await calculatedTVL();
     })();
-  }, [evmosPrice, atomPrice]);
+  }, [evmosPrice, tokenPrice]);
 
   return {
     tvl,
     balance,
     setBalance,
     address,
-    ibUSDC: ibAtom,
+    ibToken,
     interestRate,
-    usdcAmount: atomAmount
+    tokenAmount
   };
 };
 

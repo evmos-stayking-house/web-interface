@@ -25,7 +25,7 @@ const useStake = () => {
   const { renderModal: renderUnStakeModal, openModal: openUnStakeModal } = useModal({ content: <UnStake /> });
 
   async function getPositionFrom() {
-    const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tATOM].address);
+    const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tUSDC].address);
     const positionValue = convertUnitFrom(position[0]);
     setHasPosition(Number(positionValue) > 0);
   }
