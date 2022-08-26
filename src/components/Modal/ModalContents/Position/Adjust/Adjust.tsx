@@ -58,7 +58,7 @@ const Adjust: FC<Props> = ({ closeModal }) => {
       <span className={cn(s.desc)}>Available Balance: {borrowingAssetBalance} USDC</span>
       <Form>
         <section className={s.adjustPositionContainer}>
-          <img className={s.btnIcon} src={`/img/logo/cosmos.png`} alt={'atom icon'} />
+          <img className={s.btnIcon} src={`/img/logo/usdc.png`} alt={'usdc icon'} />
           <Form.Item label="" className={s.input}>
             <InputNumber max={borrowingAssetBalance} setInputValue={setDebtInToken} inputValue={deptInToken} />
           </Form.Item>

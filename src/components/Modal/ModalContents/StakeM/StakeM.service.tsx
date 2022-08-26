@@ -7,6 +7,7 @@ import { convertDenomFrom, convertUnitFrom } from '../../../../utils/numberForma
 import { useWalletState } from '../../../../contexts/WalletContext';
 import { useModal } from '../../useModal';
 import StakeConfirm from './StakeConfirm/StakeConfirm';
+import { useSnackbar } from 'notistack';
 
 let tokenContract: Contract;
 let vaultContract: Contract;
@@ -21,6 +22,8 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
   const [positionValue, setPositionValue] = useState<string>('0');
   const [borrowingAsset, setBorrowingAsset] = useState<any>('USDC');
   const [leverage, setLeverage] = useState<string | null>(parentLeverage);
+  const { onChangeIsPendingState } = useWalletState();
+  const { enqueueSnackbar } = useSnackbar();
 
   const {
     renderModal: renderStakeConfirmModal,
@@ -73,23 +76,33 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
   }
 
   async function addPosition() {
-    const result = await stayKingContract.addPosition(
-      contractsInfo[Contracts.tUSDC].address,
-      convertDenomFrom(amount),
-      convertDenomFrom(deptInBase),
-      {
-        value: convertDenomFrom(amount)
-      }
-    );
-    if (result && result['hash']) {
+    onChangeIsPendingState(true);
+    try {
+      const result = await stayKingContract.addPosition(
+        contractsInfo[Contracts.tUSDC].address,
+        convertDenomFrom(amount),
+        convertDenomFrom(deptInBase),
+        {
+          value: convertDenomFrom(amount)
+        }
+      );
       closeModal();
-      alert(`txHash: ${result['hash']} \n Please wait for transaction to confirm on the network...`);
+      enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
+    } catch (e: any) {
+      onChangeIsPendingState(false);
+      enqueueSnackbar(e.toString(), { variant: 'error' });
     }
+  }
+
+  function registerContractEvents() {
+    stayKingContract.on('AddPosition', async (...args) => {
+      onChangeIsPendingState(false);
+    });
   }
 
   async function init() {
     await loadLendingPoolAsset();
-    // await swapHelperBalanceCheck();
+    registerContractEvents();
   }
 
   useEffect(() => {

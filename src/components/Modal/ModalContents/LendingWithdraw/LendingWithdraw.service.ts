@@ -12,10 +12,10 @@ let tokenContract: Contract;
 const useLendingWithdraw = (closeModal: VoidFunction) => {
   const { address } = useWalletState();
   const { onChangeIsPendingState } = useWalletState();
+  const { enqueueSnackbar } = useSnackbar();
   const [amount, setAmount] = useState<string>('0');
   const [ibTokenBalance, setIbTokenBalance] = useState<string>('0');
   const [ibTokenWithdraw, setIbTokenWithdraw] = useState<string>('0');
-  const { enqueueSnackbar } = useSnackbar();
 
   function setMaxAmount() {
     setAmount(ibTokenBalance);
@@ -45,10 +45,10 @@ const useLendingWithdraw = (closeModal: VoidFunction) => {
 
   async function init() {
     await getBalanceIbToken();
-    await registerContractEvents();
+    registerContractEvents();
   }
 
-  async function registerContractEvents() {
+  function registerContractEvents() {
     vaultContract.on('Withdraw', async (...args) => {
       onChangeIsPendingState(false);
     });

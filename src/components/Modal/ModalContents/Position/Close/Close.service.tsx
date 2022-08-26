@@ -2,16 +2,35 @@ import { useEffect, useState } from 'react';
 import { useWalletState } from '../../../../../contexts/WalletContext';
 import { contractsInfo } from '../../../../../data/contract/contracts';
 import { Contracts } from '../../../../../type/contract';
-import { convertUnitFrom } from '../../../../../utils/numberFormats';
+import { convertDenomFrom, convertUnitFrom } from '../../../../../utils/numberFormats';
 import { Position } from '../../../../feature/Dashboard/ActivePosition/ActivePosition.service';
 import { Contract } from 'ethers';
 import { getContract } from '../../../../../config/contract';
+import { useSnackbar } from 'notistack';
 
 let stayKingContract: Contract;
+let vaultContract: Contract;
+
+export enum CloseType {
+  Entire = 'Close Entire Position',
+  Partial = 'Partially Close Position'
+}
+
+const closePositions: readonly string[] = [CloseType.Entire, CloseType.Partial];
+
+interface ResultSummary {
+  equity: string;
+  deptInBase: string;
+  deptInToken: string;
+  estimated: string;
+  positionValueInBase: string;
+}
 
 const useClosePosition = (closeModal: VoidFunction) => {
-  const { address } = useWalletState();
-  const [evmosQuantity, setEvmosQuantity] = useState<string>('0');
+  const { address, onChangeIsPendingState } = useWalletState();
+  const { enqueueSnackbar } = useSnackbar();
+  const [result, setResult] = useState<ResultSummary | null>(null);
+  const [closeType, setCloseType] = useState<CloseType>(CloseType.Entire);
 
   async function getPosition(): Promise<Position | null> {
     const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tUSDC].address);
@@ -38,33 +57,54 @@ const useClosePosition = (closeModal: VoidFunction) => {
     return convertUnitFrom(_totalAmount, '18');
   }
 
+  async function getTokenOut(deptInBase: string) {
+    return vaultContract.getTokenOut(Number(deptInBase).toFixed(0));
+  }
+
   async function calculatedEVMOS() {
     const position = await getPosition();
-    if (Number(position?.positionValueInBase) === 0) return setEvmosQuantity('0');
 
     const equity = Number(position?.equityValue);
     const deptInBase = Number(position?.debtInBase);
     const totalShare = Number(await getTotalShareOf());
     const totalAmount = Number(await getTotalAmountOf());
+    const _deptInToken = await getTokenOut(position?.debtInBase || '0');
+    const estimated = ((totalShare * (equity + deptInBase)) / totalAmount - deptInBase).toFixed(1);
 
-    const estimated = (totalShare * (equity + deptInBase)) / totalAmount;
-    setEvmosQuantity(estimated.toFixed(1));
+    setResult({
+      estimated,
+      positionValueInBase: position?.positionValueInBase || '0.0',
+      deptInToken: convertUnitFrom(_deptInToken, '0'),
+      equity: equity.toFixed(1),
+      deptInBase: deptInBase.toFixed(1)
+    });
   }
 
   async function removePosition() {
-    const result = await stayKingContract.removePosition(contractsInfo[Contracts.tUSDC].address);
-    if (result && result['hash']) {
+    onChangeIsPendingState(true);
+    try {
+      const result = await stayKingContract.removePosition(contractsInfo[Contracts.tUSDC].address);
       closeModal();
-      alert(`txHash: ${result['hash']} \n Please wait for transaction to confirm on the network...`);
+      enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
+    } catch (e: any) {
+      onChangeIsPendingState(false);
+      enqueueSnackbar(e.toString(), { variant: 'error' });
     }
-    return;
+  }
+
+  function registerContractEvents() {
+    stayKingContract.on('RemovePosition', async (...args) => {
+      onChangeIsPendingState(false);
+    });
   }
 
   async function init() {
     await calculatedEVMOS();
+    registerContractEvents();
   }
 
   useEffect(() => {
+    vaultContract = getContract(Contracts.vault);
     stayKingContract = getContract(Contracts.stayKing);
 
     (async (_address) => {
@@ -73,8 +113,11 @@ const useClosePosition = (closeModal: VoidFunction) => {
   }, []);
 
   return {
-    evmosQuantity,
-    removePosition
+    result,
+    removePosition,
+    closeType,
+    setCloseType,
+    closePositions
   };
 };
 

@@ -4,6 +4,7 @@ import s from './Stake.module.scss';
 import { cn } from '../../../utils/style';
 import useStake from './Stake.service';
 import { Autocomplete, TextField } from '@mui/material';
+import { LEVERAGE_OPTIONS } from '../../../config/constants';
 
 const Stake = () => {
   const { leverage, setLeverage, renderStakeModal, hasPosition, openStakeModal, renderUnStakeModal, openUnStakeModal } =
@@ -42,13 +43,14 @@ const Stake = () => {
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__leverage)}>
           <Autocomplete
-            value={leverage}
+            value={leverage || '1.0'}
+            disableClearable={true}
             onChange={(event: any, newValue: string | null) => {
               event.preventDefault();
               setLeverage(newValue);
             }}
             id="leverage-adjust-modal"
-            options={['1.0', '1.5', '2.0', '2.5']}
+            options={LEVERAGE_OPTIONS}
             style={{ width: 120, background: '#D9D9D9', color: '#4D4545', borderRadius: 8 }}
             renderInput={(params) => <TextField {...params} variant="outlined" />}
           />

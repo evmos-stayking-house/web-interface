@@ -45,7 +45,7 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
     setShare(convertUnitFrom(_share));
   }
 
-  async function registerContractEvents() {
+  function registerContractEvents() {
     vaultContract.on('Deposit', async (...args) => {
       onChangeIsPendingState(false);
     });
@@ -54,10 +54,7 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
   useEffect(() => {
     vaultContract = getContract(Contracts.vault);
     tokenContract = getContract(Contracts.tUSDC);
-
-    (async () => {
-      await registerContractEvents();
-    })();
+    registerContractEvents();
   }, []);
 
   return {

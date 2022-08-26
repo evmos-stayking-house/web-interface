@@ -1,46 +1,68 @@
-import React, { FC } from 'react';
+import React, { FC, SyntheticEvent } from 'react';
 import s from './Close.module.scss';
-import { cn } from '../../../../../utils/style';
-import Form from '../../../../common/Form';
-import { InputNumber } from '../../../../common/Input';
-import Button from '../../../../common/Button';
-import useClosePosition from './Close.service';
+import useClosePosition, { CloseType } from './Close.service';
+import { Autocomplete, Box, Button, TextField } from '@mui/material';
 
 interface Props {
   closeModal: VoidFunction;
 }
 
 const Close: FC<Props> = ({ closeModal }) => {
-  const { evmosQuantity, removePosition } = useClosePosition(closeModal);
+  const { result, removePosition, closeType, setCloseType, closePositions } = useClosePosition(closeModal);
   return (
     <div className={s.container}>
       <div className={s.logoContainer}>
-        <div className={s.logoContainer__title}>Close Position</div>
+        <div className={s.logoContainer__title}>Unstake Position</div>
       </div>
       <div className={s.divider}></div>
-      <span className={cn(s.desc, s.desc__lg)}>Available uEVMOS Balance: {evmosQuantity} uEVMOS</span>
-      <Form>
-        <section className={s.withdrawTokenContainer} onBlur={() => {}}>
-          <Form.Item label="" className={s.input}>
-            <InputNumber max={evmosQuantity} setInputValue={() => {}} inputValue={evmosQuantity} />
-          </Form.Item>
-          <div className={s.assetName}>uEVMOS</div>
-        </section>
-      </Form>
-      <div className={s.colSpace}></div>
-      <span className={cn(s.desc, s.desc__lg)}>You will receive</span>
-      <div className={s.uEVMOSContainerWrapper}>
-        <section className={s.uEVMOSContainer}>
-          <Form.Item label="" className={s.input}>
-            <InputNumber max={evmosQuantity} setInputValue={() => {}} inputValue={evmosQuantity} />
-          </Form.Item>
-          <div className={s.assetName} style={{ marginRight: -20 }}>
-            EVMOS
-          </div>
-        </section>
-        <div className={s.confirmBtn}>
-          <Button onClick={() => removePosition()}>Confirm</Button>
+      <div className={s.positionDropdownWrapper}>
+        <Autocomplete
+          sx={{
+            width: '100%',
+            border: 0,
+            background: '#d9d9d9',
+            borderRadius: 10
+          }}
+          options={closePositions}
+          disableClearable={true}
+          value={closeType}
+          getOptionDisabled={(option: string) => option === CloseType.Partial}
+          onChange={(e: SyntheticEvent<any>) => setCloseType(e.currentTarget.innerText!)}
+          renderInput={(params) => (
+            <TextField
+              sx={{ borderRadius: 10, borderColor: 'transparent', color: '#d9d9d9' }}
+              className={s.dropdown}
+              {...params}
+            />
+          )}
+        />
+      </div>
+      <div className={s.closePositionWrapper}>
+        <div className={s.row}>
+          <span className={s.row__label}>Total Position Value</span>
+          <span className={s.row__value}>
+            {result?.equity} EVMOS + {result?.deptInToken} USDC
+          </span>
         </div>
+        <div className={s.row}>
+          <span className={s.row__label}>Debt Value</span>
+          <span className={s.row__value}>
+            {result?.deptInToken} USDC <span style={{ fontSize: 10 }}>(≈ {result?.deptInBase} EVMOS )</span>
+          </span>
+        </div>
+        <div className={s.row}>
+          <span className={s.row__label}>Converted Position Value Asset</span>
+          <span className={s.row__value}>{result?.positionValueInBase} EVMOS</span>
+        </div>
+        <div className={s.row}>
+          <span className={s.row__label}>EVMOS Reward you will approximately recieve after 14 days : </span>
+          <span className={s.row__value}>≈ {result?.estimated} EVMOS</span>
+        </div>
+      </div>
+      <div className={s.btnWrapper}>
+        <Button className={s.unstakeBtn} onClick={() => removePosition()}>
+          UNSTAKE
+        </Button>
       </div>
     </div>
   );

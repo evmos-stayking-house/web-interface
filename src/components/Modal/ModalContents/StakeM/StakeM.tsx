@@ -6,7 +6,7 @@ import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
 import useStakeM from './StakeM.service';
 import React from 'react';
-import { Autocomplete, Box, Button, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Slider, styled, TextField } from '@mui/material';
 import { numberFormat } from '../../../../utils/numberFormats';
 import { LEVERAGE_OPTIONS } from '../../../../config/constants';
 
@@ -120,6 +120,25 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
           <div className={s.assetName}>{borrowingAsset}</div>
         </section>
       </Form>
+
+      <div className={s.sliderContainer}>
+        <PrettoSlider
+          aria-label="Always visible"
+          defaultValue={1.0}
+          value={Number(leverage)}
+          onChange={async (event: any, newValue: number | number[]) => {
+            event.preventDefault();
+            await onChangeLeverage((newValue as number)?.toFixed(1));
+          }}
+          getAriaValueText={(val: number) => `x${val.toFixed(1)}`}
+          getAriaLabel={(val: number) => `x${val.toFixed(1)}`}
+          step={0.5}
+          max={4.5}
+          min={1.0}
+          marks={LEVERAGE_OPTIONS.map((_leverage) => ({ label: ``, value: Number(_leverage) }))}
+          valueLabelDisplay="on"
+        />
+      </div>
       <div className={s.leverageContainer}>
         <span className={cn(s.desc, s.desc__lg)}>Leverage</span>
         <Autocomplete
@@ -187,6 +206,45 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
     </div>
   );
 };
+
+const PrettoSlider = styled(Slider)({
+  color: '#52af77',
+  height: 8,
+  '& .MuiSlider-track': {
+    border: 'none'
+  },
+  '& .MuiSlider-thumb': {
+    height: 24,
+    width: 24,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+      boxShadow: 'inherit'
+    },
+    '&:before': {
+      display: 'none'
+    }
+  },
+  '& .MuiSlider-valueLabel': {
+    lineHeight: 1.2,
+    fontSize: 12,
+    background: 'unset',
+    padding: 0,
+    width: 32,
+    height: 32,
+    borderRadius: '50% 50% 50% 0',
+    backgroundColor: '#52af77',
+    transformOrigin: 'bottom left',
+    transform: 'translate(50%, -100%) rotate(-45deg) scale(0)',
+    '&:before': { display: 'none' },
+    '&.MuiSlider-valueLabelOpen': {
+      transform: 'translate(50%, -100%) rotate(-45deg) scale(1)'
+    },
+    '& > *': {
+      transform: 'rotate(45deg)'
+    }
+  }
+});
 
 const tokens: readonly string[] = ['USDC', 'ATOM', 'OSMO'];
 
