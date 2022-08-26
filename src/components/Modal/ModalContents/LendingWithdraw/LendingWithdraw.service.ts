@@ -4,32 +4,36 @@ import { Contracts } from '../../../../type/contract';
 import { Contract } from '@ethersproject/contracts';
 import { convertDenomFrom, convertUnitFrom } from '../../../../utils/numberFormats';
 import { useWalletState } from '../../../../contexts/WalletContext';
+import { useSnackbar } from 'notistack';
 
 let vaultContract: Contract;
 let tokenContract: Contract;
 
 const useLendingWithdraw = (closeModal: VoidFunction) => {
   const { address } = useWalletState();
-
+  const { onChangeIsPendingState } = useWalletState();
   const [amount, setAmount] = useState<string>('0');
   const [ibTokenBalance, setIbTokenBalance] = useState<string>('0');
   const [ibTokenWithdraw, setIbTokenWithdraw] = useState<string>('0');
+  const { enqueueSnackbar } = useSnackbar();
 
   function setMaxAmount() {
     setAmount(ibTokenBalance);
   }
 
   async function withdraw() {
-    console.log('출금량', convertDenomFrom(ibTokenWithdraw));
-    const withdrawResult = await vaultContract.withdraw(convertDenomFrom(ibTokenWithdraw));
-    if (withdrawResult && withdrawResult['hash']) {
+    onChangeIsPendingState(true);
+    try {
+      const withdrawResult = await vaultContract.withdraw(convertDenomFrom(ibTokenWithdraw));
       closeModal();
-      alert(`txHash: ${withdrawResult['hash']} \n Please wait for transaction to confirm on the network...`);
+      enqueueSnackbar(`Transaction Hash: ${withdrawResult['hash']}`, { variant: 'success' });
+    } catch (e: any) {
+      onChangeIsPendingState(false);
+      enqueueSnackbar(e.toString(), { variant: 'error' });
     }
   }
 
   async function shareToAmount() {
-    // if (Number(ibTokenWithdraw) > Number(ibTokenBalance)) return;
     const _amount = await vaultContract.shareToAmount(convertDenomFrom(ibTokenWithdraw));
     setAmount(convertUnitFrom(_amount));
   }
@@ -41,6 +45,13 @@ const useLendingWithdraw = (closeModal: VoidFunction) => {
 
   async function init() {
     await getBalanceIbToken();
+    await registerContractEvents();
+  }
+
+  async function registerContractEvents() {
+    vaultContract.on('Withdraw', async (...args) => {
+      onChangeIsPendingState(false);
+    });
   }
 
   useEffect(() => {

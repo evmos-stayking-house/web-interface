@@ -6,9 +6,8 @@ import { convertDenomFrom, convertUnitFrom } from '../../../../utils/numberForma
 import useLendingAsset from '../../../../hooks/useLendingAsset';
 import { contractsInfo } from '../../../../data/contract/contracts';
 import { useWalletState } from '../../../../contexts/WalletContext';
-import useVault from '../../../feature/Vault/Vault.service';
+import { useSnackbar } from 'notistack';
 import { sleep } from '../../../../utils/utils';
-import { useSnackbar, VariantType } from 'notistack';
 
 let vaultContract: Contract;
 let tokenContract: Contract;
@@ -27,7 +26,11 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
   async function deposit() {
     onChangeIsPendingState(true);
     try {
-      await tokenContract.approve(contractsInfo[Contracts.vault].address, convertDenomFrom(amount));
+      const approveResult = await tokenContract.approve(
+        contractsInfo[Contracts.vault].address,
+        convertDenomFrom(amount)
+      );
+      approveResult.wait();
       const depositedResult = await vaultContract.deposit(convertDenomFrom(amount));
       closeModal();
       enqueueSnackbar(`Transaction Hash: ${depositedResult['hash']}`, { variant: 'success' });
@@ -45,7 +48,6 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
   async function registerContractEvents() {
     vaultContract.on('Deposit', async (...args) => {
       onChangeIsPendingState(false);
-      // await sleep(3000);
     });
   }
 

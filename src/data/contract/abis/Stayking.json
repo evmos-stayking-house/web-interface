@@ -489,17 +489,17 @@
       },
       {
         "internalType": "int256",
-        "name": "changeEquityInBase",
+        "name": "equityInBaseChanged",
         "type": "int256"
       },
       {
         "internalType": "int256",
-        "name": "changeDebtInBase",
+        "name": "debtInBaseChanged",
         "type": "int256"
       },
       {
         "internalType": "uint256",
-        "name": "repayDebt",
+        "name": "repaidDebt",
         "type": "uint256"
       }
     ],
