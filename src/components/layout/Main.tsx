@@ -5,10 +5,11 @@ import Image from 'next/image';
 import MetaMask from '../common/MetaMask';
 import Menu from './Menu';
 import useCoinPrice from '../../hooks/useCoinPrice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import { useWalletState } from '../../contexts/WalletContext';
 import { APP_ENV } from '../../config/environments';
+import useWindowSize from '../../hooks/useWindowSize';
 
 interface MainProps {
   children: ReactNode;
@@ -19,10 +20,19 @@ const Main: FC<MainProps> = ({ children, title }) => {
   const { coinPrice: cosmosPrice } = useCoinPrice(`cosmos`);
   const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
   const { coinPrice: usdcPrice } = useCoinPrice('usd-coin');
+  const [isMetaMaskInstalled, setIsMetaMaskInstalled] = useState<boolean>(false);
   const { isPending } = useWalletState();
+  const size = useWindowSize();
+
+  const hasMetaMask = () => {
+    //Have to check the ethereum binding on the window object to see if it's installed
+    const { ethereum } = window;
+    return Boolean(ethereum && ethereum.isMetaMask);
+  };
 
   useEffect(() => {
     console.log('APP_ENV:: ', APP_ENV);
+    setIsMetaMaskInstalled(hasMetaMask);
   }, []);
 
   return (
@@ -71,6 +81,12 @@ const Main: FC<MainProps> = ({ children, title }) => {
           <span className={s.text}>Loading....</span>
         </div>
       )}
+      {size && size < 1024 && (
+        <div className={s.dim}>
+          <span className={s.text}>The resolution of the connected display screen is not supported.</span>
+        </div>
+      )}
+      {!isMetaMaskInstalled && <div className={s.dim}>Metamask is not installed</div>}
     </div>
   );
 };

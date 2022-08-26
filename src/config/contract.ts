@@ -1,11 +1,9 @@
 import { ethers } from 'ethers';
-import { Contracts, ContractsType } from 'type/contract';
+import { Contracts } from 'type/contract';
 import { contractsInfo } from '../data/contract/contracts';
 import { chains } from '../data/chain';
-import { Web3Provider } from '@ethersproject/providers';
 import { APP_ENV } from './environments';
 
-let contract: ContractsType = {};
 let provider: ethers.providers.Web3Provider | null = null;
 
 export function initMetaMaskProvider() {
@@ -41,13 +39,3 @@ export function getContract(contractName: Contracts) {
   const signer = getProvider().getSigner();
   return new ethers.Contract(contractsInfo[contractName].address, contractsInfo[contractName].abi, signer);
 }
-
-// export function registerProviderEvents() {
-//   getProvider().on('block', (block) => {
-//     console.log('block.event:: ', block);
-//   });
-//
-//   getProvider().on('pending', (block, tx) => {
-//     console.log('pending.event:: ', tx);
-//   });
-// }

@@ -5,7 +5,7 @@ import { useWalletState } from '../../../contexts/WalletContext';
 import { useModal } from '../../Modal';
 import WalletSelection from '../../Modal/ModalContents/WalletSelection/WalletSelection';
 import useMetaMask from './MetaMask.service';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 interface MetaMaskProps {}
 
@@ -27,7 +27,6 @@ interface ProviderRpcError extends Error {
 const MetaMask: FC<MetaMaskProps> = () => {
   const { address, onChangeAddress } = useWalletState();
   const { connectWallet } = useMetaMask();
-  const [isMetaMaskInstalled, setIsMetaMaskInstalled] = useState<boolean>(false);
   const { openModal, closeModal, renderModal } = useModal({
     content: <WalletSelection closeModal={() => closeModal()} metaMaskLogin={connectWallet} />
   });
@@ -77,15 +76,8 @@ const MetaMask: FC<MetaMaskProps> = () => {
     window.location.reload();
   }
 
-  const hasMetaMask = () => {
-    //Have to check the ethereum binding on the window object to see if it's installed
-    const { ethereum } = window;
-    return Boolean(ethereum && ethereum.isMetaMask);
-  };
-
   useEffect(() => {
     registerEvents();
-    setIsMetaMaskInstalled(hasMetaMask);
     return () => removeRegisterEvents();
   }, []);
 
@@ -97,7 +89,6 @@ const MetaMask: FC<MetaMaskProps> = () => {
         <span>{address || 'Connect Wallet First'}</span>
       </div>
       {!address && <div className={s.dim} />}
-      {!isMetaMaskInstalled && <div className={s.dim} />}
       {renderModal()}
     </div>
   );
