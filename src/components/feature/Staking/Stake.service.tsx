@@ -8,6 +8,7 @@ import { useWalletState } from '../../../contexts/WalletContext';
 import { contractsInfo } from '../../../data/contract/contracts';
 import { convertUnitFrom } from '../../../utils/numberFormats';
 import UnStake from '../../Modal/ModalContents/UnStake';
+import Close from '../../Modal/ModalContents/Position/Close';
 
 let stayKingContract: Contract;
 
@@ -20,9 +21,13 @@ const useStake = () => {
     renderModal: renderStakeModal,
     openModal: openStakeModal,
     closeModal: closeStakeModal
-  } = useModal({ content: <StakeM closeModal={() => {}} parentLeverage={leverage} /> });
+  } = useModal({ content: <StakeM closeModal={() => closeStakeModal()} parentLeverage={leverage} /> });
 
-  const { renderModal: renderUnStakeModal, openModal: openUnStakeModal } = useModal({ content: <UnStake /> });
+  const {
+    renderModal: renderUnStakeModal,
+    openModal: openUnStakeModal,
+    closeModal: closeUnStakeModal
+  } = useModal({ content: <Close closeModal={() => closeUnStakeModal()} /> });
 
   async function getPositionFrom() {
     const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tUSDC].address);
