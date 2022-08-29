@@ -17,7 +17,7 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
   const { address, evmosBalance } = useWalletState();
   const [amount, setAmount] = useState<string>('0');
   const [borrowingAssetBalance, setBorrowingAssetBalance] = useState<string>('0');
-  const [deptInToken, setDebtInToken] = useState<string>('0');
+  const [debtInToken, setDebtInToken] = useState<string>('0');
   const [deptInBase, setDebtInBase] = useState<string>('0');
   const [positionValue, setPositionValue] = useState<string>('0');
   const [borrowingAsset, setBorrowingAsset] = useState<any>('USDC');
@@ -126,7 +126,7 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
     borrowingAssetBalance,
     onChangeBorrowingAsset,
     borrowingAsset,
-    deptInToken: debtInToken,
+    debtInToken,
     leverage,
     onChangeLeverage,
     onChangeSuppliedAmount,

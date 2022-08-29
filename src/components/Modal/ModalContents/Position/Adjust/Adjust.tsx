@@ -29,7 +29,9 @@ const Adjust: FC<Props> = ({ closeModal }) => {
     debtPositionType,
     handleChangeDebtType,
     repayType,
-    handleChangeRepayType
+    handleChangeRepayType,
+    repayAmount,
+    onChangeRepayAmount
   } = useAdjust(closeModal);
 
   return (
@@ -42,7 +44,7 @@ const Adjust: FC<Props> = ({ closeModal }) => {
         <span style={{ color: '#e20808', marginRight: 5, fontWeight: 800 }}>{equityPositionType}</span> Collateral
       </span>
       <span className={cn(s.desc)}>Available Balance: {numberFormat(evmosBalance)} EVMOS</span>
-      <div className={s.adjustPositionWrapper}>
+      <div className={cn(s.adjustPositionWrapper)}>
         <ToggleButtonGroup
           color="primary"
           style={{
@@ -56,23 +58,38 @@ const Adjust: FC<Props> = ({ closeModal }) => {
           }}
           value={equityPositionType}
           exclusive
+          disabled={!!repayType}
           onChange={handleChangeEquityType}
           aria-label="Platform">
           <ToggleButton
+            disabled={!!repayType}
             style={{
               borderBottomLeftRadius: 8,
               borderTopLeftRadius: 8,
-              ...{ backgroundColor: equityPositionType === PositionType.ADD ? '#e20808' : '#f1f1f1' },
+              ...{
+                backgroundColor: !!repayType
+                  ? '#666666'
+                  : equityPositionType === PositionType.ADD
+                  ? '#e20808'
+                  : '#f1f1f1'
+              },
               ...{ color: equityPositionType === PositionType.ADD ? '#f1f1f1' : '#232323' }
             }}
             value={PositionType.ADD}>
             ADD
           </ToggleButton>
           <ToggleButton
+            disabled={!!repayType}
             style={{
               borderBottomRightRadius: 8,
               borderTopRightRadius: 8,
-              ...{ backgroundColor: equityPositionType === PositionType.REMOVE ? '#e20808' : '#f1f1f1' },
+              ...{
+                backgroundColor: !!repayType
+                  ? '#666666'
+                  : equityPositionType === PositionType.REMOVE
+                  ? '#e20808'
+                  : '#f1f1f1'
+              },
               ...{ color: equityPositionType === PositionType.REMOVE ? '#f1f1f1' : '#232323' }
             }}
             value={PositionType.REMOVE}>
@@ -104,6 +121,7 @@ const Adjust: FC<Props> = ({ closeModal }) => {
       <div className={s.adjustPositionWrapper}>
         <ToggleButtonGroup
           color="primary"
+          disabled={!!repayType}
           style={{
             height: 46,
             justifyItems: 'center',
@@ -118,20 +136,30 @@ const Adjust: FC<Props> = ({ closeModal }) => {
           onChange={handleChangeDebtType}
           aria-label="Platform">
           <ToggleButton
+            disabled={!!repayType}
             style={{
               borderBottomLeftRadius: 8,
               borderTopLeftRadius: 8,
-              ...{ backgroundColor: debtPositionType === PositionType.ADD ? '#e20808' : '#f1f1f1' },
+              ...{
+                backgroundColor: !!repayType ? '#666666' : debtPositionType === PositionType.ADD ? '#e20808' : '#f1f1f1'
+              },
               ...{ color: debtPositionType === PositionType.ADD ? '#f1f1f1' : '#232323' }
             }}
             value={PositionType.ADD}>
             ADD
           </ToggleButton>
           <ToggleButton
+            disabled={!!repayType}
             style={{
               borderBottomRightRadius: 8,
               borderTopRightRadius: 8,
-              ...{ backgroundColor: debtPositionType === PositionType.REMOVE ? '#e20808' : '#f1f1f1' },
+              ...{
+                backgroundColor: !!repayType
+                  ? '#666666'
+                  : debtPositionType === PositionType.REMOVE
+                  ? '#e20808'
+                  : '#f1f1f1'
+              },
               ...{ color: debtPositionType === PositionType.REMOVE ? '#f1f1f1' : '#232323' }
             }}
             value={PositionType.REMOVE}>
@@ -192,14 +220,20 @@ const Adjust: FC<Props> = ({ closeModal }) => {
         <section className={s.adjustPositionContainer}>
           <img
             className={s.btnIcon}
-            src={`/img/logo/${repayType === RepayType.EQUITY ? 'evmos' : 'usdc'}.png`}
+            src={`/img/logo/${repayType ? (repayType === RepayType.EQUITY ? 'evmos' : 'usdc') : 'logo'}.png`}
             alt={'repay icon'}
           />
           <Form.Item label="" className={s.input}>
-            <InputNumber max={borrowingAssetBalance} setInputValue={onChangeDebtInToken} inputValue={debtInToken} />
+            <InputNumber
+              max={
+                (!repayType ? 0 : repayType === RepayType.EQUITY ? position?.debtInBase : '1000000000000000000') + ''
+              }
+              setInputValue={onChangeRepayAmount}
+              inputValue={(repayType === RepayType.EQUITY ? repayAmount.amountInBase : repayAmount.amountInToken) + ''}
+            />
           </Form.Item>
           <div className={s.assetName} style={{ marginRight: -15 }}>
-            {repayType === RepayType.EQUITY ? 'EVMOS' : 'USDC'}
+            {repayType ? (repayType === RepayType.EQUITY ? 'EVMOS' : 'USDC') : ''}
           </div>
         </section>
       </div>
@@ -224,12 +258,23 @@ const Adjust: FC<Props> = ({ closeModal }) => {
           </div>
           <div className={s.adjustSummaryContainer__item__center}>►</div>
           <div className={s.adjustSummaryContainer__item__right}>
-            <span className={s.label}>{debtPositionType} Debt Value</span>
+            <span className={s.label}>{!!repayType ? 'Repay' : debtPositionType} Debt Value</span>
             <span className={s.value}>
-              {debtInToken} USDC
-              <span style={{ fontSize: 10, marginLeft: 3 }}>
-                (≈ {Number(updatedPosition?.debtInBase) - Number(position?.debtInBase)} EVMOS )
-              </span>
+              {!!repayType && repayType === RepayType.EQUITY && <> {updatedPosition?.debtInBase} EVMOS</>}
+              {!!repayType && repayType === RepayType.DEBT && (
+                <>
+                  {repayAmount.amountInToken} USDC
+                  <span style={{ fontSize: 10, marginLeft: 3 }}>(≈ {updatedPosition?.swappedInBase} EVMOS )</span>
+                </>
+              )}
+              {!repayType && (
+                <>
+                  {debtInToken} USDC
+                  <span style={{ fontSize: 10, marginLeft: 3 }}>
+                    (≈ {Number(updatedPosition?.debtInBase) - Number(position?.debtInBase)} EVMOS )
+                  </span>
+                </>
+              )}
             </span>
           </div>
         </div>

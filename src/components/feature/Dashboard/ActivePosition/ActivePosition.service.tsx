@@ -26,6 +26,7 @@ export interface Position {
   deptRatio: string;
   killFactor?: string;
   safetyBuffer?: string;
+  swappedInBase?: string;
 }
 
 const useActivePosition = (address: string) => {

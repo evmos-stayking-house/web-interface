@@ -25,7 +25,7 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
     onChangeLeverage,
     amount,
     setAmount,
-    deptInToken,
+    debtInToken,
     stake,
     borrowingAssetBalance,
     onChangeBorrowingAsset,
@@ -116,7 +116,7 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
       <Form>
         <section className={s.borrowingTokenContainer}>
           <img className={s.btnIcon} src={`/img/common/token/${borrowingAsset || 'USDC'}.png`} alt={'cosmos icon'} />
-          <span className={s.input}>{deptInToken}</span>
+          <span className={s.input}>{debtInToken}</span>
           <div className={s.assetName}>{borrowingAsset}</div>
         </section>
       </Form>
@@ -188,7 +188,7 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
           <div className={s.summaryRow}>
             <span className={s.summaryRow__label}>Asset Borrowed</span>
             <span className={s.summaryRow__value}>
-              {deptInToken} USDC <span style={{ fontSize: 10 }}>(≈ {deptInBase} EVMOS )</span>
+              {debtInToken} USDC <span style={{ fontSize: 10 }}>(≈ {deptInBase} EVMOS )</span>
             </span>
           </div>
           <div className={s.summaryRow}>

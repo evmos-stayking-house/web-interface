@@ -111,8 +111,7 @@ const useVault = () => {
     totalBorrowed,
     utilizationRate,
     ibBalance,
-    vaultTokenBalance,
-    loadData
+    vaultTokenBalance
   };
 };
 
