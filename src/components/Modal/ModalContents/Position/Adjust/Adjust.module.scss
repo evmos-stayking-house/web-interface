@@ -47,12 +47,17 @@
   }
 }
 
+.adjustPositionWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
 
 .adjustPositionContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
+  width: 85%;
   margin-top: 16px;
   height: 48px;
   border-radius: 10px;
@@ -82,7 +87,7 @@
   }
 
   .maxBtn {
-    width: 10%;
+    width: 12%;
     cursor: pointer;
     background-color: #{$theme-mint};
     color: var(--contrast-color);
@@ -94,9 +99,9 @@
 
 
   .swapBtn {
-    width: 10%;
+    width: 11%;
     cursor: pointer;
-    background-color: #FF6B4A;
+    background-color: #ff9b4a;
     color: var(--contrast-color);
     font-size: 18px;
     border: 0;
@@ -133,6 +138,12 @@
   margin-right: 10px;
 }
 
+
+.borrowingTokenWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
 
 .borrowingTokenContainer {
   display: flex;
@@ -256,15 +267,29 @@
   &__item {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    width: 100%;
+    justify-content: center;
     margin-top: 10px;
     margin-bottom: 5px;
 
-    &__label {
+    &__left {
+      display: flex;
+      flex-direction: row;
+      width: 45%;
+      justify-content: space-between;
     }
 
-    &__value {
+    &__center{
+      width: 10%;
+      justify-content: center;
+      text-align: center;
+    }
 
+    &__right{
+      display: flex;
+      width: 45%;
+      flex-direction: row;
+      justify-content: space-between;
     }
   }
 }

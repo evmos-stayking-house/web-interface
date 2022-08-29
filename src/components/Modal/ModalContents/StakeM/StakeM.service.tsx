@@ -126,7 +126,7 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
     borrowingAssetBalance,
     onChangeBorrowingAsset,
     borrowingAsset,
-    deptInToken,
+    deptInToken: debtInToken,
     leverage,
     onChangeLeverage,
     onChangeSuppliedAmount,

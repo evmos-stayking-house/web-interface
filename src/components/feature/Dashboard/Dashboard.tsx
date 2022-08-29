@@ -1,7 +1,7 @@
 import s from './Dashboard.module.scss';
 import useCoinPrice from '../../../hooks/useCoinPrice';
 import { useWalletState } from '../../../contexts/WalletContext';
-import useDashboard from './Dashboard.Service';
+import useDashboard from './Dashboard.service';
 import { cn } from '../../../utils/style';
 import { useState } from 'react';
 import { numberFormat } from '../../../utils/numberFormats';

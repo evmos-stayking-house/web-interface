@@ -74,7 +74,7 @@ const useClosePosition = (closeModal: VoidFunction) => {
     setResult({
       estimated,
       positionValueInBase: position?.positionValueInBase || '0.0',
-      deptInToken: convertUnitFrom(_deptInToken, '0'),
+      debtInToken: convertUnitFrom(_deptInToken, '0'),
       equity: equity.toFixed(1),
       deptInBase: deptInBase.toFixed(1)
     });
