@@ -20,8 +20,8 @@ const closePositions: readonly string[] = [CloseType.Entire, CloseType.Partial];
 
 interface ResultSummary {
   equity: string;
-  deptInBase: string;
-  deptInToken: string;
+  debtInBase: string;
+  debtInToken: string;
   estimated: string;
   positionValueInBase: string;
 }
@@ -68,15 +68,15 @@ const useClosePosition = (closeModal: VoidFunction) => {
     const deptInBase = Number(position?.debtInBase);
     const totalShare = Number(await getTotalShareOf());
     const totalAmount = Number(await getTotalAmountOf());
-    const _deptInToken = await getTokenOut(position?.debtInBase || '0');
+    const _debtInToken = await getTokenOut(position?.debtInBase || '0');
     const estimated = ((totalShare * (equity + deptInBase)) / totalAmount - deptInBase).toFixed(1);
 
     setResult({
       estimated,
       positionValueInBase: position?.positionValueInBase || '0.0',
-      debtInToken: convertUnitFrom(_deptInToken, '0'),
+      debtInToken: convertUnitFrom(_debtInToken, '0'),
       equity: equity.toFixed(1),
-      deptInBase: deptInBase.toFixed(1)
+      debtInBase: deptInBase.toFixed(1)
     });
   }
 
