@@ -1,7 +1,9 @@
 import React from 'react';
 import s from './LiquidatedPosition.module.scss';
+import useActivePosition from './LiquidatedPosition.service';
 
 const LiquidatedPosition = () => {
+  const { liquidatedTxs } = useActivePosition();
   return (
     <div className={s.liquidatedPositionContainer}>
       <div className={s.positionContainerHeader}>
@@ -43,7 +45,8 @@ const LiquidatedPosition = () => {
         </div>
         <div>&nbsp;</div>
       </div>
-      <div className={s.positionEmptyContainer}>Coming Soon</div>
+      {liquidatedTxs.length > 0 && <div className={s.positionEmptyContainer}>The data will be showed up...</div>}
+      {liquidatedTxs.length === 0 && <div className={s.positionEmptyContainer}>No data</div>}
     </div>
   );
 };

@@ -11,7 +11,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "totalStaked",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "distributed",
         "type": "uint256"
       }
     ],
@@ -330,6 +336,12 @@
         "internalType": "uint256",
         "name": "killFactorBps",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reservedBps",
+        "type": "uint256"
       }
     ],
     "name": "UpdateConfigs",
@@ -380,7 +392,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "currentTotalStaked",
+        "name": "totalStaked",
         "type": "uint256"
       }
     ],
@@ -548,6 +560,25 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "totalStaked",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAccruedValue",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "debtToken",
         "type": "address"
@@ -674,6 +705,11 @@
         "internalType": "uint256",
         "name": "debtInBase",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "debt",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -781,6 +817,32 @@
     "name": "repayDebtInBase",
     "outputs": [],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "reservedBps",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "reservedPool",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -903,6 +965,11 @@
         "internalType": "uint256",
         "name": "_killFactorBps",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_reservedBps",
+        "type": "uint256"
       }
     ],
     "name": "updateConfigs",
@@ -926,6 +993,25 @@
     "name": "updateVault",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "vaults",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
