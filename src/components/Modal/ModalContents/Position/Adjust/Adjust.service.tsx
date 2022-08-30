@@ -4,7 +4,7 @@ import { contractsInfo } from '../../../../../data/contract/contracts';
 import { Contracts } from '../../../../../type/contract';
 import { convertDenomFrom, convertUnitFrom } from '../../../../../utils/numberFormats';
 import { Position } from '../../../../feature/Dashboard/ActivePosition/ActivePosition.service';
-import { Contract } from 'ethers';
+import { BigNumber, Contract } from 'ethers';
 import { getContract } from '../../../../../config/contract';
 import { useSnackbar } from 'notistack';
 
@@ -63,6 +63,7 @@ const useAdjust = (closeModal: VoidFunction) => {
       setEquityPositionType(type);
       await onChangeAmount('0');
       setDebtInToken('0');
+      setRepayAmount({ amountInBase: 0, amountInToken: 0 });
     }
   };
 
@@ -74,6 +75,7 @@ const useAdjust = (closeModal: VoidFunction) => {
       setDebtPositionType(type);
       await onChangeDebtInToken('0');
       setAmount('0');
+      setRepayAmount({ amountInBase: 0, amountInToken: 0 });
     }
   };
 
@@ -197,20 +199,20 @@ const useAdjust = (closeModal: VoidFunction) => {
     let equityInBaseChanged = 0;
     let debtInBaseChanged = 0;
     let repaidDebt = 0;
-    let valueObj = {};
+    let valueObj = null;
 
     if (repayType) {
       if (repayType === RepayType.EQUITY) {
         valueObj = {
-          value: convertDenomFrom(String(repaidDebt))
+          value: convertDenomFrom(String(repayAmount.amountInBase || 0))
         };
       } else {
         repaidDebt = repayAmount.amountInToken || 0;
-        const approveResult = await tokenContract.approve(
+        const approveTx = await tokenContract.approve(
           contractsInfo[Contracts.vault].address,
           convertDenomFrom(String(repaidDebt))
         );
-        approveResult.wait();
+        approveTx.wait();
       }
     } else {
       equityInBaseChanged = Number(updatedPosition?.equityValue) - Number(position?.equityValue);
@@ -222,18 +224,20 @@ const useAdjust = (closeModal: VoidFunction) => {
       debtInBaseChanged = Number(updatedPosition?.debtInBase) - Number(position?.debtInBase);
     }
 
-    console.log(equityInBaseChanged, debtInBaseChanged);
-
     onChangeIsPendingState(true);
     try {
-      const result = await stayKingContract.changePosition(
-        contractsInfo[Contracts.tUSDC].address,
+      console.log(equityInBaseChanged, debtInBaseChanged, repaidDebt, valueObj);
+      console.log(
         convertDenomFrom(String(equityInBaseChanged)),
         convertDenomFrom(String(debtInBaseChanged)),
         convertDenomFrom(String(repaidDebt)),
-        {
-          ...valueObj
-        }
+        valueObj
+      );
+      const result = await getTxOfChangePosition(
+        convertDenomFrom(String(equityInBaseChanged)),
+        convertDenomFrom(String(debtInBaseChanged)),
+        convertDenomFrom(String(repaidDebt)),
+        valueObj
       );
       closeModal();
       enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
@@ -241,6 +245,29 @@ const useAdjust = (closeModal: VoidFunction) => {
       onChangeIsPendingState(false);
       enqueueSnackbar(e.toString(), { variant: 'error' });
     }
+  }
+
+  function getTxOfChangePosition(
+    _equityInBaseChanged: BigNumber,
+    _debtInBaseChanged: BigNumber,
+    _repaidDebt: BigNumber,
+    _valueObj?: any
+  ) {
+    if (_valueObj) {
+      return stayKingContract.changePosition(
+        contractsInfo[Contracts.tUSDC].address,
+        _equityInBaseChanged,
+        _debtInBaseChanged,
+        _repaidDebt,
+        _valueObj
+      );
+    }
+    return stayKingContract.changePosition(
+      contractsInfo[Contracts.tUSDC].address,
+      _equityInBaseChanged,
+      _debtInBaseChanged,
+      _repaidDebt
+    );
   }
 
   function registerContractEvents() {
