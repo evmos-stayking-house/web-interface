@@ -30,7 +30,7 @@ const TEST_NET_CONTRACTS = {
     abi: Stayking
   },
   vault: {
-    address: '0xAE246E208ea35B3F23dE72b697D47044FC594D5F',
+    address: '0x5f246ADDCF057E0f778CD422e20e413be70f9a0c',
     abi: Vault
   },
   tATOM: {
@@ -38,7 +38,7 @@ const TEST_NET_CONTRACTS = {
     abi: ERC20
   },
   tUSDC: {
-    address: '0x575D3d18666B28680255a202fB5d482D1949bB32',
+    address: '0xF357118EBd576f3C812c7875B1A1651a7f140E9C',
     abi: ERC20
   },
   tUSDT: {
