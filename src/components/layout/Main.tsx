@@ -35,6 +35,22 @@ const Main: FC<MainProps> = ({ children, title }) => {
     setIsMetaMaskInstalled(hasMetaMask);
   }, []);
 
+  if (!isMetaMaskInstalled) {
+    return (
+      <div className={s.emptyContainer}>
+        <div className={s.logoRow}>
+          <Image src="/img/logo/logo.png" alt="sooho.io" width={105} height={105} />
+        </div>
+        <div className={s.contentRow}>
+          <span className={s.logoText}>
+            It is not currently supported on mobile devices.
+            <br /> Please connect to the desktop
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={s.container}>
       <Head>

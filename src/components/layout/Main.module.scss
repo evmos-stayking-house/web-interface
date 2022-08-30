@@ -185,4 +185,34 @@
   }
 }
 
+.emptyContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 
+  .logoRow {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    top: 33%;
+    justify-content: center;
+    justify-items: center;
+    justify-self: center;
+  }
+
+  .contentRow {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    justify-content: center;
+    justify-items: center;
+    justify-self: center;
+  }
+
+  .logoText {
+    font-size: 18px;
+    font-weight: 800;
+    text-align: center;
+  }
+}
