@@ -1,28 +1,24 @@
 import s from './Dashboard.module.scss';
-import useCoinPrice from '../../../hooks/useCoinPrice';
-import { useWalletState } from '../../../contexts/WalletContext';
-import useDashboard from './Dashboard.service';
+import useDashboard, { BalanceTab, PositionTab } from './Dashboard.service';
 import { cn } from '../../../utils/style';
-import { useState } from 'react';
 import { numberFormat } from '../../../utils/numberFormats';
 import ActivePosition from './ActivePosition';
 import LiquidatedPosition from './LiquidatedPosition';
 import Image from 'next/image';
 
-export enum PositionTab {
-  Active = 'Active',
-  Liquidated = 'Liquidated'
-}
-
 const Dashboard = () => {
-  const [selectedTab, setSelectedTab] = useState<PositionTab>(PositionTab.Active);
-  const { evmosBalance, address } = useWalletState();
-  const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
-  const { tvl, ibToken, tokenAmount } = useDashboard(address);
-
-  function onSetSelectedTab(_selTab: PositionTab) {
-    setSelectedTab(_selTab);
-  }
+  const {
+    tvl,
+    ibToken,
+    tokenAmount,
+    evmosBalance,
+    evmosPrice,
+    selectedTab,
+    setSelectedTab,
+    address,
+    selectedBalanceTab,
+    onSelectedBalanceTab
+  } = useDashboard();
 
   return (
     <div className={s.container}>
@@ -47,16 +43,31 @@ const Dashboard = () => {
           <div className={s.balanceBox}>
             <div className={s.balanceBox__left}>
               <div className={s.tabs}>
-                <span className={cn(s.tabs__tab, { [s.tabs__tab__selected]: true })}>Earned</span>
-                <span className={cn(s.tabs__tab, { [s.tabs__tab__selected]: false })}>Locked</span>
-                <span className={cn(s.tabs__tab, { [s.tabs__tab__selected]: false })}>Unlockable</span>
+                <span
+                  onClick={() => onSelectedBalanceTab(BalanceTab.Balance)}
+                  className={cn(s.tabs__tab, { [s.tabs__tab__selected]: selectedBalanceTab === BalanceTab.Balance })}>
+                  Balance
+                </span>
+                <span
+                  onClick={() => onSelectedBalanceTab(BalanceTab.Locked)}
+                  className={cn(s.tabs__tab, { [s.tabs__tab__selected]: selectedBalanceTab === BalanceTab.Locked })}>
+                  Locked
+                </span>
+                <span
+                  onClick={() => onSelectedBalanceTab(BalanceTab.Unlockable)}
+                  className={cn(s.tabs__tab, {
+                    [s.tabs__tab__selected]: selectedBalanceTab === BalanceTab.Unlockable
+                  })}>
+                  Unlockable
+                </span>
               </div>
               <p className={s.value}>
                 {numberFormat(Number(evmosBalance).toFixed(3))}
-                <span className={s.balanceBox__value__unit}>&nbsp;EVMOS</span>
+                <span className={s.value__unit}>&nbsp;EVMOS</span>
               </p>
               <p className={s.description}>
-                ~ ${evmosPrice && numberFormat((evmosPrice * Number(evmosBalance)).toFixed(0))}
+                ~ $&nbsp;
+                {evmosPrice && numberFormat((evmosPrice * Number(evmosBalance)).toFixed(0))}
               </p>
             </div>
             <div className={s.balanceBox__right}>
@@ -70,7 +81,7 @@ const Dashboard = () => {
             <div className={cn(s.balanceBox__left, s.padTop)}>
               <p className={s.value}>
                 {numberFormat(ibToken)}
-                <span className={s.balanceBox__value__unit}>&nbsp;ibUSDC</span>
+                <span className={s.value__unit}>&nbsp;ibUSDC</span>
               </p>
               <p className={s.description}>~ {numberFormat(tokenAmount)}&nbsp;USDC</p>
             </div>
@@ -86,12 +97,12 @@ const Dashboard = () => {
         <div className={s.tabsContainer}>
           <div
             className={cn(s.tab, { [s.activeTab]: selectedTab === PositionTab.Active })}
-            onClick={() => onSetSelectedTab(PositionTab.Active)}>
+            onClick={() => setSelectedTab(PositionTab.Active)}>
             <span className={s.label}>Active Positions</span>
           </div>
           <div
             className={cn(s.tab, { [s.activeTab]: selectedTab === PositionTab.Liquidated })}
-            onClick={() => onSetSelectedTab(PositionTab.Liquidated)}>
+            onClick={() => setSelectedTab(PositionTab.Liquidated)}>
             <span className={s.label}>Liquidated Positions</span>
           </div>
         </div>

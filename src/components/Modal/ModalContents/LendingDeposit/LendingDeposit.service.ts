@@ -7,15 +7,21 @@ import useLendingAsset from '../../../../hooks/useLendingAsset';
 import { contractsInfo } from '../../../../data/contract/contracts';
 import { useWalletState } from '../../../../contexts/WalletContext';
 import { useSnackbar } from 'notistack';
-import { sleep } from '../../../../utils/utils';
+
+export enum DepositTxStatus {
+  NotYet = 'NotYet',
+  Approved = 'Approved'
+}
 
 let vaultContract: Contract;
 let tokenContract: Contract;
 
 const useLendingDeposit = (closeModal: VoidFunction) => {
-  const { onChangeIsPendingState } = useWalletState();
   const [amount, setAmount] = useState<string>('0');
   const [share, setShare] = useState<string>('0');
+  const [txStatus, setTxStatus] = useState<DepositTxStatus>(DepositTxStatus.NotYet);
+
+  const { onChangeIsPendingState } = useWalletState();
   const { tokenBalance } = useLendingAsset(Contracts.tUSDC);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -23,14 +29,24 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
     setAmount(tokenBalance);
   }
 
-  async function deposit() {
+  async function approve() {
     onChangeIsPendingState(true);
     try {
       const approveResult = await tokenContract.approve(
         contractsInfo[Contracts.vault].address,
         convertDenomFrom(amount)
       );
-      approveResult.wait();
+      setTxStatus(DepositTxStatus.Approved);
+      enqueueSnackbar(`Transaction Hash: ${approveResult['hash']}`, { variant: 'success' });
+    } catch (e: any) {
+      onChangeIsPendingState(false);
+      enqueueSnackbar(e.toString(), { variant: 'error' });
+    }
+  }
+
+  async function deposit() {
+    onChangeIsPendingState(true);
+    try {
       const depositedResult = await vaultContract.deposit(convertDenomFrom(amount));
       closeModal();
       enqueueSnackbar(`Transaction Hash: ${depositedResult['hash']}`, { variant: 'success' });
@@ -46,6 +62,10 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
   }
 
   function registerContractEvents() {
+    tokenContract.on('Approval', async (...args) => {
+      onChangeIsPendingState(false);
+    });
+
     vaultContract.on('Deposit', async (...args) => {
       onChangeIsPendingState(false);
     });
@@ -59,12 +79,14 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
 
   return {
     deposit,
+    approve,
     setAmount,
     amount,
     tokenBalance,
     setMaxAmount,
     share,
-    amountToShare
+    amountToShare,
+    txStatus
   };
 };
 

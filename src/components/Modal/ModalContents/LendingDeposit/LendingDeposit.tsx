@@ -1,12 +1,12 @@
 import type { FC } from 'react';
+import React from 'react';
 import Image from 'next/image';
 
 import s from './LendingDeposit.module.scss';
 import { InputNumber } from '../../../common/Input';
 import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
-import useLendingDeposit from './LendingDeposit.service';
-import React from 'react';
+import useLendingDeposit, { DepositTxStatus } from './LendingDeposit.service';
 import { numberFormat } from '../../../../utils/numberFormats';
 import { Button } from '@mui/material';
 
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const LendingDeposit: FC<Props> = ({ title, closeModal }) => {
-  const { deposit, amount, share, setAmount, tokenBalance, setMaxAmount, amountToShare } =
+  const { deposit, amount, share, setAmount, tokenBalance, setMaxAmount, amountToShare, approve, txStatus } =
     useLendingDeposit(closeModal);
 
   return (
@@ -61,8 +61,10 @@ const LendingDeposit: FC<Props> = ({ title, closeModal }) => {
           </div>
         </section>
         <div className={s.approveBtnWrapper}>
-          <Button className={s.approveBtnWrapper__btn} onClick={() => deposit()}>
-            Approve
+          <Button
+            className={s.approveBtnWrapper__btn}
+            onClick={() => (txStatus === DepositTxStatus.NotYet ? approve() : deposit())}>
+            {txStatus === DepositTxStatus.NotYet ? 'Approve' : 'Confirm'}
           </Button>
         </div>
       </div>

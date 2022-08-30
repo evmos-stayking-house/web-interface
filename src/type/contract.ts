@@ -5,9 +5,10 @@ export enum Contracts {
   vault = 'vault',
   tATOM = 'tATOM',
   tUSDC = 'tUSDC',
-  tUSDT = 'tUSDT'
+  tUSDT = 'tUSDT',
+  uEVMOS = 'uEVMOS'
 }
 
 export interface ContractsType {
-  [key: string]: Contract
+  [key: string]: Contract;
 }

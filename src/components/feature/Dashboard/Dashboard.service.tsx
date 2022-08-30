@@ -1,22 +1,74 @@
 import { useEffect, useState } from 'react';
-import { getContract } from '../../../config/contract';
+import { getContract, getProvider } from '../../../config/contract';
 import { Contracts } from '../../../type/contract';
 import { bigNumToNum, convertDenomFrom, convertUnitFrom } from '../../../utils/numberFormats';
-import { Contract } from 'ethers';
+import { BigNumber, Contract, ethers } from 'ethers';
 import useCoinPrice from '../../../hooks/useCoinPrice';
 import { contractsInfo } from '../../../data/contract/contracts';
+import { useWalletState } from '../../../contexts/WalletContext';
+import { Web3Provider } from '@ethersproject/providers';
+
+export enum PositionTab {
+  Active = 'Active',
+  Liquidated = 'Liquidated'
+}
+
+export enum BalanceTab {
+  Balance = 'Balance',
+  Locked = 'Locked',
+  Unlockable = 'Unlockable'
+}
 
 let vaultContract: Contract;
 let stayKingContract: Contract;
+let uEVMOSContract: Contract;
 
-const useDashboard = (address: string) => {
+const useDashboard = () => {
+  const [selectedTab, setSelectedTab] = useState<PositionTab>(PositionTab.Active);
+  const [selectedBalanceTab, setSelectedBalanceTab] = useState<BalanceTab>(BalanceTab.Balance);
   const [balance, setBalance] = useState<number>(0);
   const [ibToken, setIbToken] = useState<string>('0');
   const [tokenAmount, setTokenAmount] = useState<string>('0');
   const [interestRate, setInterestRate] = useState<number>(0);
   const [tvl, setTvl] = useState<string>('0');
+  const [evmosBalance, setEvmosBalance] = useState<string>('0');
+  const { address } = useWalletState();
   const { coinPrice: tokenPrice } = useCoinPrice('cosmos');
   const { coinPrice: evmosPrice } = useCoinPrice('evmos');
+
+  async function onSelectedBalanceTab(tab: BalanceTab) {
+    let _evmosBalance: string = '0';
+
+    if (tab === BalanceTab.Balance) {
+      const _balance = await getBalance();
+      _evmosBalance = ethers.utils.formatEther(_balance);
+    } else if (tab === BalanceTab.Locked) {
+      _evmosBalance = await balanceOfLocked();
+    } else if (tab === BalanceTab.Unlockable) {
+      const _balance = await getUnlockable();
+      try {
+        _evmosBalance = ethers.utils.formatEther(_balance);
+      } catch (e) {
+        _evmosBalance = '0';
+      }
+    }
+    setEvmosBalance(_evmosBalance);
+    setSelectedBalanceTab(tab);
+  }
+
+  function getBalance() {
+    return getProvider().getBalance(address);
+  }
+
+  async function balanceOfLocked() {
+    const _balance = await uEVMOSContract.balanceOf(address);
+    const _amount = await uEVMOSContract.shareToAmount(Number(convertUnitFrom(_balance, '18')).toFixed(0));
+    return convertUnitFrom(_amount, '0');
+  }
+
+  function getUnlockable() {
+    return uEVMOSContract.getUnlockable(address);
+  }
 
   async function getIbToken() {
     try {
@@ -65,11 +117,13 @@ const useDashboard = (address: string) => {
   async function init() {
     await getIbToken();
     await getInterestRate();
+    await onSelectedBalanceTab(BalanceTab.Balance);
   }
 
   useEffect(() => {
     vaultContract = getContract(Contracts.vault);
     stayKingContract = getContract(Contracts.stayKing);
+    uEVMOSContract = getContract(Contracts.uEVMOS);
   }, []);
 
   useEffect(() => {
@@ -92,7 +146,13 @@ const useDashboard = (address: string) => {
     address,
     ibToken,
     interestRate,
-    tokenAmount
+    tokenAmount,
+    evmosBalance,
+    evmosPrice,
+    selectedTab,
+    setSelectedTab,
+    selectedBalanceTab,
+    onSelectedBalanceTab
   };
 };
 

@@ -50,6 +50,8 @@ const useActivePosition = (address: string) => {
     const position = await stayKingContract.positionInfo(address, contractsInfo[Contracts.tUSDC].address);
     const _killFactor = await stayKingContract.killFactorBps();
 
+    console.log(_killFactor);
+
     if (position && position.length > 0) {
       const _positionValueInBase = Number(convertUnitFrom(position[0], '18')) || 0;
       const _deptInBase = Number(convertUnitFrom(position[1], '18')) || 0;
