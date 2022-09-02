@@ -1,6 +1,7 @@
 import React from 'react';
 import s from './LiquidatedPosition.module.scss';
 import useActivePosition from './LiquidatedPosition.service';
+import { cn } from '../../../../utils/style';
 
 const LiquidatedPosition = () => {
   const { liquidatedTxs } = useActivePosition();
@@ -24,11 +25,6 @@ const LiquidatedPosition = () => {
           Value
         </div>
         <div className={s.alignToCenter}>
-          Current
-          <br />
-          APY
-        </div>
-        <div className={s.alignToCenter}>
           Debt
           <br />
           Ratio
@@ -39,13 +35,82 @@ const LiquidatedPosition = () => {
           Threshold
         </div>
         <div className={s.alignToCenter}>
-          Safety
+          Over
           <br />
-          Buffer
+          Ratio
         </div>
         <div>&nbsp;</div>
       </div>
-      {liquidatedTxs.length > 0 && <div className={s.positionEmptyContainer}>The data will be showed up...</div>}
+      <div className={s.positionContainerContents}>
+        {liquidatedTxs.length > 0 &&
+          liquidatedTxs.map(
+            (
+              { killer, user, vault, share, equity, debtInBase, debt, positionValue, debtRatio, safetyBuffer },
+              index
+            ) => (
+              <React.Fragment key={index}>
+                <div className={s.positionContainerContents__item}>
+                  <div className={s.assetInfo}>
+                    <img className={s.assetInfo__icon} src={'/img/logo/evmos.png'} alt={'evmos symbol'} />
+                    <div className={s.AssetInfo__info}>
+                      <p className={s.assetInfo__info__title}>EVMOS</p>
+                      <p className={s.assetInfo__info__priceInfo}>Evmos</p>
+                    </div>
+                  </div>
+                </div>
+                <div className={s.positionContainerContents__item}>
+                  <div className={s.assetInfo}>
+                    <div className={s.assetInfo__labelAndValue}>
+                      <span className={s.assetInfo__labelAndValue__value}>{positionValue}</span>
+                      <span className={s.assetInfo__labelAndValue__label}>{'EVMOS'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={s.positionContainerContents__item}>
+                  <div className={s.assetInfo}>
+                    <div className={s.assetInfo__labelAndValue}>
+                      <span className={s.assetInfo__labelAndValue__value}>{debtInBase}</span>
+                      <span className={s.assetInfo__labelAndValue__label}>{'EVMOS'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={s.positionContainerContents__item}>
+                  <div className={s.assetInfo}>
+                    <div className={s.assetInfo__labelAndValue}>
+                      <span className={s.assetInfo__labelAndValue__value}>{equity}</span>
+                      <span className={s.assetInfo__labelAndValue__label}>{'EVMOS'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={s.positionContainerContents__item}>
+                  <div className={s.assetInfo}>
+                    <div className={s.assetInfo__labelAndValue}>
+                      <span className={s.assetInfo__labelAndValue__value}>{debtRatio?.toFixed(1)}</span>
+                      <span className={s.assetInfo__labelAndValue__label}>{'%'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={s.positionContainerContents__item}>
+                  <div className={s.assetInfo}>
+                    <div className={s.assetInfo__labelAndValue}>
+                      <span className={s.assetInfo__labelAndValue__value}>{75}</span>
+                      <span className={s.assetInfo__labelAndValue__label}>{'%'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={s.positionContainerContents__item}>
+                  <div className={s.assetInfo}>
+                    <div className={s.assetInfo__labelAndValue}>
+                      <span className={s.assetInfo__labelAndValue__value}>{(Number(debtRatio) - 75).toFixed(1)}</span>
+                      <span className={s.assetInfo__labelAndValue__label}>{'%'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={s.positionContainerContents__item}>Killed</div>
+              </React.Fragment>
+            )
+          )}
+      </div>
       {liquidatedTxs.length === 0 && <div className={s.positionEmptyContainer}>No data</div>}
     </div>
   );

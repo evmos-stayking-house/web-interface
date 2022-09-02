@@ -7,7 +7,6 @@ import { Contract } from 'ethers';
 import { useWalletState } from '../../../contexts/WalletContext';
 import { contractsInfo } from '../../../data/contract/contracts';
 import { convertUnitFrom } from '../../../utils/numberFormats';
-import UnStake from '../../Modal/ModalContents/UnStake';
 import Close from '../../Modal/ModalContents/Position/Close';
 
 let stayKingContract: Contract;

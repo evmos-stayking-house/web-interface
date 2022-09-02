@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import { getContract, getProvider } from '../../../config/contract';
 import { Contracts } from '../../../type/contract';
 import { bigNumToNum, convertDenomFrom, convertUnitFrom } from '../../../utils/numberFormats';
-import { BigNumber, Contract, ethers } from 'ethers';
+import { Contract, ethers } from 'ethers';
 import useCoinPrice from '../../../hooks/useCoinPrice';
 import { contractsInfo } from '../../../data/contract/contracts';
 import { useWalletState } from '../../../contexts/WalletContext';
-import { Web3Provider } from '@ethersproject/providers';
 
 export enum PositionTab {
   Active = 'Active',
@@ -134,9 +133,9 @@ const useDashboard = () => {
   }, [address]);
 
   useEffect(() => {
-    (async () => {
-      await calculatedTVL();
-    })();
+    (async (address) => {
+      address && (await calculatedTVL());
+    })(address);
   }, [evmosPrice, tokenPrice]);
 
   return {
