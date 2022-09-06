@@ -31,7 +31,9 @@ const Adjust: FC<Props> = ({ closeModal }) => {
     repayType,
     handleChangeRepayType,
     repayAmount,
-    onChangeRepayAmount
+    onChangeRepayAmount,
+    yieldStaking,
+    loadYieldStaking
   } = useAdjust(closeModal);
 
   return (
@@ -309,19 +311,19 @@ const Adjust: FC<Props> = ({ closeModal }) => {
           </div>
           <div className={s.totalRow}>
             <span className={s.totalRow__label}>Yield Staking</span>
-            <span className={s.totalRow__value}>TBD</span>
+            <span className={s.totalRow__value}>{yieldStaking.apr}%</span>
           </div>
           <div className={s.totalRow}>
             <span className={s.totalRow__label}>Borrowing Interest</span>
-            <span className={s.totalRow__value}>TBD</span>
+            <span className={s.totalRow__value}>{yieldStaking.borrowingInterest}%</span>
           </div>
           <div className={s.totalRow}>
             <span className={s.totalRow__label}>Total APR</span>
-            <span className={s.totalRow__value}>TBD</span>
+            <span className={s.totalRow__value}>{yieldStaking.totalApr}%</span>
           </div>
           <div className={s.totalRow}>
             <span className={s.totalRow__label}>Total APY</span>
-            <span className={s.totalRow__value}>TBD</span>
+            <span className={s.totalRow__value}>{yieldStaking.apy}%</span>
           </div>
         </div>
         <div className={s.summary}>

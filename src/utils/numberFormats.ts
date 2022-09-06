@@ -18,6 +18,8 @@ export const convertUnitFrom = (denom: string, unit?: string | BigNumberish) => 
   return ethers.utils.formatUnits(denom, unit);
 };
 
-export const numberFormat = (num: string) => {
-  return Number(num).toLocaleString('en-US');
+export const numberFormat = (_num: string, fixed?: number) => {
+  const num = fixed !== undefined ? Number(_num).toFixed(fixed) : Number(_num);
+  const parts = num.toString().split('.');
+  return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (parts[1] ? '.' + parts[1] : '');
 };
