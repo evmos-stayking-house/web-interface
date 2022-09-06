@@ -7,8 +7,17 @@ import { Autocomplete, TextField } from '@mui/material';
 import { LEVERAGE_OPTIONS } from '../../../config/constants';
 
 const Stake = () => {
-  const { leverage, setLeverage, renderStakeModal, hasPosition, openStakeModal, renderUnStakeModal, openUnStakeModal } =
-    useStake();
+  const {
+    leverage,
+    yieldStaking,
+    loadYieldStaking,
+    setLeverage,
+    renderStakeModal,
+    hasPosition,
+    openStakeModal,
+    renderUnStakeModal,
+    openUnStakeModal
+  } = useStake();
 
   return (
     <div className={s.container}>
@@ -32,14 +41,15 @@ const Stake = () => {
         </div>
         <div className={s.poolListContainerContents__item}>
           <div className={s.assetInfo__labelAndValue}>
-            <span className={s.assetInfo__labelAndValue__label}>APY</span>
-            <span className={s.assetInfo__labelAndValue__value}>TBD%</span>
+            <span className={s.assetInfo__labelAndValue__value}>{yieldStaking.apy}%</span>
           </div>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__yield)}>
-          <span className={s.poolListContainerContents__item__text}>Yield Staking : TBD%</span>
-          <span className={s.poolListContainerContents__item__text}>Borrowing Interest : USDC TBD%</span>
-          <span className={s.poolListContainerContents__item__text}>Total APR : TBD%</span>
+          <span className={s.poolListContainerContents__item__text}>Yield Staking : {yieldStaking.apr}%</span>
+          <span className={s.poolListContainerContents__item__text}>
+            Borrowing Interest : USDC {yieldStaking.borrowingInterest}%
+          </span>
+          <span className={s.poolListContainerContents__item__text}>Total APR : {yieldStaking.totalApr}%</span>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__leverage)}>
           <Autocomplete
@@ -48,6 +58,7 @@ const Stake = () => {
             onChange={(event: any, newValue: string | null) => {
               event.preventDefault();
               setLeverage(newValue);
+              loadYieldStaking(newValue);
             }}
             id="leverage-adjust-modal"
             options={LEVERAGE_OPTIONS}

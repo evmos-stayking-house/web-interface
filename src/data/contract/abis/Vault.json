@@ -112,7 +112,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "leftInterest",
+        "name": "reward",
         "type": "uint256"
       }
     ],
@@ -284,6 +284,13 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "accrue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -489,7 +496,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "tokenIn",
+        "name": "baseIn",
         "type": "uint256"
       }
     ],
@@ -497,7 +504,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "baseOut",
+        "name": "tokenOut",
         "type": "uint256"
       }
     ],
@@ -591,7 +598,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "baseIn",
+        "name": "tokenIn",
         "type": "uint256"
       }
     ],
@@ -599,7 +606,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "tokenOut",
+        "name": "baseOut",
         "type": "uint256"
       }
     ],
@@ -658,12 +665,45 @@
   },
   {
     "inputs": [],
-    "name": "lastSavedUtilizationRateTime",
+    "name": "lastAnnualRateBps",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lastPaid",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "totalDebtAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint128",
+        "name": "timestamp",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint128",
+        "name": "interval",
+        "type": "uint128"
       }
     ],
     "stateMutability": "view",
@@ -881,29 +921,17 @@
         "internalType": "address",
         "name": "user",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "minRepaidDebt",
-        "type": "uint256"
       }
     ],
     "name": "repayPendingDebt",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "repaidDebtAmount",
+        "name": "remained",
         "type": "uint256"
       }
     ],
     "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "saveUtilizationRateBps",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -1037,6 +1065,19 @@
   {
     "inputs": [],
     "name": "totalPendingDebtShare",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalStakedDebtAmount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1195,19 +1236,6 @@
       }
     ],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "yesterdayUtilRate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {

@@ -11,13 +11,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "totalStaked",
+        "name": "accrued",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "distributed",
+        "name": "totalStaked",
         "type": "uint256"
       }
     ],
@@ -334,13 +334,31 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "reservedBps",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "vaultRewardBps",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "killFactorBps",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "reservedBps",
+        "name": "liquidateDebtFactorBps",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "liquidationFeeBps",
         "type": "uint256"
       }
     ],
@@ -397,42 +415,6 @@
       }
     ],
     "name": "accrue",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "debtToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "extraDebtInBase",
-        "type": "uint256"
-      }
-    ],
-    "name": "addDebt",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "debtToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "extraEquity",
-        "type": "uint256"
-      }
-    ],
-    "name": "addEquity",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -561,7 +543,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "totalStaked",
+        "name": "reward",
         "type": "uint256"
       }
     ],
@@ -593,7 +575,7 @@
     "outputs": [
       {
         "internalType": "bool",
-        "name": "healthy",
+        "name": "",
         "type": "bool"
       }
     ],
@@ -621,6 +603,32 @@
   {
     "inputs": [],
     "name": "killFactorBps",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "liquidateDebtFactorBps",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "liquidationFeeBps",
     "outputs": [
       {
         "internalType": "uint256",
@@ -710,6 +718,11 @@
         "internalType": "uint256",
         "name": "debt",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "positionId",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -781,42 +794,6 @@
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "debtToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "repaidDebt",
-        "type": "uint256"
-      }
-    ],
-    "name": "repayDebt",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "debtToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "minRepaid",
-        "type": "uint256"
-      }
-    ],
-    "name": "repayDebtInBase",
-    "outputs": [],
-    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -963,12 +940,27 @@
       },
       {
         "internalType": "uint256",
+        "name": "_reservedBps",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_vaultRewardBps",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "_killFactorBps",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_reservedBps",
+        "name": "_liquidateDebtFactorBps",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_liquidationFeeBps",
         "type": "uint256"
       }
     ],
@@ -993,6 +985,37 @@
     "name": "updateVault",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "killers",
+        "type": "address[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "ok",
+        "type": "bool"
+      }
+    ],
+    "name": "updateWhitelistedKillerStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "vaultRewardBps",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

@@ -7,6 +7,7 @@ import { Position } from '../../../../feature/Dashboard/ActivePosition/ActivePos
 import { BigNumber, Contract } from 'ethers';
 import { getContract } from '../../../../../config/contract';
 import { useSnackbar } from 'notistack';
+import { calculateAPYFromAPR } from '../../../../../utils/utils';
 
 let stayKingContract: Contract;
 let vaultContract: Contract;
@@ -25,6 +26,13 @@ export enum RepayType {
 interface RepayAmount {
   amountInBase?: number;
   amountInToken?: number;
+}
+
+interface YieldStaking {
+  apr: string;
+  apy: string;
+  borrowingInterest: string;
+  totalApr: string;
 }
 
 /**
@@ -51,6 +59,12 @@ const useAdjust = (closeModal: VoidFunction) => {
 
   const [equityPositionType, setEquityPositionType] = React.useState<PositionType>(PositionType.ADD);
   const [debtPositionType, setDebtPositionType] = React.useState<PositionType>(PositionType.ADD);
+  const [yieldStaking, setYieldStaking] = useState<YieldStaking>({
+    apr: '0',
+    apy: '0',
+    totalApr: '0',
+    borrowingInterest: '0'
+  });
 
   const { onChangeIsPendingState } = useWalletState();
   const { enqueueSnackbar } = useSnackbar();
@@ -145,6 +159,40 @@ const useAdjust = (closeModal: VoidFunction) => {
     );
   }
 
+  async function getStakingAPR() {
+    return fetch(`/api/yield/evmos`).then((res) => res.json());
+  }
+
+  async function getInterestFromVault() {
+    const _lastAnnualRateBps: BigNumber = await vaultContract.lastAnnualRateBps();
+    const _reservedBps: BigNumber = await stayKingContract.reservedBps();
+    return (
+      Number(convertUnitFrom(_lastAnnualRateBps.toString(), '2')) +
+      Number(convertUnitFrom(_reservedBps.toString(), '2'))
+    );
+  }
+
+  async function loadYieldStaking(equity: number, debt: number) {
+    let debtPerEquity = equity ? Number((debt / equity).toFixed(2)) : 1;
+    if (debtPerEquity < 1) debtPerEquity = 1;
+    const _result = await getStakingAPR();
+    const _apr = Number(_result.data.apr) - 15;
+    const apy = calculateAPYFromAPR((_apr / 100).toFixed(2));
+    const _borrowingInterest = await getInterestFromVault();
+    const borrowingInterest = Number(_borrowingInterest) * debtPerEquity;
+    const apr = _apr * debtPerEquity;
+    const totalApr = _apr * debtPerEquity - borrowingInterest;
+    const totalApy = apy * debtPerEquity - borrowingInterest;
+
+    setYieldStaking({
+      ...yieldStaking,
+      apy: totalApy.toFixed(2),
+      apr: apr.toFixed(2),
+      borrowingInterest: borrowingInterest.toFixed(2),
+      totalApr: totalApr.toFixed(2)
+    });
+  }
+
   async function reCalculatePosition(deptInBase: number, amount: number) {
     const _positionValueInBase: number = Number(position?.positionValueInBase) + (Number(amount) + deptInBase);
     const _debtInBase = _positionValueInBase - Number(position?.equityValue) - Number(amount);
@@ -159,6 +207,7 @@ const useAdjust = (closeModal: VoidFunction) => {
       deptRatio: _debtRatio.toFixed(1),
       safetyBuffer: _safetyBuffer.toFixed(1)
     });
+    await loadYieldStaking(_equityValue, _debtInBase);
   }
 
   async function loadLendingPoolAsset() {
@@ -279,6 +328,7 @@ const useAdjust = (closeModal: VoidFunction) => {
   async function init() {
     await getPositionFrom();
     await loadLendingPoolAsset();
+    await loadYieldStaking(0, 0);
     registerContractEvents();
   }
 
@@ -317,7 +367,9 @@ const useAdjust = (closeModal: VoidFunction) => {
     repayType,
     repayAmount,
     onChangeRepayAmount,
-    handleChangeRepayType
+    handleChangeRepayType,
+    yieldStaking,
+    loadYieldStaking
   };
 };
 

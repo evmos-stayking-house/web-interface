@@ -8,6 +8,7 @@ import { useModal } from '../../Modal';
 import LendingDeposit from '../../Modal/ModalContents/LendingDeposit/LendingDeposit';
 import { useWalletState } from '../../../contexts/WalletContext';
 import LendingWithdraw from '../../Modal/ModalContents/LendingWithdraw/LendingWithdraw';
+import { calculateAPYFromAPR } from '../../../utils/utils';
 
 let vaultContract: Contract;
 let tokenContract: Contract;
@@ -46,9 +47,10 @@ const useVault = () => {
   }
 
   async function getInterestRate() {
-    const _interestRate: BigNumber = await vaultContract.getInterestRate();
-    const interestRate = convertUnitFrom(_interestRate.toString(), '0');
-    setInterestRate(interestRate);
+    const _aprBPSOfVault: BigNumber = await vaultContract.lastAnnualRateBps();
+    const aprBPSOfVault = convertUnitFrom(_aprBPSOfVault.toString(), '4');
+    console.log(aprBPSOfVault);
+    setInterestRate(calculateAPYFromAPR(aprBPSOfVault).toFixed(1));
   }
 
   async function getTotalSupply() {

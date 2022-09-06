@@ -8,7 +8,8 @@ interface Props {
 }
 
 const ActivePosition: FC<Props> = ({ address }) => {
-  const { position, renderAdjustModal, openAdjustModal, renderCloseModal, openCloseModal } = useActivePosition(address);
+  const { position, renderAdjustModal, yieldStaking, openAdjustModal, renderCloseModal, openCloseModal } =
+    useActivePosition(address);
 
   return (
     <div className={s.activePositionContainer}>
@@ -93,7 +94,8 @@ const ActivePosition: FC<Props> = ({ address }) => {
                 <div className={s.positionContainerContents__item}>
                   <div className={s.assetInfo}>
                     <div className={s.assetInfo__labelAndValue}>
-                      <span className={s.assetInfo__labelAndValue__value}>{'TBD'}</span>
+                      <span className={s.assetInfo__labelAndValue__value}>{yieldStaking.apy}</span>
+                      <span className={s.assetInfo__labelAndValue__label}>{'%'}</span>
                     </div>
                   </div>
                 </div>

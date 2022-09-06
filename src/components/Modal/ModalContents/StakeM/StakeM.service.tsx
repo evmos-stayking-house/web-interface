@@ -8,10 +8,19 @@ import { useWalletState } from '../../../../contexts/WalletContext';
 import { useModal } from '../../useModal';
 import StakeConfirm from './StakeConfirm/StakeConfirm';
 import { useSnackbar } from 'notistack';
+import { BigNumber } from 'ethers';
+import { calculateAPYFromAPR } from '../../../../utils/utils';
 
 let tokenContract: Contract;
 let vaultContract: Contract;
 let stayKingContract: Contract;
+
+interface YieldStaking {
+  apr: string;
+  apy: string;
+  borrowingInterest: string;
+  totalApr: string;
+}
 
 const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
   const { address, evmosBalance } = useWalletState();
@@ -24,6 +33,12 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
   const [leverage, setLeverage] = useState<string | null>(parentLeverage);
   const { onChangeIsPendingState } = useWalletState();
   const { enqueueSnackbar } = useSnackbar();
+  const [yieldStaking, setYieldStaking] = useState<YieldStaking>({
+    apr: '0',
+    apy: '0',
+    totalApr: '0',
+    borrowingInterest: '0'
+  });
 
   const {
     renderModal: renderStakeConfirmModal,
@@ -35,6 +50,39 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
 
   function setMaxAmount() {
     setAmount(evmosBalance);
+  }
+
+  async function getInterestFromVault() {
+    const _lastAnnualRateBps: BigNumber = await vaultContract.lastAnnualRateBps();
+    const _reservedBps: BigNumber = await stayKingContract.reservedBps();
+    return (
+      Number(convertUnitFrom(_lastAnnualRateBps.toString(), '2')) +
+      Number(convertUnitFrom(_reservedBps.toString(), '2'))
+    );
+  }
+
+  async function loadYieldStaking(_leverage?: any) {
+    const _result = await getStakingAPR();
+    const _apr = Number(_result.data.apr) - 15;
+    const apy = calculateAPYFromAPR((_apr / 100).toFixed(2));
+    const lev = _leverage ? Number(_leverage) : 1;
+    const _borrowingInterest = await getInterestFromVault();
+    const borrowingInterest = Number(_borrowingInterest) * (lev - 1);
+    const apr = _apr * lev;
+    const totalApr = _apr * lev - borrowingInterest;
+    const totalApy = apy * lev - borrowingInterest;
+
+    setYieldStaking({
+      ...yieldStaking,
+      apy: totalApy.toFixed(2),
+      apr: apr.toFixed(2),
+      borrowingInterest: borrowingInterest.toFixed(2),
+      totalApr: totalApr.toFixed(2)
+    });
+  }
+
+  async function getStakingAPR() {
+    return fetch(`/api/yield/evmos`).then((res) => res.json());
   }
 
   async function onChangeSuppliedAmount() {
@@ -50,6 +98,7 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
     await onChangeDebtInToken(deptInBase.toFixed(0));
     setPositionValue((Number(amount) + deptInBase).toFixed(1));
     setLeverage(_leverage);
+    await loadYieldStaking(_leverage);
   }
 
   function onChangeBorrowingAsset(e: SyntheticEvent<any>) {
@@ -131,7 +180,8 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
     onChangeLeverage,
     onChangeSuppliedAmount,
     addPosition,
-    renderStakeConfirmModal
+    renderStakeConfirmModal,
+    yieldStaking
   };
 };
 

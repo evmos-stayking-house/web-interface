@@ -3,11 +3,11 @@ import { APP_ENV } from '../../config/environments';
 
 const LOCAL_NET_CONTRACTS = {
   stayKing: {
-    address: '0x726debadDCd0A372ae74A94e4c964d0253167c48',
+    address: '0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE',
     abi: Stayking
   },
   vault: {
-    address: '0xF1e004B20C02e106dc6567eeB7c52EF9e17dC087',
+    address: '0xc6e7DF5E7b4f2A278906862b61205850344D4e7d',
     abi: Vault
   },
   tATOM: {
@@ -15,7 +15,7 @@ const LOCAL_NET_CONTRACTS = {
     abi: ERC20
   },
   tUSDC: {
-    address: '0x3fFc9A40369696778c1cDDD245F5409857C90881',
+    address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
     abi: ERC20
   },
   tUSDT: {
@@ -23,7 +23,7 @@ const LOCAL_NET_CONTRACTS = {
     abi: ERC20
   },
   uEVMOS: {
-    address: '0xAac00246CbE4D58BE99E59F59455Dc31C75A32f4',
+    address: '0x0B306BF915C4d645ff596e518fAf3F9669b97016',
     abi: UnbondedEvmos
   }
 };

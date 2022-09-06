@@ -24,6 +24,7 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
     borrowingAsset,
     onChangeLeverage,
     amount,
+    yieldStaking,
     setAmount,
     debtInToken,
     stake,
@@ -133,7 +134,7 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
           getAriaValueText={(val: number) => `x${val.toFixed(1)}`}
           getAriaLabel={(val: number) => `x${val.toFixed(1)}`}
           step={0.5}
-          max={4.5}
+          max={3.0}
           min={1.0}
           marks={LEVERAGE_OPTIONS.map((_leverage) => ({ label: ``, value: Number(_leverage) }))}
           valueLabelDisplay="on"
@@ -162,19 +163,19 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
           </div>
           <div className={s.totalRow}>
             <span className={s.totalRow__label}>Yield Staking</span>
-            <span className={s.totalRow__value}>TBD</span>
+            <span className={s.totalRow__value}>{yieldStaking.apr}%</span>
           </div>
           <div className={s.totalRow}>
             <span className={s.totalRow__label}>Borrowing Interest</span>
-            <span className={s.totalRow__value}>TBD</span>
+            <span className={s.totalRow__value}>{yieldStaking.borrowingInterest}%</span>
           </div>
           <div className={s.totalRow}>
             <span className={s.totalRow__label}>Total APR</span>
-            <span className={s.totalRow__value}>TBD</span>
+            <span className={s.totalRow__value}>{yieldStaking.totalApr}%</span>
           </div>
           <div className={s.totalRow}>
             <span className={s.totalRow__label}>Total APY</span>
-            <span className={s.totalRow__value}>TBD</span>
+            <span className={s.totalRow__value}>{yieldStaking.apy}%</span>
           </div>
         </div>
         <div className={s.summary}>

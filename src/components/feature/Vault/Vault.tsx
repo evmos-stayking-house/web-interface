@@ -52,11 +52,11 @@ const Vault = () => {
           </div>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__totalSupply)}>
-          <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(totalSupply)}</span>
+          <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(totalSupply, 1)}</span>
           <span className={s.poolListContainerContents__item__tokenSymbol}>USDC</span>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__totalBorrowed)}>
-          <span className={s.poolListContainerContents__item__tokenValue}>{totalBorrowed}</span>
+          <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(totalBorrowed, 1)}</span>
           <span className={s.poolListContainerContents__item__tokenSymbol}>USDC</span>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__totalBorrowed)}>
@@ -65,11 +65,11 @@ const Vault = () => {
         </div>
         <div className={s.poolListContainerContents__item}>
           <div className={s.poolListContainerContents__item__tokenBalance}>
-            <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(ibBalance)}</span>
+            <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(ibBalance, 1)}</span>
             <span className={s.poolListContainerContents__item__tokenSymbol}>ibUSDC</span>
           </div>
           <div className={s.poolListContainerContents__item__tokenBalance}>
-            <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(vaultTokenBalance)}</span>
+            <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(vaultTokenBalance, 1)}</span>
             <span className={s.poolListContainerContents__item__tokenSymbol}>USDC</span>
           </div>
         </div>
