@@ -30,11 +30,11 @@ const LOCAL_NET_CONTRACTS = {
 
 const TEST_NET_CONTRACTS = {
   stayKing: {
-    address: '0x37C7e2F4B0a299BF4437dc4c8C8A80436C1aeA44',
+    address: '0x14CB3b1a9F343B7F75F6Fb085Df2b210dEbA38f4',
     abi: Stayking
   },
   vault: {
-    address: '0x58621A8529cA0Fcdc569F7B97690ae918C96067E',
+    address: '0x1165fB4616AEBa68D9bD928811bBd5338b3eA6F1',
     abi: Vault
   },
   tATOM: {
@@ -42,7 +42,7 @@ const TEST_NET_CONTRACTS = {
     abi: ERC20
   },
   tUSDC: {
-    address: '0x55f83322529a218ba82b56A532F7B1771B9EBA96',
+    address: '0x76CC610c589D05CccCe832025576EA7B2484683C',
     abi: ERC20
   },
   tUSDT: {
@@ -50,7 +50,7 @@ const TEST_NET_CONTRACTS = {
     abi: ERC20
   },
   uEVMOS: {
-    address: '0x7C396906079626192A266bB927E7E6706b3c7eD1',
+    address: '0x16B93cccC0e6E8C52a21433e947eE6894e57Ef07',
     abi: UnbondedEvmos
   }
 };
