@@ -5,6 +5,7 @@ import { cn } from '../../../utils/style';
 import useStake from './Stake.service';
 import { Autocomplete, TextField } from '@mui/material';
 import { LEVERAGE_OPTIONS } from '../../../config/constants';
+import { numberFormat } from '../../../utils/numberFormats';
 
 const Stake = () => {
   const {
@@ -41,7 +42,7 @@ const Stake = () => {
         </div>
         <div className={s.poolListContainerContents__item}>
           <div className={s.assetInfo__labelAndValue}>
-            <span className={s.assetInfo__labelAndValue__value}>{yieldStaking.apy}%</span>
+            <span className={s.assetInfo__labelAndValue__value}>{numberFormat(yieldStaking.apy, 2)}%</span>
           </div>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__yield)}>

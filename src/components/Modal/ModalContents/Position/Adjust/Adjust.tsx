@@ -1,9 +1,20 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import s from './Adjust.module.scss';
 import { cn } from '../../../../../utils/style';
 import Form from '../../../../common/Form';
 import { InputNumber } from '../../../../common/Input';
-import { Button, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Popover,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography
+} from '@mui/material';
 import useAdjust, { PositionType, RepayType } from './Adjust.service';
 import { numberFormat } from '../../../../../utils/numberFormats';
 
@@ -22,6 +33,7 @@ const Adjust: FC<Props> = ({ closeModal }) => {
     updatedPosition,
     onChangeAmount,
     adjust,
+    beforeAdjust,
     borrowingAssetBalance,
     debtInToken,
     equityPositionType,
@@ -33,11 +45,34 @@ const Adjust: FC<Props> = ({ closeModal }) => {
     repayAmount,
     onChangeRepayAmount,
     yieldStaking,
-    loadYieldStaking
+    noticePopupOpen,
+    handleNoticePopup
   } = useAdjust(closeModal);
 
   return (
     <div className={s.container}>
+      <Dialog
+        open={noticePopupOpen}
+        onClose={() => handleNoticePopup(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">{'[Notice] Would you like to proceed this way?'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This is the same way that ${amount} EVMOS of Equity is {equityPositionType.toLowerCase()}ed to the position,
+            and {Math.abs(Number(position?.debtInBase) - Number(updatedPosition?.debtInBase))} EVMOS is used to repay
+            the debt.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleNoticePopup(false)} autoFocus>
+            Disagree
+          </Button>
+          <Button onClick={() => beforeAdjust()} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
       <div className={s.logoContainer}>
         <div className={s.logoContainer__title}>Adjust Position</div>
       </div>
@@ -345,7 +380,7 @@ const Adjust: FC<Props> = ({ closeModal }) => {
         </div>
       </div>
       <div className={s.btnWrapper}>
-        <Button className={s.adjustBtn} autoCapitalize={'false'} onClick={() => adjust()}>
+        <Button className={s.adjustBtn} autoCapitalize={'false'} onClick={() => beforeAdjust()}>
           Adjust Position
         </Button>
       </div>

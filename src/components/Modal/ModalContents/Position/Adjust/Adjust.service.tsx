@@ -66,8 +66,12 @@ const useAdjust = (closeModal: VoidFunction) => {
     borrowingInterest: '0'
   });
 
+  const [noticePopupOpen, setNoticePopupOpen] = useState<boolean>(false);
+
   const { onChangeIsPendingState } = useWalletState();
   const { enqueueSnackbar } = useSnackbar();
+
+  const handleNoticePopup = (open: boolean) => setNoticePopupOpen(open);
 
   const handleChangeEquityType = async (event: React.MouseEvent<HTMLElement>, type: PositionType) => {
     event.preventDefault();
@@ -177,12 +181,12 @@ const useAdjust = (closeModal: VoidFunction) => {
     if (debtPerEquity < 1) debtPerEquity = 1;
     const _result = await getStakingAPR();
     const _apr = Number(_result.data.apr) - 15;
-    const apy = calculateAPYFromAPR((_apr / 100).toFixed(2));
+    // const apy = calculateAPYFromAPR((_apr / 100).toFixed(2));
     const _borrowingInterest = await getInterestFromVault();
     const borrowingInterest = Number(_borrowingInterest) * debtPerEquity;
     const apr = _apr * debtPerEquity;
     const totalApr = _apr * debtPerEquity - borrowingInterest;
-    const totalApy = apy * debtPerEquity - borrowingInterest;
+    const totalApy = calculateAPYFromAPR((totalApr / 100).toFixed(2));
 
     setYieldStaking({
       ...yieldStaking,
@@ -244,6 +248,17 @@ const useAdjust = (closeModal: VoidFunction) => {
     }
   }
 
+  async function beforeAdjust() {
+    const equityInBaseChanged = Number(updatedPosition?.equityValue) - Number(position?.equityValue);
+    const debtInBaseChanged = Number(updatedPosition?.debtInBase) - Number(position?.debtInBase);
+
+    if (equityInBaseChanged * debtInBaseChanged < 0) {
+      setNoticePopupOpen(true);
+    } else {
+      await adjust();
+    }
+  }
+
   async function adjust() {
     let equityInBaseChanged = 0;
     let debtInBaseChanged = 0;
@@ -275,13 +290,6 @@ const useAdjust = (closeModal: VoidFunction) => {
 
     onChangeIsPendingState(true);
     try {
-      console.log(equityInBaseChanged, debtInBaseChanged, repaidDebt, valueObj);
-      console.log(
-        convertDenomFrom(String(equityInBaseChanged)),
-        convertDenomFrom(String(debtInBaseChanged)),
-        convertDenomFrom(String(repaidDebt)),
-        valueObj
-      );
       const result = await getTxOfChangePosition(
         convertDenomFrom(String(equityInBaseChanged)),
         convertDenomFrom(String(debtInBaseChanged)),
@@ -369,7 +377,10 @@ const useAdjust = (closeModal: VoidFunction) => {
     onChangeRepayAmount,
     handleChangeRepayType,
     yieldStaking,
-    loadYieldStaking
+    loadYieldStaking,
+    noticePopupOpen,
+    handleNoticePopup,
+    beforeAdjust
   };
 };
 

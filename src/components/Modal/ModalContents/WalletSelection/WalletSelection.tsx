@@ -9,9 +9,7 @@ interface Props {
 }
 
 const WalletSelection: FC<Props> = ({ closeModal, metaMaskLogin }) => {
-
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   function onMetaMaskLogin() {
     metaMaskLogin();
@@ -24,20 +22,20 @@ const WalletSelection: FC<Props> = ({ closeModal, metaMaskLogin }) => {
         <img src={'/img/logo/logo.png'} className={s.logoContainer__logo} alt={'로고'} />
       </div>
       <h3 className={s.title}>Connect Wallet</h3>
-      <p className={s.loginDesc}>
-        Hello! Connect your Metamask wallet to start the application.
-      </p>
+      <p className={s.loginDesc}>Hello! Connect your Metamask wallet to start the application.</p>
       <div className={s.walletContainer} onClick={() => onMetaMaskLogin()}>
-          <div className={s.wallet}>
-            <span className={s.walletName}>MetaMask</span>
-            <img className={s.logo} src={'/img/metamask.png'} alt={'metamask icon'} />
-          </div>
+        <div className={s.wallet}>
+          <span className={s.walletName}>MetaMask</span>
+          <img className={s.logo} src={'/img/metamask.png'} alt={'metamask icon'} />
+        </div>
       </div>
       <div className={s.divider}></div>
-      <span className={s.otherText}>
-        or Login With
-      </span>
-      <div className={s.walletContainer} onClick={() => { alert('Sorry @Jen Next time.... I will do it!') }}>
+      <span className={s.otherText}>or Login With</span>
+      <div
+        className={s.walletContainer}
+        onClick={() => {
+          alert('Coming soon...');
+        }}>
         <div className={s.wallet}>
           <span className={s.walletName}>Google</span>
           <img className={s.logo} src={'/img/google.png'} alt={'google icon'} />

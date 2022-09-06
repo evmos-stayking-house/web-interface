@@ -8,7 +8,7 @@ export const chains = [
       decimals: 18
     },
     blockExplorerUrls: ['https://evm.evmos.dev'],
-    rpcUrls: ['http://65.108.225.158:8545']
+    rpcUrls: ['https://eth.bd.evmos.dev:8545']
   },
   {
     chainId: '0x7a69',
