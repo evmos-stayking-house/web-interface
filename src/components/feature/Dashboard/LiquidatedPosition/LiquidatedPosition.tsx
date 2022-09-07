@@ -112,7 +112,16 @@ const LiquidatedPosition = () => {
             )
           )}
       </div>
-      {liquidatedTxs.length === 0 && <div className={s.positionEmptyContainer}>No data</div>}
+      {liquidatedTxs.length === 0 && (
+        <>
+          <div className={s.positionEmptyContainer}>
+            <p>No data</p>
+          </div>
+          <p style={{ fontSize: 16, textAlign: 'center' }}>
+            ( Only the most recent (latest block height - 10,000) liquidated data is visible )
+          </p>
+        </>
+      )}
     </div>
   );
 };
