@@ -25,8 +25,8 @@ const Stake = () => {
       <div className={s.title}>Staking Pools</div>
       <div className={s.poolListContainerHeader}>
         <div>Asset/Chain</div>
-        <div>APY</div>
-        <div>Yield</div>
+        <div>Expected APY</div>
+        <div>Expected APR/Borrowing Interest</div>
         <div>Leverage</div>
         <div>&nbsp;</div>
       </div>
@@ -46,11 +46,11 @@ const Stake = () => {
           </div>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__yield)}>
-          <span className={s.poolListContainerContents__item__text}>Yield Staking : {yieldStaking.apr}%</span>
+          <span className={s.poolListContainerContents__item__text}>Expected Staking APR : {yieldStaking.apr}%</span>
           <span className={s.poolListContainerContents__item__text}>
             Borrowing Interest : USDC {yieldStaking.borrowingInterest}%
           </span>
-          <span className={s.poolListContainerContents__item__text}>Total APR : {yieldStaking.totalApr}%</span>
+          <span className={s.poolListContainerContents__item__text}>Expected Total APR : {yieldStaking.totalApr}%</span>
         </div>
         <div className={cn(s.poolListContainerContents__item, s.poolListContainerContents__item__leverage)}>
           <Autocomplete

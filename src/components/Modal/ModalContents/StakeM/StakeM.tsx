@@ -152,17 +152,17 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
           id="leverage-adjust-modal"
           options={LEVERAGE_OPTIONS}
           style={{ width: 150, background: '#D9D9D9', color: '#4D4545', borderRadius: 8 }}
-          renderInput={(params) => <TextField {...params} variant="outlined" />}
+          renderInput={(params) => <TextField {...params} />}
         />
       </div>
       <div className={s.divider}></div>
       <div className={s.summaryWrapper}>
         <div className={s.total}>
           <div className={s.totalRow}>
-            <span className={s.totalRow__title}>Total APY/APR</span>
+            <span className={s.totalRow__title}>Expected Total APY/APR</span>
           </div>
           <div className={s.totalRow}>
-            <span className={s.totalRow__label}>Yield Staking</span>
+            <span className={s.totalRow__label}>Expected Staking APR</span>
             <span className={s.totalRow__value}>{yieldStaking.apr}%</span>
           </div>
           <div className={s.totalRow}>
@@ -170,11 +170,11 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
             <span className={s.totalRow__value}>{yieldStaking.borrowingInterest}%</span>
           </div>
           <div className={s.totalRow}>
-            <span className={s.totalRow__label}>Total APR</span>
+            <span className={s.totalRow__label}>Expected Total APR</span>
             <span className={s.totalRow__value}>{yieldStaking.totalApr}%</span>
           </div>
           <div className={s.totalRow}>
-            <span className={s.totalRow__label}>Total APY</span>
+            <span className={s.totalRow__label}>Expected Total APY</span>
             <span className={s.totalRow__value}>{yieldStaking.apy}%</span>
           </div>
         </div>

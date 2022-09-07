@@ -33,6 +33,8 @@ const ActivePosition: FC<Props> = ({ address }) => {
         <div className={s.alignToCenter}>
           Current
           <br />
+          Expected
+          <br />
           APY
         </div>
         <div className={s.alignToCenter}>

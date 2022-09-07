@@ -46,7 +46,7 @@ const useDashboard = () => {
     } else if (tab === BalanceTab.Unlockable) {
       const [_unlockable] = await getUnlockable();
       try {
-        _evmosBalance = ethers.utils.formatEther(_unlockable);
+        _evmosBalance = convertUnitFrom(_unlockable, '18');
       } catch (e) {
         _evmosBalance = '0';
       }
@@ -61,8 +61,12 @@ const useDashboard = () => {
 
   async function balanceOfLocked() {
     const _balance = await uEVMOSContract.balanceOf(address);
-    const _amount = await uEVMOSContract.shareToAmount(Number(convertUnitFrom(_balance, '18')).toFixed(0));
-    return convertUnitFrom(_amount, '0');
+    const balance = convertUnitFrom(_balance, '0');
+    const [_unlockable] = await getUnlockable();
+    const unlockable = convertUnitFrom(_unlockable, '18');
+
+    // const _amount = await uEVMOSContract.shareToAmount(Number(convertUnitFrom(_balance, '18')).toFixed(0));
+    return (Number(balance) - Number(unlockable)).toFixed(1);
   }
 
   function getUnlockable() {

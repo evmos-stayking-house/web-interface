@@ -8,6 +8,7 @@ import createEmotionCache from '../createEmotionCache';
 import PropTypes from 'prop-types';
 import { SnackbarProvider } from 'notistack';
 import { useRouter } from 'next/router';
+import { createTheme, ThemeProvider } from '@mui/material';
 
 declare global {
   interface Window {
@@ -30,14 +31,40 @@ export default function MyApp(props: any) {
           console.log('closed...');
         }}>
         <ThemeContextProvider>
-          <WalletContextProvider>
-            <Component {...pageProps} />
-          </WalletContextProvider>
+          <ThemeProvider theme={theme}>
+            <WalletContextProvider>
+              <Component {...pageProps} />
+            </WalletContextProvider>
+          </ThemeProvider>
         </ThemeContextProvider>
       </SnackbarProvider>
     </CacheProvider>
   );
 }
+
+const theme = createTheme({
+  components: {
+    // Name of the component
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          '.MuiOutlinedInput-notchedOutline': {
+            borderColor: 'transparent'
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'transparent'
+          }
+        },
+        notchedOutline: {
+          borderColor: 'transparent',
+          '&:hover': {
+            borderColor: 'transparent'
+          }
+        }
+      }
+    }
+  }
+});
 
 MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,

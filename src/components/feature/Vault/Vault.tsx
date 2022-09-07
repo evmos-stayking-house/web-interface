@@ -26,7 +26,7 @@ const Vault = () => {
       {/* Header */}
       <div className={s.poolListContainerHeader}>
         <div>Asset/Chain</div>
-        <div>APY</div>
+        <div>Expected APY</div>
         <div>Total Supply</div>
         <div>Total Borrowed</div>
         <div>Utilization</div>

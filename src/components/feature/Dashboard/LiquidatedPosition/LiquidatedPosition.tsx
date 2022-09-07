@@ -1,7 +1,6 @@
 import React from 'react';
 import s from './LiquidatedPosition.module.scss';
 import useActivePosition from './LiquidatedPosition.service';
-import { cn } from '../../../../utils/style';
 import { numberFormat } from '../../../../utils/numberFormats';
 
 const LiquidatedPosition = () => {

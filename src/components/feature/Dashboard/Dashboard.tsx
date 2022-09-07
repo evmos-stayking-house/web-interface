@@ -83,7 +83,7 @@ const Dashboard = () => {
                 {numberFormat(ibToken)}
                 <span className={s.value__unit}>&nbsp;ibUSDC</span>
               </p>
-              <p className={s.description}>~ {numberFormat(tokenAmount)}&nbsp;USDC</p>
+              <p className={s.description}>~ {numberFormat(tokenAmount, 1)}&nbsp;USDC</p>
             </div>
             <div className={s.balanceBox__right}>
               <Image width={64} height={64} src={'/img/logo/usdc.png'} />
