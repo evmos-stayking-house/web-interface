@@ -40,8 +40,9 @@ const useActivePosition = () => {
   const [liquidatedTxs, setLiquidatedTxs] = useState<KillEvent[]>([]);
 
   async function getKillFilter() {
+    const _blockHeight = await getProvider().getBlockNumber();
     const filterFrom = stayKingContract.filters['Kill'](address);
-    return stayKingContract.queryFilter(filterFrom, APP_ENV === 'local' ? -10 : 5203485, 'latest');
+    return stayKingContract.queryFilter(filterFrom, APP_ENV === 'local' ? -10 : _blockHeight - 9900, 'latest');
   }
 
   async function init() {

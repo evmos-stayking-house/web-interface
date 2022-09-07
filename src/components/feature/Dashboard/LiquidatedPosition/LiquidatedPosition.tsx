@@ -2,6 +2,7 @@ import React from 'react';
 import s from './LiquidatedPosition.module.scss';
 import useActivePosition from './LiquidatedPosition.service';
 import { cn } from '../../../../utils/style';
+import { numberFormat } from '../../../../utils/numberFormats';
 
 const LiquidatedPosition = () => {
   const { liquidatedTxs } = useActivePosition();
@@ -69,7 +70,7 @@ const LiquidatedPosition = () => {
                 <div className={s.positionContainerContents__item}>
                   <div className={s.assetInfo}>
                     <div className={s.assetInfo__labelAndValue}>
-                      <span className={s.assetInfo__labelAndValue__value}>{debtInBase}</span>
+                      <span className={s.assetInfo__labelAndValue__value}>{numberFormat(String(debtInBase), 1)}</span>
                       <span className={s.assetInfo__labelAndValue__label}>{'EVMOS'}</span>
                     </div>
                   </div>
@@ -77,7 +78,7 @@ const LiquidatedPosition = () => {
                 <div className={s.positionContainerContents__item}>
                   <div className={s.assetInfo}>
                     <div className={s.assetInfo__labelAndValue}>
-                      <span className={s.assetInfo__labelAndValue__value}>{equity}</span>
+                      <span className={s.assetInfo__labelAndValue__value}>{numberFormat(String(equity), 1)}</span>
                       <span className={s.assetInfo__labelAndValue__label}>{'EVMOS'}</span>
                     </div>
                   </div>
