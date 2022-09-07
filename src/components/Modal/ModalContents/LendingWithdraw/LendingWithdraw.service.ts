@@ -12,7 +12,7 @@ let tokenContract: Contract;
 const useLendingWithdraw = (closeModal: VoidFunction) => {
   const { address } = useWalletState();
   const { onChangeIsPendingState } = useWalletState();
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [amount, setAmount] = useState<string>('0');
   const [ibTokenBalance, setIbTokenBalance] = useState<string>('0');
   const [ibTokenWithdraw, setIbTokenWithdraw] = useState<string>('0');
@@ -29,7 +29,10 @@ const useLendingWithdraw = (closeModal: VoidFunction) => {
       enqueueSnackbar(`Transaction Hash: ${withdrawResult['hash']}`, { variant: 'success' });
     } catch (e: any) {
       onChangeIsPendingState(false);
-      enqueueSnackbar(e.toString(), { variant: 'error' });
+      const key = enqueueSnackbar(e.toString(), {
+        variant: 'warning',
+        onClick: () => closeSnackbar(key)
+      });
     }
   }
 

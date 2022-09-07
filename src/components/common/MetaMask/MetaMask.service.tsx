@@ -36,6 +36,7 @@ const useMetaMask = () => {
     try {
       const provider: Web3Provider = getProvider();
       await provider.send('eth_requestAccounts', []);
+      await provider.send('wallet_requestPermissions', [{ eth_accounts: {} }]);
       const address = await provider.getSigner().getAddress();
       onChangeAddress(address);
     } catch (err: any) {

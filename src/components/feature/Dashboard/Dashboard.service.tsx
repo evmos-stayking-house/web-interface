@@ -44,9 +44,9 @@ const useDashboard = () => {
     } else if (tab === BalanceTab.Locked) {
       _evmosBalance = await balanceOfLocked();
     } else if (tab === BalanceTab.Unlockable) {
-      const _balance = await getUnlockable();
+      const [_unlockable] = await getUnlockable();
       try {
-        _evmosBalance = ethers.utils.formatEther(_balance);
+        _evmosBalance = ethers.utils.formatEther(_unlockable);
       } catch (e) {
         _evmosBalance = '0';
       }

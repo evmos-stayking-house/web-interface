@@ -28,7 +28,7 @@ interface ResultSummary {
 
 const useClosePosition = (closeModal: VoidFunction) => {
   const { address, onChangeIsPendingState } = useWalletState();
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [result, setResult] = useState<ResultSummary | null>(null);
   const [closeType, setCloseType] = useState<CloseType>(CloseType.Entire);
 
@@ -88,7 +88,10 @@ const useClosePosition = (closeModal: VoidFunction) => {
       enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
     } catch (e: any) {
       onChangeIsPendingState(false);
-      enqueueSnackbar(e.toString(), { variant: 'error' });
+      const key = enqueueSnackbar(e.toString(), {
+        variant: 'warning',
+        onClick: () => closeSnackbar(key)
+      });
     }
   }
 

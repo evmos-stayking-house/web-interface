@@ -43,7 +43,7 @@ const useVault = () => {
 
   async function ibTokenRatioWithVaultToken() {
     const amount = await shareToAmount();
-    setIbTokenRatioWithToken(`1 ibUSDC = ${amount} USDC`);
+    setIbTokenRatioWithToken(`1 ibUSDC = ${Number(amount).toFixed(4)} USDC`);
   }
 
   async function getInterestRate() {

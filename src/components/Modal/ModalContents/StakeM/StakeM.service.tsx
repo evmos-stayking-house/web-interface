@@ -32,7 +32,7 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
   const [borrowingAsset, setBorrowingAsset] = useState<any>('USDC');
   const [leverage, setLeverage] = useState<string | null>(parentLeverage);
   const { onChangeIsPendingState } = useWalletState();
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [yieldStaking, setYieldStaking] = useState<YieldStaking>({
     apr: '0',
     apy: '0',
@@ -139,7 +139,10 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
       enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
     } catch (e: any) {
       onChangeIsPendingState(false);
-      enqueueSnackbar(e.toString(), { variant: 'error' });
+      const key = enqueueSnackbar(e.toString(), {
+        variant: 'warning',
+        onClick: () => closeSnackbar(key)
+      });
     }
   }
 

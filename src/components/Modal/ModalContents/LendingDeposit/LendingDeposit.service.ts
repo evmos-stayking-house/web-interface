@@ -23,7 +23,7 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
 
   const { onChangeIsPendingState } = useWalletState();
   const { tokenBalance } = useLendingAsset(Contracts.tUSDC);
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   function setMaxAmount() {
     setAmount(tokenBalance);
@@ -52,7 +52,10 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
       enqueueSnackbar(`Transaction Hash: ${depositedResult['hash']}`, { variant: 'success' });
     } catch (e: any) {
       onChangeIsPendingState(false);
-      enqueueSnackbar(e.toString(), { variant: 'error' });
+      const key = enqueueSnackbar(e.toString(), {
+        variant: 'warning',
+        onClick: () => closeSnackbar(key)
+      });
     }
   }
 

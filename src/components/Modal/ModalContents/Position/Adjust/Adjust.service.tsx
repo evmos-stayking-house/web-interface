@@ -8,6 +8,8 @@ import { BigNumber, Contract } from 'ethers';
 import { getContract } from '../../../../../config/contract';
 import { useSnackbar } from 'notistack';
 import { calculateAPYFromAPR } from '../../../../../utils/utils';
+import { JsonRpcError } from '@walletconnect/jsonrpc-types';
+import { ProviderRpcError } from '../../../../../config/interfaces';
 
 let stayKingContract: Contract;
 let vaultContract: Contract;
@@ -69,7 +71,7 @@ const useAdjust = (closeModal: VoidFunction) => {
   const [noticePopupOpen, setNoticePopupOpen] = useState<boolean>(false);
 
   const { onChangeIsPendingState } = useWalletState();
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleNoticePopup = (open: boolean) => setNoticePopupOpen(open);
 
@@ -201,7 +203,7 @@ const useAdjust = (closeModal: VoidFunction) => {
     const _positionValueInBase: number = Number(position?.positionValueInBase) + (Number(amount) + deptInBase);
     const _debtInBase = _positionValueInBase - Number(position?.equityValue) - Number(amount);
     const _equityValue = _positionValueInBase - Number(position?.debtInBase) - deptInBase;
-    const _debtRatio = (_debtInBase / _positionValueInBase) * 100;
+    const _debtRatio = (_debtInBase / (_positionValueInBase || 1)) * 100;
     const _safetyBuffer = Number(position?.killFactor) - _debtRatio;
     setUpdatedPosition({
       ...position!,
@@ -220,7 +222,7 @@ const useAdjust = (closeModal: VoidFunction) => {
   }
 
   async function swapDebtOutToken(_deptInToken: string) {
-    const _deptInBase = await vaultContract.getTokenOut(_deptInToken);
+    const _deptInBase = await vaultContract.getBaseIn(_deptInToken);
     setDebtInBase(convertUnitFrom(_deptInBase, 0));
     return convertUnitFrom(_deptInBase, 0);
   }
@@ -300,7 +302,10 @@ const useAdjust = (closeModal: VoidFunction) => {
       enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
     } catch (e: any) {
       onChangeIsPendingState(false);
-      enqueueSnackbar(e.toString(), { variant: 'error' });
+      const key = enqueueSnackbar(e.toString(), {
+        variant: 'warning',
+        onClick: () => closeSnackbar(key)
+      });
     }
   }
 
