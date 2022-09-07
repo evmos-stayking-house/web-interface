@@ -61,7 +61,7 @@ const useDashboard = () => {
 
   async function balanceOfLocked() {
     const _balance = await uEVMOSContract.balanceOf(address);
-    const balance = convertUnitFrom(_balance, '0');
+    const balance = convertUnitFrom(_balance, '18');
     const [_unlockable] = await getUnlockable();
     const unlockable = convertUnitFrom(_unlockable, '18');
 
