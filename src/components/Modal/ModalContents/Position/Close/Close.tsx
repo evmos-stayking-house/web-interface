@@ -47,7 +47,7 @@ const Close: FC<Props> = ({ closeModal }) => {
         <div className={s.row}>
           <span className={s.row__label}>Debt Value</span>
           <span className={s.row__value}>
-            {result?.debtInBase} USDC <span style={{ fontSize: 10 }}>(≈ {result?.debtInBase} EVMOS )</span>
+            {result?.debtInToken} USDC <span style={{ fontSize: 10 }}>(≈ {result?.debtInBase} EVMOS )</span>
           </span>
         </div>
         <div className={s.row}>

@@ -72,7 +72,7 @@ const useClosePosition = (closeModal: VoidFunction) => {
     const totalShare = Number(await getTotalShareOf());
     const totalAmount = Number(await getTotalAmountOf());
     const _debtInToken = await getTokenOut(position?.debtInBase || '0');
-    const estimated = ((totalShare * (equity + deptInBase)) / totalAmount - deptInBase).toFixed(1);
+    const estimated = ((totalShare * (equity + deptInBase)) / totalAmount - deptInBase).toFixed(4);
 
     setResult({
       estimated,
