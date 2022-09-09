@@ -34,7 +34,9 @@ const useStake = () => {
     renderModal: renderStakeModal,
     openModal: openStakeModal,
     closeModal: closeStakeModal
-  } = useModal({ content: <StakeM closeModal={() => closeStakeModal()} parentLeverage={leverage} /> });
+  } = useModal({
+    content: <StakeM yieldStaking={yieldStaking} closeModal={() => closeStakeModal()} parentLeverage={leverage} />
+  });
 
   const {
     renderModal: renderUnStakeModal,

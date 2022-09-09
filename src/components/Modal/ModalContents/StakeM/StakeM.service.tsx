@@ -15,14 +15,14 @@ let tokenContract: Contract;
 let vaultContract: Contract;
 let stayKingContract: Contract;
 
-interface YieldStaking {
+export interface YieldStaking {
   apr: string;
   apy: string;
   borrowingInterest: string;
   totalApr: string;
 }
 
-const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
+const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null, _yieldStaking: YieldStaking) => {
   const { address, evmosBalance } = useWalletState();
   const [amount, setAmount] = useState<string>('0');
   const [borrowingAssetBalance, setBorrowingAssetBalance] = useState<string>('0');
@@ -33,12 +33,7 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
   const [leverage, setLeverage] = useState<string | null>(parentLeverage);
   const { onChangeIsPendingState } = useWalletState();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [yieldStaking, setYieldStaking] = useState<YieldStaking>({
-    apr: '0',
-    apy: '0',
-    totalApr: '0',
-    borrowingInterest: '0'
-  });
+  const [yieldStaking, setYieldStaking] = useState<YieldStaking>(_yieldStaking);
 
   const {
     renderModal: renderStakeConfirmModal,
@@ -64,7 +59,6 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null) => {
   async function loadYieldStaking(_leverage?: any) {
     const _result = await getStakingAPR();
     const _apr = Number(_result.data.apr) - 15;
-    // const apy = calculateAPYFromAPR((_apr / 100).toFixed(2));
     const lev = _leverage ? Number(_leverage) : 1;
     const _borrowingInterest = await getInterestFromVault();
     const borrowingInterest = Number(_borrowingInterest) * (lev - 1);

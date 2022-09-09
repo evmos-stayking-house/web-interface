@@ -4,7 +4,7 @@ import s from './StakeM.module.scss';
 import { InputNumber } from '../../../common/Input';
 import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
-import useStakeM from './StakeM.service';
+import useStakeM, { YieldStaking } from './StakeM.service';
 import React from 'react';
 import { Autocomplete, Box, Button, Slider, styled, TextField } from '@mui/material';
 import { numberFormat } from '../../../../utils/numberFormats';
@@ -13,9 +13,10 @@ import { LEVERAGE_OPTIONS } from '../../../../config/constants';
 interface Props {
   closeModal: VoidFunction;
   parentLeverage: string | null;
+  yieldStaking: YieldStaking;
 }
 
-const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
+const StakeM: FC<Props> = ({ yieldStaking: _yieldStaking, closeModal, parentLeverage }) => {
   const {
     evmosBalance,
     deptInBase,
@@ -24,7 +25,6 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
     borrowingAsset,
     onChangeLeverage,
     amount,
-    yieldStaking,
     setAmount,
     debtInToken,
     stake,
@@ -32,8 +32,9 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
     onChangeBorrowingAsset,
     renderStakeConfirmModal,
     setMaxAmount,
+    yieldStaking,
     onChangeSuppliedAmount
-  } = useStakeM(closeModal, parentLeverage);
+  } = useStakeM(closeModal, parentLeverage, _yieldStaking);
 
   return (
     <div className={s.container}>
@@ -42,7 +43,7 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
       </div>
       <div className={s.divider}></div>
       <span className={cn(s.desc, s.desc__lg)}>Staking Asset</span>
-      <span className={cn(s.desc)}>Available Balance: {numberFormat(evmosBalance)} EVMOS</span>
+      <span className={cn(s.desc)}>Available Balance: {numberFormat(evmosBalance, 2)} EVMOS</span>
       <Form>
         <section className={s.depositTokenContainer} onBlur={() => onChangeSuppliedAmount()}>
           <img className={s.btnIcon} src={`/img/logo/evmos.png`} alt={'evmos icon'} />
@@ -113,7 +114,7 @@ const StakeM: FC<Props> = ({ closeModal, parentLeverage }) => {
           }}
         />
       </div>
-      <span className={cn(s.desc)}>Available Balance: {numberFormat(borrowingAssetBalance)} USDC</span>
+      <span className={cn(s.desc)}>Available Balance: {numberFormat(borrowingAssetBalance, 2)} USDC</span>
       <Form>
         <section className={s.borrowingTokenContainer}>
           <img className={s.btnIcon} src={`/img/common/token/${borrowingAsset || 'USDC'}.png`} alt={'cosmos icon'} />
