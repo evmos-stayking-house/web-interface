@@ -16,12 +16,6 @@ interface ConnectInfo {
   chainId: string;
 }
 
-interface ProviderRpcError extends Error {
-  message: string;
-  code: number;
-  data?: unknown;
-}
-
 const useMetaMask = () => {
   const { onChangeAddress, address, onChangeEvmosBalance } = useWalletState();
 
@@ -54,15 +48,13 @@ const useMetaMask = () => {
   });
 
   function registerEvents() {
-    if (window.ethereum !== undefined) {
-      window.ethereum.on('accountsChanged', handleAccountChanged);
-      window.ethereum.on('chainChanged', handleChainChanged);
-      window.ethereum.on('message', handleMessage);
-      window.ethereum.on('connect', handleConnect);
-      window.ethereum.on('disconnect', handleDisconnect);
+    window.ethereum.on('accountsChanged', handleAccountChanged);
+    window.ethereum.on('chainChanged', handleChainChanged);
+    window.ethereum.on('message', handleMessage);
+    window.ethereum.on('connect', handleConnect);
+    window.ethereum.on('disconnect', handleDisconnect);
 
-      console.log(`metamask events are registered`);
-    }
+    console.log(`metamask events are registered`);
   }
 
   function removeRegisterEvents() {
@@ -106,11 +98,12 @@ const useMetaMask = () => {
 
   useEffect(() => {
     (async () => {
+      if (!window?.ethereum) return;
       await switchEvmosChain();
       registerEvents();
     })();
 
-    return () => removeRegisterEvents();
+    return () => window?.ethereum && removeRegisterEvents();
   }, []);
 
   useEffect(() => {

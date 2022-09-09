@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import s from './WalletSelection.module.scss';
 
@@ -9,7 +9,16 @@ interface Props {
 }
 
 const WalletSelection: FC<Props> = ({ closeModal, metaMaskLogin }) => {
-  useEffect(() => {}, []);
+  const [isMetaMaskInstalled, setIsMetaMaskInstalled] = useState<boolean>(false);
+
+  const hasMetaMask = () => {
+    const { ethereum } = window;
+    return Boolean(ethereum && ethereum.isMetaMask);
+  };
+
+  useEffect(() => {
+    setIsMetaMaskInstalled(hasMetaMask);
+  }, []);
 
   function onMetaMaskLogin() {
     metaMaskLogin();
@@ -23,9 +32,17 @@ const WalletSelection: FC<Props> = ({ closeModal, metaMaskLogin }) => {
       </div>
       <h3 className={s.title}>Connect Wallet</h3>
       <p className={s.loginDesc}>Hello! Connect your Metamask wallet to start the application.</p>
-      <div className={s.walletContainer} onClick={() => onMetaMaskLogin()}>
+      <div className={s.walletContainer} onClick={() => (isMetaMaskInstalled ? onMetaMaskLogin() : {})}>
         <div className={s.wallet}>
-          <span className={s.walletName}>MetaMask</span>
+          {isMetaMaskInstalled && <span className={s.walletName}>MetaMask</span>}
+          {!isMetaMaskInstalled && (
+            <span className={s.walletName}>
+              MetaMask Is Not Installed ►{' '}
+              <a target="_blank" style={{ color: '#1b69fb' }} href={'https://metamask.io/download/'}>
+                Download
+              </a>
+            </span>
+          )}
           <img className={s.logo} src={'/img/metamask.png'} alt={'metamask icon'} />
         </div>
       </div>

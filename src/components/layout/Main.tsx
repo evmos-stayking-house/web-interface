@@ -10,6 +10,7 @@ import { CircularProgress } from '@mui/material';
 import { useWalletState } from '../../contexts/WalletContext';
 import { APP_ENV } from '../../config/environments';
 import useWindowSize from '../../hooks/useWindowSize';
+import { isMobile } from 'react-device-detect';
 
 interface MainProps {
   children: ReactNode;
@@ -20,22 +21,14 @@ const Main: FC<MainProps> = ({ children, title }) => {
   const { coinPrice: cosmosPrice } = useCoinPrice(`cosmos`);
   const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
   const { coinPrice: usdcPrice } = useCoinPrice('usd-coin');
-  const [isMetaMaskInstalled, setIsMetaMaskInstalled] = useState<boolean>(false);
   const { isPending } = useWalletState();
   const size = useWindowSize();
 
-  const hasMetaMask = () => {
-    //Have to check the ethereum binding on the window object to see if it's installed
-    const { ethereum } = window;
-    return Boolean(ethereum && ethereum.isMetaMask);
-  };
-
   useEffect(() => {
     console.log('APP_ENV:: ', APP_ENV);
-    setIsMetaMaskInstalled(hasMetaMask);
   }, []);
 
-  if (!isMetaMaskInstalled) {
+  if (isMobile) {
     return (
       <div className={s.emptyContainer}>
         <div className={s.logoRow}>
@@ -102,7 +95,6 @@ const Main: FC<MainProps> = ({ children, title }) => {
           <span className={s.text}>The resolution of the connected display screen is not supported.</span>
         </div>
       )}
-      {!isMetaMaskInstalled && <div className={s.dim}>Metamask is not installed</div>}
     </div>
   );
 };

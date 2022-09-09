@@ -61,7 +61,7 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
 
   async function amountToShare() {
     const _share = await vaultContract.amountToShare(convertDenomFrom(amount));
-    setShare(convertUnitFrom(_share));
+    setShare(Number(convertUnitFrom(_share)).toFixed(1));
   }
 
   function registerContractEvents() {

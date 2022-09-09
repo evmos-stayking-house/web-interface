@@ -1,16 +1,18 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import s from './Adjust.module.scss';
 import { cn } from '../../../../../utils/style';
 import Form from '../../../../common/Form';
 import { InputNumber } from '../../../../common/Input';
 import {
+  Backdrop,
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Popover,
+  Modal,
   ToggleButton,
   ToggleButtonGroup,
   Typography
@@ -33,7 +35,6 @@ const Adjust: FC<Props> = ({ closeModal }) => {
     updatedPosition,
     onChangeAmount,
     adjust,
-    beforeAdjust,
     borrowingAssetBalance,
     debtInToken,
     equityPositionType,
@@ -46,7 +47,10 @@ const Adjust: FC<Props> = ({ closeModal }) => {
     onChangeRepayAmount,
     yieldStaking,
     noticePopupOpen,
-    handleNoticePopup
+    handleNoticePopup,
+    approve,
+    recommendAdjustModal,
+    setRecommendAdjustModal
   } = useAdjust(closeModal);
 
   return (
@@ -59,17 +63,12 @@ const Adjust: FC<Props> = ({ closeModal }) => {
         <DialogTitle id="alert-dialog-title">{'[Notice] Would you like to proceed this way?'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            This is the same way that ${amount} EVMOS of Equity is {equityPositionType.toLowerCase()}ed to the position,
-            and {Math.abs(Number(position?.debtInBase) - Number(updatedPosition?.debtInBase))} EVMOS is used to repay
-            the debt.
+            In order to repay debts in token, You need to approve first.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleNoticePopup(false)} autoFocus>
-            Disagree
-          </Button>
-          <Button onClick={() => beforeAdjust()} autoFocus>
-            Agree
+          <Button onClick={() => approve()} autoFocus>
+            Approve
           </Button>
         </DialogActions>
       </Dialog>
@@ -95,20 +94,14 @@ const Adjust: FC<Props> = ({ closeModal }) => {
           }}
           value={equityPositionType}
           exclusive
-          disabled={!!repayType}
           onChange={handleChangeEquityType}
           aria-label="Platform">
           <ToggleButton
-            disabled={!!repayType}
             style={{
               borderBottomLeftRadius: 8,
               borderTopLeftRadius: 8,
               ...{
-                backgroundColor: !!repayType
-                  ? '#666666'
-                  : equityPositionType === PositionType.ADD
-                  ? '#e20808'
-                  : '#f1f1f1'
+                backgroundColor: equityPositionType === PositionType.ADD ? '#e20808' : '#f1f1f1'
               },
               ...{ color: equityPositionType === PositionType.ADD ? '#f1f1f1' : '#232323' }
             }}
@@ -116,16 +109,11 @@ const Adjust: FC<Props> = ({ closeModal }) => {
             ADD
           </ToggleButton>
           <ToggleButton
-            disabled={!!repayType}
             style={{
               borderBottomRightRadius: 8,
               borderTopRightRadius: 8,
               ...{
-                backgroundColor: !!repayType
-                  ? '#666666'
-                  : equityPositionType === PositionType.REMOVE
-                  ? '#e20808'
-                  : '#f1f1f1'
+                backgroundColor: equityPositionType === PositionType.REMOVE ? '#e20808' : '#f1f1f1'
               },
               ...{ color: equityPositionType === PositionType.REMOVE ? '#f1f1f1' : '#232323' }
             }}
@@ -214,7 +202,10 @@ const Adjust: FC<Props> = ({ closeModal }) => {
         </section>
       </div>
       <span className={cn(s.desc, s.desc__lg)}>
-        Repay <span style={{ color: '#1b69fb', marginLeft: 5, fontWeight: 800 }}>{repayType}</span>{' '}
+        Repay{' '}
+        <span style={{ color: '#1b69fb', marginLeft: 5, fontWeight: 800 }}>
+          {repayType === RepayType.EVMOS ? 'EVMOS' : 'USDC'}
+        </span>{' '}
         <span style={{ fontSize: 10, marginTop: 5, marginLeft: 5 }}>(* Your position value will not be changed )</span>
       </span>
       <div className={s.adjustPositionWrapper}>
@@ -237,40 +228,38 @@ const Adjust: FC<Props> = ({ closeModal }) => {
             style={{
               borderBottomLeftRadius: 8,
               borderTopLeftRadius: 8,
-              ...{ backgroundColor: repayType === RepayType.EQUITY ? '#1b69fb' : '#f1f1f1' },
-              ...{ color: repayType === RepayType.EQUITY ? '#f1f1f1' : '#232323' }
+              ...{ backgroundColor: repayType === RepayType.EVMOS ? '#1b69fb' : '#f1f1f1' },
+              ...{ color: repayType === RepayType.EVMOS ? '#f1f1f1' : '#232323' }
             }}
-            value={RepayType.EQUITY}>
-            EQUITY
+            value={RepayType.EVMOS}>
+            EVMOS
           </ToggleButton>
           <ToggleButton
             style={{
               borderBottomRightRadius: 8,
               borderTopRightRadius: 8,
-              ...{ backgroundColor: repayType === RepayType.DEBT ? '#1b69fb' : '#f1f1f1' },
-              ...{ color: repayType === RepayType.DEBT ? '#f1f1f1' : '#232323' }
+              ...{ backgroundColor: repayType === RepayType.USDC ? '#1b69fb' : '#f1f1f1' },
+              ...{ color: repayType === RepayType.USDC ? '#f1f1f1' : '#232323' }
             }}
-            value={RepayType.DEBT}>
-            DEBT
+            value={RepayType.USDC}>
+            USDC
           </ToggleButton>
         </ToggleButtonGroup>
         <section className={s.adjustPositionContainer}>
           <img
             className={s.btnIcon}
-            src={`/img/logo/${repayType ? (repayType === RepayType.EQUITY ? 'evmos' : 'usdc') : 'logo'}.png`}
+            src={`/img/logo/${repayType ? (repayType === RepayType.EVMOS ? 'evmos' : 'usdc') : 'logo'}.png`}
             alt={'repay icon'}
           />
           <Form.Item label="" className={s.input}>
             <InputNumber
-              max={
-                (!repayType ? 0 : repayType === RepayType.EQUITY ? position?.debtInBase : '1000000000000000000') + ''
-              }
+              max={(!repayType ? 0 : repayType === RepayType.EVMOS ? position?.debtInBase : '1000000000000000000') + ''}
               setInputValue={onChangeRepayAmount}
-              inputValue={(repayType === RepayType.EQUITY ? repayAmount.amountInBase : repayAmount.amountInToken) + ''}
+              inputValue={(repayType === RepayType.EVMOS ? repayAmount.amountInBase : repayAmount.amountInToken) + ''}
             />
           </Form.Item>
           <div className={s.assetName} style={{ marginRight: -15 }}>
-            {repayType ? (repayType === RepayType.EQUITY ? 'EVMOS' : 'USDC') : ''}
+            {repayType ? (repayType === RepayType.EVMOS ? 'EVMOS' : 'USDC') : ''}
           </div>
         </section>
       </div>
@@ -297,8 +286,8 @@ const Adjust: FC<Props> = ({ closeModal }) => {
           <div className={s.adjustSummaryContainer__item__right}>
             <span className={s.label}>{!!repayType ? 'Repay' : debtPositionType} Debt Value</span>
             <span className={s.value}>
-              {!!repayType && repayType === RepayType.EQUITY && <> {updatedPosition?.debtInBase} EVMOS</>}
-              {!!repayType && repayType === RepayType.DEBT && (
+              {!!repayType && repayType === RepayType.EVMOS && <> {updatedPosition?.debtInBase} EVMOS</>}
+              {!!repayType && repayType === RepayType.USDC && (
                 <>
                   {repayAmount.amountInToken} USDC
                   <span style={{ fontSize: 10, marginLeft: 3 }}>(≈ {updatedPosition?.swappedInBase} EVMOS )</span>
@@ -380,11 +369,55 @@ const Adjust: FC<Props> = ({ closeModal }) => {
         </div>
       </div>
       <div className={s.btnWrapper}>
-        <Button className={s.adjustBtn} autoCapitalize={'false'} onClick={() => beforeAdjust()}>
+        <Button className={s.adjustBtn} disabled={false} autoCapitalize={'false'} onClick={() => adjust()}>
           Adjust Position
         </Button>
       </div>
+      <Modal
+        open={recommendAdjustModal}
+        onClose={() => setRecommendAdjustModal(!recommendAdjustModal)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500
+        }}>
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            [Notice]
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            In this case, it is better to follow the recommendation below
+            <br /> <br />
+            [e.g]
+            <br />
+            If Add/Remove Collateral = 100 EVMOS <br />
+            and Remove/Add Debt = -100 USDC(≈50 EVMOS)
+            <br /> Then 50 EVMOS is Locked at uEVMOS.
+            <br />
+            <br />
+            [Recommendation]
+            <br /> You just Add/Remove Collateral = 50 EVMOS
+            <br /> and Repay USDC/EVMOS = 100 USDC(≈50 EVMOS)
+          </Typography>
+        </Box>
+      </Modal>
     </div>
   );
 };
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  color: '#232323',
+  boxShadow: 24,
+  p: 4
+};
+
 export default Adjust;

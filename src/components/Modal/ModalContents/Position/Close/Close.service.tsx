@@ -37,12 +37,15 @@ const useClosePosition = (closeModal: VoidFunction) => {
 
     if (position && position.length > 0) {
       const _positionValueInBase = Number(convertUnitFrom(position[0], '18')) || 0;
-      const _deptInBase = Number(convertUnitFrom(position[1], '18')) || 0;
+      const _debtInBase = Number(convertUnitFrom(position[1], '18')) || 0;
+      const _debt = Number(convertUnitFrom(position[2], '18')) || 0;
+
+      console.log(_positionValueInBase, _debtInBase, _debt);
       return {
         positionValueInBase: _positionValueInBase.toFixed(1),
-        equityValue: (_positionValueInBase - _deptInBase).toFixed(1),
-        debtInBase: _deptInBase.toFixed(1),
-        deptRatio: ((_deptInBase / _positionValueInBase) * 100).toFixed(1)
+        equityValue: (_positionValueInBase - _debtInBase).toFixed(1),
+        debtInBase: _debtInBase.toFixed(1),
+        deptRatio: ((_debtInBase / _positionValueInBase) * 100).toFixed(1)
       };
     }
     return null;

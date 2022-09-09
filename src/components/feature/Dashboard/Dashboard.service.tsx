@@ -124,12 +124,14 @@ const useDashboard = () => {
   }
 
   useEffect(() => {
+    if (!window?.ethereum) return;
     vaultContract = getContract(Contracts.vault);
     stayKingContract = getContract(Contracts.stayKing);
     uEVMOSContract = getContract(Contracts.uEVMOS);
   }, []);
 
   useEffect(() => {
+    if (!window?.ethereum) return;
     (async (address) => {
       if (!address) return;
       await init();
@@ -137,6 +139,7 @@ const useDashboard = () => {
   }, [address]);
 
   useEffect(() => {
+    if (!window?.ethereum) return;
     (async (address) => {
       address && (await calculatedTVL());
     })(address);

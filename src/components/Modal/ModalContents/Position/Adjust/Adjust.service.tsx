@@ -8,8 +8,6 @@ import { BigNumber, Contract } from 'ethers';
 import { getContract } from '../../../../../config/contract';
 import { useSnackbar } from 'notistack';
 import { calculateAPYFromAPR } from '../../../../../utils/utils';
-import { JsonRpcError } from '@walletconnect/jsonrpc-types';
-import { ProviderRpcError } from '../../../../../config/interfaces';
 
 let stayKingContract: Contract;
 let vaultContract: Contract;
@@ -21,8 +19,8 @@ export enum PositionType {
 }
 
 export enum RepayType {
-  EQUITY = 'Equity',
-  DEBT = 'Debt'
+  EVMOS = 'EVMOS',
+  USDC = 'USDC'
 }
 
 interface RepayAmount {
@@ -58,7 +56,8 @@ const useAdjust = (closeModal: VoidFunction) => {
   const [debtInBase, setDebtInBase] = useState<string>('0');
   const [repayType, setRepayType] = useState<RepayType | null>(null);
   const [repayAmount, setRepayAmount] = useState<RepayAmount>({ amountInBase: 0, amountInToken: 0 });
-
+  const [approved, setApproved] = useState<boolean>(false);
+  const [recommendAdjustModal, setRecommendAdjustModal] = useState<boolean>(false);
   const [equityPositionType, setEquityPositionType] = React.useState<PositionType>(PositionType.ADD);
   const [debtPositionType, setDebtPositionType] = React.useState<PositionType>(PositionType.ADD);
   const [yieldStaking, setYieldStaking] = useState<YieldStaking>({
@@ -82,7 +81,6 @@ const useAdjust = (closeModal: VoidFunction) => {
     } else {
       setEquityPositionType(type);
       await onChangeAmount('0');
-      setDebtInToken('0');
       setRepayAmount({ amountInBase: 0, amountInToken: 0 });
     }
   };
@@ -94,8 +92,6 @@ const useAdjust = (closeModal: VoidFunction) => {
     } else {
       setDebtPositionType(type);
       await onChangeDebtInToken('0');
-      setAmount('0');
-      setRepayAmount({ amountInBase: 0, amountInToken: 0 });
     }
   };
 
@@ -106,33 +102,43 @@ const useAdjust = (closeModal: VoidFunction) => {
       amountInBase: 0,
       amountInToken: 0
     });
-    if (type === RepayType.EQUITY) {
+    if (type === RepayType.EVMOS) {
       await onChangeDebtInToken('0');
-    } else if (type === RepayType.DEBT) {
+    } else if (type === RepayType.USDC) {
       await onChangeAmount('0');
     }
   };
 
   async function onChangeRepayAmount(_repayAmount: any) {
     if (!repayType) return;
+    if (Number(_repayAmount) === 0 || !_repayAmount) {
+      await reCalculatePosition(0, Number(amount) * (equityPositionType === PositionType.REMOVE ? -1 : 1));
+      return;
+    }
+    // console.log(_repayAmount);
+    // console.log('_repayAmount :: ', _repayAmount);
 
     setRepayAmount({
-      amountInBase: RepayType.EQUITY ? _repayAmount : 0,
-      amountInToken: RepayType.DEBT ? _repayAmount : 0
+      amountInBase: RepayType.EVMOS ? _repayAmount : 0,
+      amountInToken: RepayType.USDC ? _repayAmount : 0
     });
     let repayDebtInBase = 0;
 
-    if (repayType === RepayType.EQUITY) {
+    if (repayType === RepayType.EVMOS) {
       repayDebtInBase = _repayAmount;
     } else {
       const _repayDebtInBase = await swapDebtOutToken(String(_repayAmount));
       repayDebtInBase = Number(_repayDebtInBase || 0);
     }
-    const _positionValueInBase: number = Number(position?.positionValueInBase);
+
+    const _positionValueInBase: number = Number(updatedPosition?.positionValueInBase);
     const _debtInBase = _positionValueInBase - Number(position?.equityValue) - repayDebtInBase;
     const _equityValue = _positionValueInBase - _debtInBase;
     const _debtRatio = (_debtInBase / _positionValueInBase) * 100;
     const _safetyBuffer = Number(position?.killFactor) - _debtRatio;
+    console.log(`_debtInBase: `, _debtInBase);
+    console.log(`_equityValue: `, _equityValue);
+
     setUpdatedPosition({
       ...position!,
       positionValueInBase: _positionValueInBase.toFixed(1),
@@ -140,28 +146,27 @@ const useAdjust = (closeModal: VoidFunction) => {
       debtInBase: _debtInBase.toFixed(1),
       deptRatio: _debtRatio.toFixed(1),
       safetyBuffer: _safetyBuffer.toFixed(1),
-      swappedInBase: repayType === RepayType.DEBT ? repayDebtInBase.toFixed(1) : '0'
+      swappedInBase: repayType === RepayType.USDC ? repayDebtInBase.toFixed(1) : '0'
     });
   }
 
   async function onChangeAmount(_amount: any) {
     if (Number(evmosBalance) === 0) return;
     setAmount(_amount);
-    const deptInBase = (Number(leverage) - 1) * Number(_amount);
-    setDebtInBase(deptInBase.toFixed(1));
-    setPositionValue((Number(_amount) + deptInBase).toFixed(1));
-    await reCalculatePosition(deptInBase, Number(_amount) * (equityPositionType === PositionType.REMOVE ? -1 : 1));
+    await reCalculatePosition(
+      Number(debtInBase) * (debtPositionType === PositionType.REMOVE ? -1 : 1),
+      Number(_amount) * (equityPositionType === PositionType.REMOVE ? -1 : 1)
+    );
   }
 
   async function onChangeDebtInToken(_debtInToken: any) {
-    if (Number(borrowingAssetBalance) === 0) return;
+    if (Number(evmosBalance) === 0 || !debtPositionType) return;
     setDebtInToken(_debtInToken);
-    // setDebtInToken((Number(_debtInBase || 0) * (debtPositionType === PositionType.REMOVE ? -1 : 1)).toFixed(0));
     const _debtInBase = await swapDebtOutToken(String(_debtInToken || 0));
     setPositionValue((Number(amount) + Number(_debtInBase || 0)).toFixed(1));
     await reCalculatePosition(
       Number(_debtInBase || 0) * (debtPositionType === PositionType.REMOVE ? -1 : 1),
-      Number(amount)
+      Number(amount) * (equityPositionType === PositionType.REMOVE ? -1 : 1)
     );
   }
 
@@ -186,8 +191,8 @@ const useAdjust = (closeModal: VoidFunction) => {
     // const apy = calculateAPYFromAPR((_apr / 100).toFixed(2));
     const _borrowingInterest = await getInterestFromVault();
     const borrowingInterest = Number(_borrowingInterest) * debtPerEquity;
-    const apr = _apr * debtPerEquity;
-    const totalApr = _apr * debtPerEquity - borrowingInterest;
+    const apr = _apr * (debtPerEquity + 1);
+    const totalApr = _apr * (debtPerEquity + 1) - borrowingInterest;
     const totalApy = calculateAPYFromAPR((totalApr / 100).toFixed(2));
 
     setYieldStaking({
@@ -250,48 +255,70 @@ const useAdjust = (closeModal: VoidFunction) => {
     }
   }
 
-  async function beforeAdjust() {
-    const equityInBaseChanged = Number(updatedPosition?.equityValue) - Number(position?.equityValue);
-    const debtInBaseChanged = Number(updatedPosition?.debtInBase) - Number(position?.debtInBase);
+  function beforeApprove() {
+    setNoticePopupOpen(true);
+  }
 
-    if (equityInBaseChanged * debtInBaseChanged < 0) {
-      setNoticePopupOpen(true);
-    } else {
-      await adjust();
+  async function approve() {
+    let repaidDebt = repayAmount.amountInToken || 0;
+    try {
+      const approveTx = await tokenContract.approve(
+        contractsInfo[Contracts.vault].address,
+        convertDenomFrom(String(repaidDebt))
+      );
+      enqueueSnackbar(`Transaction Hash: ${approveTx['hash']}`, { variant: 'success' });
+      setApproved(true);
+    } catch (e: any) {
+      onChangeIsPendingState(false);
+      const key = enqueueSnackbar(e.toString(), {
+        variant: 'warning',
+        onClick: () => closeSnackbar(key)
+      });
+    } finally {
+      setNoticePopupOpen(false);
     }
   }
 
   async function adjust() {
-    let equityInBaseChanged = 0;
-    let debtInBaseChanged = 0;
+    const equityInBaseChanged = Number(updatedPosition?.equityValue) - Number(position?.equityValue);
     let repaidDebt = 0;
+    let debtInBaseChanged = 0;
     let valueObj = null;
+    let value = 0;
+
+    if (equityInBaseChanged > 0) {
+      value += equityInBaseChanged;
+    }
 
     if (repayType) {
-      if (repayType === RepayType.EQUITY) {
-        valueObj = {
-          value: convertDenomFrom(String(repayAmount.amountInBase || 0))
-        };
-      } else {
+      if (repayType === RepayType.EVMOS) {
+        value += Number(repayAmount.amountInBase || 0);
+      }
+
+      if (repayType === RepayType.USDC) {
         repaidDebt = repayAmount.amountInToken || 0;
-        const approveTx = await tokenContract.approve(
-          contractsInfo[Contracts.vault].address,
-          convertDenomFrom(String(repaidDebt))
-        );
-        approveTx.wait();
+      }
+
+      if (repayType === RepayType.USDC && !approved) {
+        return beforeApprove();
       }
     } else {
-      equityInBaseChanged = Number(updatedPosition?.equityValue) - Number(position?.equityValue);
-      if (equityInBaseChanged > 0) {
-        valueObj = {
-          value: convertDenomFrom(String(equityInBaseChanged))
-        };
-      }
       debtInBaseChanged = Number(updatedPosition?.debtInBase) - Number(position?.debtInBase);
+    }
+
+    if (debtInBaseChanged * equityInBaseChanged < 0) {
+      return setRecommendAdjustModal(true);
+    }
+
+    if (value > 0) {
+      valueObj = {
+        value: convertDenomFrom(String(value))
+      };
     }
 
     onChangeIsPendingState(true);
     try {
+      console.log(equityInBaseChanged, debtInBaseChanged, repaidDebt, value);
       const result = await getTxOfChangePosition(
         convertDenomFrom(String(equityInBaseChanged)),
         convertDenomFrom(String(debtInBaseChanged)),
@@ -300,6 +327,7 @@ const useAdjust = (closeModal: VoidFunction) => {
       );
       closeModal();
       enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
+      setApproved(false);
     } catch (e: any) {
       onChangeIsPendingState(false);
       const key = enqueueSnackbar(e.toString(), {
@@ -385,7 +413,9 @@ const useAdjust = (closeModal: VoidFunction) => {
     loadYieldStaking,
     noticePopupOpen,
     handleNoticePopup,
-    beforeAdjust
+    approve,
+    recommendAdjustModal,
+    setRecommendAdjustModal
   };
 };
 

@@ -81,10 +81,9 @@ const useActivePosition = (address: string) => {
     // const apy = calculateAPYFromAPR((_apr / 100).toFixed(2));
     const _borrowingInterest = await getInterestFromVault();
     const borrowingInterest = Number(_borrowingInterest) * debtPerEquity;
-    const apr = _apr * debtPerEquity;
-    const totalApr = _apr * debtPerEquity - borrowingInterest;
+    const apr = _apr * (debtPerEquity + 1);
+    const totalApr = _apr * (debtPerEquity + 1) - borrowingInterest;
     const totalApy = calculateAPYFromAPR((totalApr / 100).toFixed(2));
-
     setYieldStaking({
       ...yieldStaking,
       apy: totalApy.toFixed(2),
@@ -122,6 +121,8 @@ const useActivePosition = (address: string) => {
   }
 
   useEffect(() => {
+    if (!window?.ethereum) return;
+
     stayKingContract = getContract(Contracts.stayKing);
     vaultContract = getContract(Contracts.vault);
     (async (address) => {
