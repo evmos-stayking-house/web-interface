@@ -38,7 +38,11 @@ const WalletSelection: FC<Props> = ({ closeModal, metaMaskLogin }) => {
           {!isMetaMaskInstalled && (
             <span className={s.walletName}>
               MetaMask Is Not Installed ►{' '}
-              <a target="_blank" style={{ color: '#1b69fb' }} href={'https://metamask.io/download/'}>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#1b69fb' }}
+                href={'https://metamask.io/download/'}>
                 Download
               </a>
             </span>
