@@ -80,10 +80,10 @@ const Dashboard = () => {
           <div className={s.balanceBox}>
             <div className={cn(s.balanceBox__left, s.padTop)}>
               <p className={s.value}>
-                {numberFormat(ibToken)}
+                {numberFormat(ibToken, 3)}
                 <span className={s.value__unit}>&nbsp;ibUSDC</span>
               </p>
-              <p className={s.description}>~ {numberFormat(tokenAmount, 1)}&nbsp;USDC</p>
+              <p className={s.description}>~ {numberFormat(tokenAmount, 3)}&nbsp;USDC</p>
             </div>
             <div className={s.balanceBox__right}>
               <Image width={64} height={64} src={'/img/logo/usdc.png'} />

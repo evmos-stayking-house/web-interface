@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import s from './ActivePosition.module.scss';
 import useActivePosition from './ActivePosition.service';
 import { cn } from '../../../../utils/style';
+import { numberFormat } from 'utils/numberFormats';
 
 interface Props {
   address: string;
@@ -96,7 +97,7 @@ const ActivePosition: FC<Props> = ({ address }) => {
                 <div className={s.positionContainerContents__item}>
                   <div className={s.assetInfo}>
                     <div className={s.assetInfo__labelAndValue}>
-                      <span className={s.assetInfo__labelAndValue__value}>{yieldStaking.apy}</span>
+                      <span className={s.assetInfo__labelAndValue__value}>{numberFormat(yieldStaking.apy, 2)}</span>
                       <span className={s.assetInfo__labelAndValue__label}>{'%'}</span>
                     </div>
                   </div>

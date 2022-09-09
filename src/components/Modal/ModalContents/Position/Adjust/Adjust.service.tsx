@@ -330,6 +330,7 @@ const useAdjust = (closeModal: VoidFunction) => {
       setApproved(false);
     } catch (e: any) {
       onChangeIsPendingState(false);
+      console.log(e.toString());
       const key = enqueueSnackbar(e.toString(), {
         variant: 'warning',
         onClick: () => closeSnackbar(key)

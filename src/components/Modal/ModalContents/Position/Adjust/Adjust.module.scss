@@ -57,7 +57,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 85%;
+  width: 100%;
   margin-top: 16px;
   height: 48px;
   border-radius: 10px;
@@ -89,7 +89,7 @@
   .maxBtn {
     width: 12%;
     cursor: pointer;
-    background-color: #{$theme-mint};
+    background-color: #FF6B4A;
     color: var(--contrast-color);
     font-size: 18px;
     border: 0;
