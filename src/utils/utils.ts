@@ -12,6 +12,5 @@ export const calculateAPYFromAPR = (apr: string) => {
 };
 
 export const goTxConfirm = (txHash: string) => {
-  if (APP_ENV !== 'development') return;
   window.open(`https://testnet.mintscan.io/evmos-testnet/txs/${txHash}`, '_blank');
 };
