@@ -5,6 +5,7 @@ import { numberFormat } from '../../../utils/numberFormats';
 import ActivePosition from './ActivePosition';
 import LiquidatedPosition from './LiquidatedPosition';
 import Image from 'next/image';
+import { version } from '../../../../package.json';
 
 const Dashboard = () => {
   const {
@@ -32,7 +33,7 @@ const Dashboard = () => {
           <div className={s.tvlBrief__right}>Stayking Pre-Alpha Ver.</div>
         </div>
         <div className={s.tvlFooter}>
-          <div className={s.tvlFooter__developedBy}>Developed by SOOHO.IO INC.</div>
+          <div className={s.tvlFooter__developedBy}>V {version}</div>
         </div>
       </div>
       {/*My Balance Section*/}

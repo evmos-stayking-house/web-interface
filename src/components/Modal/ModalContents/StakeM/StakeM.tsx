@@ -6,7 +6,7 @@ import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
 import useStakeM, { YieldStaking } from './StakeM.service';
 import React from 'react';
-import { Autocomplete, Box, Button, Slider, styled, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, OutlinedInput, Slider, styled, TextField } from '@mui/material';
 import { numberFormat } from '../../../../utils/numberFormats';
 import { LEVERAGE_OPTIONS } from '../../../../config/constants';
 
@@ -25,7 +25,7 @@ const StakeM: FC<Props> = ({ yieldStaking: _yieldStaking, closeModal, parentLeve
     borrowingAsset,
     onChangeLeverage,
     amount,
-    setAmount,
+    onChangeAmount,
     debtInToken,
     stake,
     borrowingAssetBalance,
@@ -48,7 +48,21 @@ const StakeM: FC<Props> = ({ yieldStaking: _yieldStaking, closeModal, parentLeve
         <section className={s.depositTokenContainer} onBlur={() => onChangeSuppliedAmount()}>
           <img className={s.btnIcon} src={`/img/logo/evmos.png`} alt={'evmos icon'} />
           <Form.Item label="" className={s.input}>
-            <InputNumber max={evmosBalance} setInputValue={setAmount} inputValue={amount} />
+            {/*<InputNumber max={evmosBalance} setInputValue={setAmount} inputValue={amount} />*/}
+            <OutlinedInput
+              value={amount}
+              type="number"
+              onBlur={() => onChangeSuppliedAmount()}
+              inputProps={{ pattern: '[0-9]*' }}
+              onChange={onChangeAmount}
+              aria-describedby="outlined-weight-helper-text"
+              sx={{
+                color: '#f1f1f1',
+                width: '100%',
+                marginTop: -1.5,
+                marginLeft: -0.5
+              }}
+            />
           </Form.Item>
           <div className={s.assetName} style={{ marginRight: -20 }}>
             EVMOS
@@ -63,7 +77,6 @@ const StakeM: FC<Props> = ({ yieldStaking: _yieldStaking, closeModal, parentLeve
           </button>
         </section>
       </Form>
-      <div className={s.colSpace}></div>
       <span className={cn(s.desc, s.desc__lg)}>Borrowing Asset</span>
       <div className={s.ibTokenContainerWrapper}>
         <Autocomplete
@@ -114,7 +127,7 @@ const StakeM: FC<Props> = ({ yieldStaking: _yieldStaking, closeModal, parentLeve
           }}
         />
       </div>
-      <span className={cn(s.desc)}>Available Balance: {numberFormat(borrowingAssetBalance, 2)} USDC</span>
+      {/*<span className={cn(s.desc)}>Available Balance: {numberFormat(borrowingAssetBalance, 2)} USDC</span>*/}
       <Form>
         <section className={s.borrowingTokenContainer}>
           <img className={s.btnIcon} src={`/img/common/token/${borrowingAsset || 'USDC'}.png`} alt={'cosmos icon'} />
@@ -185,7 +198,7 @@ const StakeM: FC<Props> = ({ yieldStaking: _yieldStaking, closeModal, parentLeve
           </div>
           <div className={s.summaryRow}>
             <span className={s.summaryRow__label}>Asset Supplied</span>
-            <span className={s.summaryRow__value}>{Number(amount).toFixed(1)} EVMOS</span>
+            <span className={s.summaryRow__value}>{Number(amount).toFixed(4)} EVMOS</span>
           </div>
           <div className={s.summaryRow}>
             <span className={s.summaryRow__label}>Asset Borrowed</span>
@@ -200,7 +213,11 @@ const StakeM: FC<Props> = ({ yieldStaking: _yieldStaking, closeModal, parentLeve
         </div>
       </div>
       <div className={s.btnWrapper}>
-        <Button className={s.stakeBtn} onClick={() => stake()}>
+        <Button
+          className={s.stakeBtn}
+          style={{ backgroundColor: !debtInToken || Number(debtInToken) === 0 ? 'gray' : '#111827' }}
+          disabled={!debtInToken || Number(debtInToken) === 0}
+          onClick={() => stake()}>
           STAKE
         </Button>
       </div>

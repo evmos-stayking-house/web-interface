@@ -69,8 +69,10 @@ const Vault = () => {
             <span className={s.poolListContainerContents__item__tokenSymbol}>ibUSDC</span>
           </div>
           <div className={s.poolListContainerContents__item__tokenBalance}>
-            <span className={s.poolListContainerContents__item__tokenValue}>{numberFormat(vaultTokenBalance, 1)}</span>
-            <span className={s.poolListContainerContents__item__tokenSymbol}>USDC</span>
+            <span className={s.poolListContainerContents__item__tokenValue} style={{ fontSize: 12 }}>
+              ( ≈ {numberFormat(vaultTokenBalance, 1)}
+            </span>
+            <span className={s.poolListContainerContents__item__tokenSymbol}>USDC )</span>
           </div>
         </div>
         <div className={s.poolListContainerContents__item}>

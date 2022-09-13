@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { getContract } from '../../../../config/contract';
 import { Contracts } from '../../../../type/contract';
 import { Contract } from '@ethersproject/contracts';
@@ -47,6 +47,14 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null, _yie
     setAmount(evmosBalance);
   }
 
+  async function onChangeAmount(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+    event.preventDefault();
+    if (isNaN(Number(event.currentTarget.value))) return;
+    if (Number(event.currentTarget.value) > Number(evmosBalance)) return setAmount(evmosBalance);
+    if (Number(event.currentTarget.value) < 0) return setAmount('0');
+    setAmount(String(Number(event.currentTarget.value)));
+  }
+
   async function getInterestFromVault() {
     const _lastAnnualRateBps: BigNumber = await vaultContract.lastAnnualRateBps();
     const _reservedBps: BigNumber = await stayKingContract.reservedBps();
@@ -81,16 +89,16 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null, _yie
 
   async function onChangeSuppliedAmount() {
     const deptInBase = (Number(leverage) - 1) * Number(amount);
-    setDebtInBase(deptInBase.toFixed(1));
-    await onChangeDebtInToken(deptInBase.toFixed(0));
-    setPositionValue((Number(amount) + deptInBase).toFixed(1));
+    setDebtInBase(String(deptInBase));
+    await onChangeDebtInToken(String(deptInBase));
+    setPositionValue(String(Number(amount) + deptInBase));
   }
 
   async function onChangeLeverage(_leverage: string | null) {
     const deptInBase = (Number(_leverage) - 1) * Number(amount);
-    setDebtInBase(deptInBase.toFixed(1));
-    await onChangeDebtInToken(deptInBase.toFixed(0));
-    setPositionValue((Number(amount) + deptInBase).toFixed(1));
+    setDebtInBase(String(deptInBase));
+    await onChangeDebtInToken(String(deptInBase));
+    setPositionValue(String(Number(amount) + deptInBase));
     setLeverage(_leverage);
     await loadYieldStaking(_leverage);
   }
@@ -110,8 +118,8 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null, _yie
   }
 
   async function onChangeDebtInToken(_deptInBase: string) {
-    const _deptInToken = await vaultContract.getTokenIn(_deptInBase);
-    setDebtInToken(convertUnitFrom(_deptInToken, 0));
+    const _deptInToken = await vaultContract.getTokenIn(convertDenomFrom(_deptInBase));
+    setDebtInToken(convertUnitFrom(_deptInToken, 18));
   }
 
   function stake() {
@@ -178,7 +186,8 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null, _yie
     onChangeSuppliedAmount,
     addPosition,
     renderStakeConfirmModal,
-    yieldStaking
+    yieldStaking,
+    onChangeAmount
   };
 };
 

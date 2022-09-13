@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { getContract } from '../../../../config/contract';
 import { Contracts } from '../../../../type/contract';
 import { Contract } from '@ethersproject/contracts';
@@ -24,6 +24,14 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
   const { onChangeIsPendingState } = useWalletState();
   const { tokenBalance } = useLendingAsset(Contracts.tUSDC);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  async function onChangeAmount(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+    event.preventDefault();
+    if (isNaN(Number(event.currentTarget.value))) return;
+    if (Number(event.currentTarget.value) > Number(tokenBalance)) return setAmount(tokenBalance);
+    if (Number(event.currentTarget.value) < 0) return setAmount('0');
+    setAmount(String(Number(event.currentTarget.value)));
+  }
 
   function setMaxAmount() {
     setAmount(tokenBalance);
@@ -61,7 +69,7 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
 
   async function amountToShare() {
     const _share = await vaultContract.amountToShare(convertDenomFrom(amount));
-    setShare(Number(convertUnitFrom(_share)).toFixed(1));
+    setShare(String(Number(convertUnitFrom(_share))));
   }
 
   function registerContractEvents() {
@@ -83,7 +91,7 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
   return {
     deposit,
     approve,
-    setAmount,
+    onChangeAmount,
     amount,
     tokenBalance,
     setMaxAmount,

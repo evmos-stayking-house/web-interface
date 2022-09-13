@@ -3,12 +3,11 @@ import React from 'react';
 import Image from 'next/image';
 
 import s from './LendingDeposit.module.scss';
-import { InputNumber } from '../../../common/Input';
 import Form from '../../../common/Form';
 import { cn } from '../../../../utils/style';
 import useLendingDeposit, { DepositTxStatus } from './LendingDeposit.service';
 import { numberFormat } from '../../../../utils/numberFormats';
-import { Button } from '@mui/material';
+import { Button, InputAdornment, OutlinedInput } from '@mui/material';
 
 interface Props {
   title: string;
@@ -16,7 +15,7 @@ interface Props {
 }
 
 const LendingDeposit: FC<Props> = ({ title, closeModal }) => {
-  const { deposit, amount, share, setAmount, tokenBalance, setMaxAmount, amountToShare, approve, txStatus } =
+  const { deposit, amount, share, onChangeAmount, tokenBalance, setMaxAmount, amountToShare, approve, txStatus } =
     useLendingDeposit(closeModal);
 
   return (
@@ -30,9 +29,21 @@ const LendingDeposit: FC<Props> = ({ title, closeModal }) => {
         Available {title} Balance: {numberFormat(tokenBalance)} {title}
       </span>
       <Form>
-        <section className={s.depositTokenContainer} onBlur={() => amountToShare()}>
+        <section className={s.depositTokenContainer}>
           <Form.Item label="" className={s.input}>
-            <InputNumber max={tokenBalance} setInputValue={setAmount} inputValue={amount} />
+            <OutlinedInput
+              value={amount}
+              type="number"
+              onBlur={() => amountToShare()}
+              inputProps={{ pattern: '[0-9]*' }}
+              onChange={onChangeAmount}
+              aria-describedby="outlined-weight-helper-text"
+              sx={{
+                color: '#f1f1f1',
+                width: '100%',
+                marginTop: -1.5
+              }}
+            />
           </Form.Item>
           <div className={s.assetName}>{title}</div>
           <button
@@ -54,7 +65,14 @@ const LendingDeposit: FC<Props> = ({ title, closeModal }) => {
       <div className={s.ibTokenContainerWrapper}>
         <section className={s.ibTokenContainer}>
           <Form.Item label="" className={s.input}>
-            <InputNumber max={share} setInputValue={() => {}} inputValue={share} />
+            <OutlinedInput
+              value={share}
+              sx={{
+                color: '#f1f1f1',
+                width: '100%',
+                marginTop: -1.5
+              }}
+            />
           </Form.Item>
           <div className={s.assetName} style={{ width: '12%' }}>
             ib{title}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useWalletState } from '../../../../../contexts/WalletContext';
 import { contractsInfo } from '../../../../../data/contract/contracts';
 import { Contracts } from '../../../../../type/contract';
@@ -109,61 +109,37 @@ const useAdjust = (closeModal: VoidFunction) => {
     }
   };
 
-  async function onChangeRepayAmount(_repayAmount: any) {
-    if (!repayType) return;
-    if (Number(_repayAmount) === 0 || !_repayAmount) {
-      await reCalculatePosition(0, Number(amount) * (equityPositionType === PositionType.REMOVE ? -1 : 1));
-      return;
-    }
-    // console.log(_repayAmount);
-    // console.log('_repayAmount :: ', _repayAmount);
-
-    setRepayAmount({
-      amountInBase: RepayType.EVMOS ? _repayAmount : 0,
-      amountInToken: RepayType.USDC ? _repayAmount : 0
-    });
-    let repayDebtInBase = 0;
-
-    if (repayType === RepayType.EVMOS) {
-      repayDebtInBase = _repayAmount;
-    } else {
-      const _repayDebtInBase = await swapDebtOutToken(String(_repayAmount));
-      repayDebtInBase = Number(_repayDebtInBase || 0);
-    }
-
-    const _positionValueInBase: number = Number(updatedPosition?.positionValueInBase);
-    const _debtInBase = _positionValueInBase - Number(position?.equityValue) - repayDebtInBase;
-    const _equityValue = _positionValueInBase - _debtInBase;
-    const _debtRatio = (_debtInBase / _positionValueInBase) * 100;
-    const _safetyBuffer = Number(position?.killFactor) - _debtRatio;
-    console.log(`_debtInBase: `, _debtInBase);
-    console.log(`_equityValue: `, _equityValue);
-
-    setUpdatedPosition({
-      ...position!,
-      positionValueInBase: _positionValueInBase.toFixed(1),
-      equityValue: _equityValue.toFixed(1),
-      debtInBase: _debtInBase.toFixed(1),
-      deptRatio: _debtRatio.toFixed(1),
-      safetyBuffer: _safetyBuffer.toFixed(1),
-      swappedInBase: repayType === RepayType.USDC ? repayDebtInBase.toFixed(1) : '0'
-    });
+  async function onEventChangeAmount(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    event.preventDefault();
+    if (isNaN(Number(event.currentTarget.value))) return;
+    if (Number(event.currentTarget.value) > Number(evmosBalance)) return setAmount(evmosBalance);
+    if (Number(event.currentTarget.value) < 0) return setAmount('0');
+    await onChangeAmount(String(Number(event.currentTarget.value)));
   }
 
   async function onChangeAmount(_amount: any) {
     if (Number(evmosBalance) === 0) return;
     setAmount(_amount);
+    if (Number(_amount) === 0) return;
     await reCalculatePosition(
       Number(debtInBase) * (debtPositionType === PositionType.REMOVE ? -1 : 1),
       Number(_amount) * (equityPositionType === PositionType.REMOVE ? -1 : 1)
     );
   }
 
+  async function onEventChangeDebtInToken(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    event.preventDefault();
+    if (isNaN(Number(event.currentTarget.value))) return;
+    if (Number(event.currentTarget.value) > Number(borrowingAssetBalance)) return setAmount(borrowingAssetBalance);
+    if (Number(event.currentTarget.value) < 0) return setDebtInToken('0');
+    await onChangeDebtInToken(String(Number(event.currentTarget.value)));
+  }
+
   async function onChangeDebtInToken(_debtInToken: any) {
     if (Number(evmosBalance) === 0 || !debtPositionType) return;
     setDebtInToken(_debtInToken);
     const _debtInBase = await swapDebtOutToken(String(_debtInToken || 0));
-    setPositionValue((Number(amount) + Number(_debtInBase || 0)).toFixed(1));
+    setPositionValue(String(Number(amount) + Number(_debtInBase || 0)));
     await reCalculatePosition(
       Number(_debtInBase || 0) * (debtPositionType === PositionType.REMOVE ? -1 : 1),
       Number(amount) * (equityPositionType === PositionType.REMOVE ? -1 : 1)
@@ -212,11 +188,11 @@ const useAdjust = (closeModal: VoidFunction) => {
     const _safetyBuffer = Number(position?.killFactor) - _debtRatio;
     setUpdatedPosition({
       ...position!,
-      positionValueInBase: _positionValueInBase.toFixed(1),
-      equityValue: _equityValue.toFixed(1),
-      debtInBase: _debtInBase.toFixed(1),
-      deptRatio: _debtRatio.toFixed(1),
-      safetyBuffer: _safetyBuffer.toFixed(1)
+      positionValueInBase: _positionValueInBase.toFixed(4),
+      equityValue: _equityValue.toFixed(4),
+      debtInBase: _debtInBase.toFixed(4),
+      deptRatio: _debtRatio.toFixed(2),
+      safetyBuffer: _safetyBuffer.toFixed(2)
     });
     await loadYieldStaking(_equityValue, _debtInBase);
   }
@@ -227,9 +203,9 @@ const useAdjust = (closeModal: VoidFunction) => {
   }
 
   async function swapDebtOutToken(_deptInToken: string) {
-    const _deptInBase = await vaultContract.getBaseIn(_deptInToken);
-    setDebtInBase(convertUnitFrom(_deptInBase, 0));
-    return convertUnitFrom(_deptInBase, 0);
+    const _deptInBase = await vaultContract.getBaseIn(convertDenomFrom(_deptInToken));
+    setDebtInBase(convertUnitFrom(_deptInBase, 18));
+    return convertUnitFrom(_deptInBase, 18);
   }
 
   async function getPositionFrom() {
@@ -398,7 +374,7 @@ const useAdjust = (closeModal: VoidFunction) => {
     onChangeAmount,
     positionValue,
     setDebtInToken,
-    onChangeDebtInToken,
+    onEventChangeDebtInToken,
     deptInBase: debtInBase,
     borrowingAssetBalance,
     updatedPosition,
@@ -408,7 +384,6 @@ const useAdjust = (closeModal: VoidFunction) => {
     debtPositionType,
     repayType,
     repayAmount,
-    onChangeRepayAmount,
     handleChangeRepayType,
     yieldStaking,
     loadYieldStaking,
@@ -416,7 +391,8 @@ const useAdjust = (closeModal: VoidFunction) => {
     handleNoticePopup,
     approve,
     recommendAdjustModal,
-    setRecommendAdjustModal
+    setRecommendAdjustModal,
+    onEventChangeAmount
   };
 };
 

@@ -24,6 +24,10 @@ const Main: FC<MainProps> = ({ children, title }) => {
   const { isPending } = useWalletState();
   const size = useWindowSize();
 
+  function onMoveToDashboard() {
+    window.location.replace('/');
+  }
+
   useEffect(() => {
     console.log('APP_ENV:: ', APP_ENV);
   }, []);
@@ -50,7 +54,7 @@ const Main: FC<MainProps> = ({ children, title }) => {
         <title>{title || 'Evmos StayKing House'}</title>
       </Head>
       <header>
-        <div>
+        <div onClick={() => onMoveToDashboard()} style={{ cursor: 'pointer' }}>
           <Image src="/img/logo/logo.png" alt="sooho.io" width={36} height={36} />
           <span className={s.logoTextWrapper}>
             <span className={s.logoText}>Evmos StayKing House</span>
