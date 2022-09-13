@@ -49,7 +49,7 @@ const Close: FC<Props> = ({ closeModal }) => {
           </span>
         </div>
         <div className={s.row}>
-          <span className={s.row__label}>EVMOS Reward you will approximately recieve after 14 days : </span>
+          <span className={s.row__label}>EVMOS Reward you will approximately recieve after 7 days : </span>
           <span className={s.row__value}>≈ {result?.estimated} EVMOS</span>
         </div>
       </div>

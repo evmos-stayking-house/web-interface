@@ -7,6 +7,7 @@ import useCoinPrice from '../../../hooks/useCoinPrice';
 import { contractsInfo } from '../../../data/contract/contracts';
 import { useWalletState } from '../../../contexts/WalletContext';
 import { useSnackbar } from 'notistack';
+import { goTxConfirm } from '../../../utils/utils';
 
 export enum PositionTab {
   Active = 'Active',
@@ -64,7 +65,13 @@ const useDashboard = () => {
     onChangeIsPendingState(true);
     try {
       const result = await uEVMOSContract.unlock();
-      enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
+      const key = enqueueSnackbar(`Transaction Hash: ${result['hash']}`, {
+        variant: 'success',
+        onClick: () => {
+          goTxConfirm(result['hash']);
+          closeSnackbar(key);
+        }
+      });
     } catch (e: any) {
       onChangeIsPendingState(false);
       const key = enqueueSnackbar(e.toString(), {

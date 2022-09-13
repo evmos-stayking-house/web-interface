@@ -37,7 +37,7 @@ const WalletSelection: FC<Props> = ({ closeModal, metaMaskLogin }) => {
           {isMetaMaskInstalled && <span className={s.walletName}>MetaMask</span>}
           {!isMetaMaskInstalled && (
             <span className={s.walletName}>
-              MetaMask Is Not Installed ►{' '}
+              Please Install Metamask Extension First ►{' '}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
@@ -55,7 +55,7 @@ const WalletSelection: FC<Props> = ({ closeModal, metaMaskLogin }) => {
       <div
         className={s.walletContainer}
         onClick={() => {
-          alert('Coming soon...');
+          alert('The service is currently unavailable');
         }}>
         <div className={s.wallet}>
           <span className={s.walletName}>Google</span>

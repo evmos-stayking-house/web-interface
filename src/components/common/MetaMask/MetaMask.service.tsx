@@ -21,7 +21,7 @@ const useMetaMask = () => {
 
   async function connectWallet() {
     if (address) {
-      if (confirm('연결 해제하시겠습니까?')) {
+      if (confirm('Are you sure you want to disconnect?')) {
         onChangeAddress('');
       }
       return;

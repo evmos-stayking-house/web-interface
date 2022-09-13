@@ -7,6 +7,7 @@ import useLendingAsset from '../../../../hooks/useLendingAsset';
 import { contractsInfo } from '../../../../data/contract/contracts';
 import { useWalletState } from '../../../../contexts/WalletContext';
 import { useSnackbar } from 'notistack';
+import { goTxConfirm } from '../../../../utils/utils';
 
 export enum DepositTxStatus {
   NotYet = 'NotYet',
@@ -45,10 +46,16 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
         convertDenomFrom(amount)
       );
       setTxStatus(DepositTxStatus.Approved);
-      enqueueSnackbar(`Transaction Hash: ${approveResult['hash']}`, { variant: 'success' });
+      const key = enqueueSnackbar(`[Approved Successful] Transaction Hash: ${approveResult['hash']}`, {
+        variant: 'success',
+        onClick: () => {
+          goTxConfirm(approveResult['hash']);
+          closeSnackbar(key);
+        }
+      });
     } catch (e: any) {
       onChangeIsPendingState(false);
-      enqueueSnackbar(e.toString(), { variant: 'error' });
+      enqueueSnackbar('[Approved Failed] ' + e.toString(), { variant: 'error' });
     } finally {
       setTimeout(() => onChangeIsPendingState(false), 15000);
     }
@@ -59,10 +66,16 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
     try {
       const depositedResult = await vaultContract.deposit(convertDenomFrom(amount));
       closeModal();
-      enqueueSnackbar(`Transaction Hash: ${depositedResult['hash']}`, { variant: 'success' });
+      const key = enqueueSnackbar(`[Deposit Successful] Transaction Hash: ${depositedResult['hash']}`, {
+        variant: 'success',
+        onClick: () => {
+          goTxConfirm(depositedResult['hash']);
+          closeSnackbar(key);
+        }
+      });
     } catch (e: any) {
       onChangeIsPendingState(false);
-      const key = enqueueSnackbar(e.toString(), {
+      const key = enqueueSnackbar('[Deposit Failed] ' + e.toString(), {
         variant: 'warning',
         onClick: () => closeSnackbar(key)
       });

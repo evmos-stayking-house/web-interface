@@ -7,6 +7,7 @@ import { Position } from '../../../../feature/Dashboard/ActivePosition/ActivePos
 import { Contract } from 'ethers';
 import { getContract } from '../../../../../config/contract';
 import { useSnackbar } from 'notistack';
+import { goTxConfirm } from '../../../../../utils/utils';
 
 let stayKingContract: Contract;
 let vaultContract: Contract;
@@ -88,10 +89,20 @@ const useClosePosition = (closeModal: VoidFunction) => {
     try {
       const result = await stayKingContract.removePosition(contractsInfo[Contracts.tUSDC].address);
       closeModal();
-      enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
+      const key = enqueueSnackbar(
+        `[Your Asset Unstaked Successfully] You will be able to claim your total position amount and rewards after 7 days 
+       from now. Please check your unlockable EVMOS reward in Dashboard menu. Transaction Hash: ${result['hash']}`,
+        {
+          variant: 'success',
+          onClick: () => {
+            goTxConfirm(result['hash']);
+            closeSnackbar(key);
+          }
+        }
+      );
     } catch (e: any) {
       onChangeIsPendingState(false);
-      const key = enqueueSnackbar(e.toString(), {
+      const key = enqueueSnackbar('[Unstaking Transaction Failed] ' + e.toString(), {
         variant: 'warning',
         onClick: () => closeSnackbar(key)
       });

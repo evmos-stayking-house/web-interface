@@ -41,6 +41,7 @@ const Main: FC<MainProps> = ({ children, title }) => {
   }
 
   useEffect(() => {
+    if (!window?.ethereum) return;
     swapContract = getContract(Contracts.MockSwap);
     (async () => await loadRatio())();
     console.log('APP_ENV:: ', APP_ENV);
@@ -82,12 +83,12 @@ const Main: FC<MainProps> = ({ children, title }) => {
           <div className={s.coinPriceInfo}>
             <div className={s.coinPrice}>
               <img className={s.coinTickerImg} src={'/img/logo/evmos.png'} alt={'evmos'} />
-              <p className={s.coinValue}>{1}</p>
+              <p className={s.coinValue}>$ {USDCRatio.toFixed(1)}</p>
             </div>
-            <div className={s.verticalDivider}>:</div>
+            <div className={s.verticalDivider}></div>
             <div className={s.coinPrice}>
               <img className={s.coinTickerImg} src={'/img/logo/usdc.png'} alt={'usdc'} />
-              <p className={s.coinValue}>{USDCRatio.toFixed(4)}</p>
+              <p className={s.coinValue}>$ 1.0</p>
             </div>
           </div>
           <MetaMask />

@@ -5,6 +5,7 @@ import { Contract } from '@ethersproject/contracts';
 import { convertDenomFrom, convertUnitFrom } from '../../../../utils/numberFormats';
 import { useWalletState } from '../../../../contexts/WalletContext';
 import { useSnackbar } from 'notistack';
+import { goTxConfirm } from '../../../../utils/utils';
 
 let vaultContract: Contract;
 let tokenContract: Contract;
@@ -26,10 +27,16 @@ const useLendingWithdraw = (closeModal: VoidFunction) => {
     try {
       const withdrawResult = await vaultContract.withdraw(convertDenomFrom(ibTokenWithdraw));
       closeModal();
-      enqueueSnackbar(`Transaction Hash: ${withdrawResult['hash']}`, { variant: 'success' });
+      const key = enqueueSnackbar(`[Withdraw Successful] Transaction Hash: ${withdrawResult['hash']}`, {
+        variant: 'success',
+        onClick: () => {
+          goTxConfirm(withdrawResult['hash']);
+          closeSnackbar(key);
+        }
+      });
     } catch (e: any) {
       onChangeIsPendingState(false);
-      const key = enqueueSnackbar(e.toString(), {
+      const key = enqueueSnackbar('[Withdraw Failed] ' + e.toString(), {
         variant: 'warning',
         onClick: () => closeSnackbar(key)
       });

@@ -9,7 +9,7 @@ import { useModal } from '../../useModal';
 import StakeConfirm from './StakeConfirm/StakeConfirm';
 import { useSnackbar } from 'notistack';
 import { BigNumber } from 'ethers';
-import { calculateAPYFromAPR } from '../../../../utils/utils';
+import { calculateAPYFromAPR, goTxConfirm } from '../../../../utils/utils';
 
 let tokenContract: Contract;
 let vaultContract: Contract;
@@ -138,10 +138,16 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null, _yie
         }
       );
       closeModal();
-      enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
+      const key = enqueueSnackbar(`[Your Asset Staked Successfully] Transaction Hash: ${result['hash']}`, {
+        variant: 'success',
+        onClick: () => {
+          goTxConfirm(result['hash']);
+          closeSnackbar(key);
+        }
+      });
     } catch (e: any) {
       onChangeIsPendingState(false);
-      const key = enqueueSnackbar(e.toString(), {
+      const key = enqueueSnackbar('[Your Asset Staked Failed] ' + e.toString(), {
         variant: 'warning',
         onClick: () => closeSnackbar(key)
       });

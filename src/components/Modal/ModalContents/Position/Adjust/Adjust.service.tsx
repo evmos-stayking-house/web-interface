@@ -7,7 +7,7 @@ import { Position } from '../../../../feature/Dashboard/ActivePosition/ActivePos
 import { BigNumber, Contract } from 'ethers';
 import { getContract } from '../../../../../config/contract';
 import { useSnackbar } from 'notistack';
-import { calculateAPYFromAPR } from '../../../../../utils/utils';
+import { calculateAPYFromAPR, goTxConfirm } from '../../../../../utils/utils';
 
 let stayKingContract: Contract;
 let vaultContract: Contract;
@@ -242,7 +242,13 @@ const useAdjust = (closeModal: VoidFunction) => {
         contractsInfo[Contracts.vault].address,
         convertDenomFrom(String(repaidDebt))
       );
-      enqueueSnackbar(`Transaction Hash: ${approveTx['hash']}`, { variant: 'success' });
+      const key = enqueueSnackbar(`Transaction Hash: ${approveTx['hash']}`, {
+        variant: 'success',
+        onClick: () => {
+          goTxConfirm(approveTx['hash']);
+          closeSnackbar(key);
+        }
+      });
       setApproved(true);
     } catch (e: any) {
       onChangeIsPendingState(false);
@@ -303,7 +309,13 @@ const useAdjust = (closeModal: VoidFunction) => {
         valueObj
       );
       closeModal();
-      enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
+      const key = enqueueSnackbar(`Transaction Hash: ${result['hash']}`, {
+        variant: 'success',
+        onClick: () => {
+          goTxConfirm(result['hash']);
+          closeSnackbar(key);
+        }
+      });
       setApproved(false);
     } catch (e: any) {
       onChangeIsPendingState(false);
