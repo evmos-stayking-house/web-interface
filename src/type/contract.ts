@@ -6,7 +6,8 @@ export enum Contracts {
   tATOM = 'tATOM',
   tUSDC = 'tUSDC',
   tUSDT = 'tUSDT',
-  uEVMOS = 'uEVMOS'
+  uEVMOS = 'uEVMOS',
+  MockSwap = 'MockSwap'
 }
 
 export interface ContractsType {

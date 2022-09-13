@@ -6,6 +6,7 @@ import { Contract, ethers } from 'ethers';
 import useCoinPrice from '../../../hooks/useCoinPrice';
 import { contractsInfo } from '../../../data/contract/contracts';
 import { useWalletState } from '../../../contexts/WalletContext';
+import { useSnackbar } from 'notistack';
 
 export enum PositionTab {
   Active = 'Active',
@@ -31,10 +32,10 @@ const useDashboard = () => {
   const [interestRate, setInterestRate] = useState<number>(0);
   const [tvl, setTvl] = useState<string>('0');
   const [evmosBalance, setEvmosBalance] = useState<string>('0');
-  const { address } = useWalletState();
+  const { address, onChangeIsPendingState } = useWalletState();
   const { coinPrice: tokenPrice } = useCoinPrice('cosmos');
   const { coinPrice: evmosPrice } = useCoinPrice('evmos');
-
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   async function onSelectedBalanceTab(tab: BalanceTab) {
     let _evmosBalance: string = '0';
 
@@ -57,6 +58,28 @@ const useDashboard = () => {
 
   function getBalance() {
     return getProvider().getBalance(address);
+  }
+
+  async function unlockUEVMOS() {
+    onChangeIsPendingState(true);
+    try {
+      const result = await uEVMOSContract.unlock();
+      enqueueSnackbar(`Transaction Hash: ${result['hash']}`, { variant: 'success' });
+    } catch (e: any) {
+      onChangeIsPendingState(false);
+      const key = enqueueSnackbar(e.toString(), {
+        variant: 'warning',
+        onClick: () => closeSnackbar(key)
+      });
+    } finally {
+      setTimeout(() => onChangeIsPendingState(false), 15000);
+    }
+  }
+
+  function registerContractEvents() {
+    uEVMOSContract.on('Unlock', async (...args) => {
+      onChangeIsPendingState(false);
+    });
   }
 
   async function balanceOfLocked() {
@@ -128,6 +151,8 @@ const useDashboard = () => {
     vaultContract = getContract(Contracts.vault);
     stayKingContract = getContract(Contracts.stayKing);
     uEVMOSContract = getContract(Contracts.uEVMOS);
+
+    registerContractEvents();
   }, []);
 
   useEffect(() => {
@@ -158,7 +183,8 @@ const useDashboard = () => {
     selectedTab,
     setSelectedTab,
     selectedBalanceTab,
-    onSelectedBalanceTab
+    onSelectedBalanceTab,
+    unlockUEVMOS
   };
 };
 

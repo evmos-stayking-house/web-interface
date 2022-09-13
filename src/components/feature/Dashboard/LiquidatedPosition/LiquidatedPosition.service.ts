@@ -4,7 +4,7 @@ import { Contracts } from '../../../../type/contract';
 import { Contract, ethers } from 'ethers';
 import { useWalletState } from '../../../../contexts/WalletContext';
 import { APP_ENV } from '../../../../config/environments';
-import { convertUnitFrom } from '../../../../utils/numberFormats';
+import { convertDenomFrom, convertUnitFrom } from '../../../../utils/numberFormats';
 
 let stayKingContract: Contract;
 let vaultContract: Contract;
@@ -20,6 +20,7 @@ export interface KillEvent {
   equity: number;
   debtInBase: number;
   debt: number;
+  returnAmount: number;
 }
 
 const defaultKillEvent: KillEvent = {
@@ -32,14 +33,15 @@ const defaultKillEvent: KillEvent = {
   killer: '',
   share: 0,
   user: '',
-  vault: ''
+  vault: '',
+  returnAmount: 0
 };
 
 const useActivePosition = () => {
   const { address } = useWalletState();
   const [liquidatedTxs, setLiquidatedTxs] = useState<KillEvent[]>([]);
 
-  async function getKillFilter() {
+  async function getKillFilter(): Promise<Array<any>> {
     const _blockHeight = await getProvider().getBlockNumber();
     const filterFrom = stayKingContract.filters['Kill'](address);
     return stayKingContract.queryFilter(filterFrom, APP_ENV === 'local' ? -10 : _blockHeight - 9900, 'latest');
@@ -47,15 +49,19 @@ const useActivePosition = () => {
 
   async function init() {
     const events = await getKillFilter();
-    const liquidatedTxs = events.map(({ args }): KillEvent => {
-      let { killer, user, vault, share, equity, debtInBase, debt } = args || defaultKillEvent;
-
+    let _liquidatedTxs: KillEvent[] = [];
+    for (let idx = 0; idx < events.length; idx++) {
+      console.log(events[idx]);
+      let { killer, user, vault, share, equity, debtInBase, debt } = events[idx].args || defaultKillEvent;
       share = Number(convertUnitFrom(share, '18'));
       equity = Number(convertUnitFrom(equity, '18'));
       debtInBase = Number(convertUnitFrom(debtInBase, '18'));
-      debt = Number(convertUnitFrom(debt, '18'));
-
-      return {
+      const positionValue = equity + debtInBase;
+      const _deptInBase = await vaultContract.getBaseIn(convertDenomFrom(convertUnitFrom(debt)));
+      const fee = (equity + debtInBase) * 0.05;
+      const currentDebtInBase = Number(convertUnitFrom(_deptInBase, '18'));
+      const returnAmount = positionValue - fee - currentDebtInBase;
+      _liquidatedTxs.push({
         vault,
         killer,
         user,
@@ -65,12 +71,13 @@ const useActivePosition = () => {
         debt,
         debtRatio: (debtInBase / (debtInBase + equity)) * 100,
         safetyBuffer: 100 - (debtInBase / (debtInBase + equity)) * 100,
+        returnAmount: returnAmount,
         positionValue: equity + debtInBase
-      };
-    });
+      });
+    }
 
-    console.log(liquidatedTxs);
-    setLiquidatedTxs(liquidatedTxs);
+    console.log(_liquidatedTxs);
+    setLiquidatedTxs(_liquidatedTxs);
   }
 
   async function getReceipt(txHash: string) {

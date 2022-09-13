@@ -6,6 +6,8 @@ import ActivePosition from './ActivePosition';
 import LiquidatedPosition from './LiquidatedPosition';
 import Image from 'next/image';
 import { version } from '../../../../package.json';
+import { Button } from '@mui/material';
+import React from 'react';
 
 const Dashboard = () => {
   const {
@@ -18,7 +20,8 @@ const Dashboard = () => {
     setSelectedTab,
     address,
     selectedBalanceTab,
-    onSelectedBalanceTab
+    onSelectedBalanceTab,
+    unlockUEVMOS
   } = useDashboard();
 
   return (
@@ -62,14 +65,31 @@ const Dashboard = () => {
                   Unlockable
                 </span>
               </div>
-              <p className={s.value}>
-                {numberFormat(Number(evmosBalance).toFixed(3))}
-                <span className={s.value__unit}>&nbsp;EVMOS</span>
-              </p>
-              <p className={s.description}>
-                ~ $&nbsp;
-                {evmosPrice && numberFormat((evmosPrice * Number(evmosBalance)).toFixed(0))}
-              </p>
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <div style={{ flexDirection: 'column' }}>
+                  <p className={s.value}>
+                    {numberFormat(Number(evmosBalance).toFixed(3))}
+                    <span className={s.value__unit}>&nbsp;EVMOS</span>
+                  </p>
+                  <p className={s.description}>
+                    ~ $&nbsp;
+                    {evmosPrice && numberFormat((evmosPrice * Number(evmosBalance)).toFixed(2))}
+                  </p>
+                </div>
+                {selectedBalanceTab === BalanceTab.Unlockable && (
+                  <div className={s.btnWrapper}>
+                    <Button
+                      style={{
+                        backgroundColor: Number(evmosBalance) === 0 ? 'gray' : '#ff9b4a'
+                      }}
+                      className={s.unlockBtn}
+                      disabled={Number(evmosBalance) === 0}
+                      onClick={() => unlockUEVMOS()}>
+                      Unlock
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
             <div className={s.balanceBox__right}>
               <Image width={64} height={64} src={'/img/logo/evmos.png'} />

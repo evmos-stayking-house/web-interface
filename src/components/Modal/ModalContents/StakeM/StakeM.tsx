@@ -215,8 +215,8 @@ const StakeM: FC<Props> = ({ yieldStaking: _yieldStaking, closeModal, parentLeve
       <div className={s.btnWrapper}>
         <Button
           className={s.stakeBtn}
-          style={{ backgroundColor: !debtInToken || Number(debtInToken) === 0 ? 'gray' : '#111827' }}
-          disabled={!debtInToken || Number(debtInToken) === 0}
+          style={{ backgroundColor: !amount || Number(amount) === 0 ? 'gray' : '#111827' }}
+          disabled={!amount || Number(amount) === 0}
           onClick={() => stake()}>
           STAKE
         </Button>

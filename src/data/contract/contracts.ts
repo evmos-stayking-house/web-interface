@@ -1,4 +1,4 @@
-import { Stayking, Vault, ERC20, UnbondedEvmos } from './abis';
+import { Stayking, Vault, ERC20, UnbondedEvmos, MockSwap } from './abis';
 import { APP_ENV } from '../../config/environments';
 
 const LOCAL_NET_CONTRACTS = {
@@ -25,6 +25,10 @@ const LOCAL_NET_CONTRACTS = {
   uEVMOS: {
     address: '0x0B306BF915C4d645ff596e518fAf3F9669b97016',
     abi: UnbondedEvmos
+  },
+  MockSwap: {
+    address: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
+    abi: MockSwap
   }
 };
 
@@ -52,6 +56,10 @@ const TEST_NET_CONTRACTS = {
   uEVMOS: {
     address: '0x78b6538835C630c295125367F92303d13E08DfeD',
     abi: UnbondedEvmos
+  },
+  MockSwap: {
+    address: '0x35A6612A26Fe4FFdEDf9b356c6a2Eb8Dee3Fb91e',
+    abi: MockSwap
   }
 };
 

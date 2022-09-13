@@ -39,20 +39,14 @@ const Close: FC<Props> = ({ closeModal }) => {
       </div>
       <div className={s.closePositionWrapper}>
         <div className={s.row}>
-          <span className={s.row__label}>Total Position Value</span>
-          <span className={s.row__value}>
-            {result?.equity} EVMOS + {result?.debtInToken} USDC
-          </span>
+          <span className={s.row__label}>Converted Position Value Asset</span>
+          <span className={s.row__value}>{result?.positionValueInBase} EVMOS</span>
         </div>
         <div className={s.row}>
           <span className={s.row__label}>Debt Value</span>
           <span className={s.row__value}>
             {result?.debtInToken} USDC <span style={{ fontSize: 10 }}>(≈ {result?.debtInBase} EVMOS )</span>
           </span>
-        </div>
-        <div className={s.row}>
-          <span className={s.row__label}>Converted Position Value Asset</span>
-          <span className={s.row__value}>{result?.positionValueInBase} EVMOS</span>
         </div>
         <div className={s.row}>
           <span className={s.row__label}>EVMOS Reward you will approximately recieve after 14 days : </span>

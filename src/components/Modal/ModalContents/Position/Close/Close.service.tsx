@@ -95,6 +95,8 @@ const useClosePosition = (closeModal: VoidFunction) => {
         variant: 'warning',
         onClick: () => closeSnackbar(key)
       });
+    } finally {
+      setTimeout(() => onChangeIsPendingState(false), 15000);
     }
   }
 

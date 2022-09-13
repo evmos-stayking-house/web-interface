@@ -4,33 +4,51 @@ import Head from 'next/head';
 import Image from 'next/image';
 import MetaMask from '../common/MetaMask';
 import Menu from './Menu';
-import useCoinPrice from '../../hooks/useCoinPrice';
 import { useEffect, useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import { useWalletState } from '../../contexts/WalletContext';
 import { APP_ENV } from '../../config/environments';
 import useWindowSize from '../../hooks/useWindowSize';
 import { isMobile } from 'react-device-detect';
+import { useRouter } from 'next/router';
+import { getContract } from '../../config/contract';
+import { Contracts } from '../../type/contract';
+import { convertUnitFrom } from '../../utils/numberFormats';
+import { Contract } from 'ethers';
 
 interface MainProps {
   children: ReactNode;
   title?: string;
 }
 
+let swapContract: Contract;
+
 const Main: FC<MainProps> = ({ children, title }) => {
-  const { coinPrice: cosmosPrice } = useCoinPrice(`cosmos`);
-  const { coinPrice: evmosPrice } = useCoinPrice(`evmos`);
-  const { coinPrice: usdcPrice } = useCoinPrice('usd-coin');
+  const [USDCRatio, setUSDCRatio] = useState<number>(1);
   const { isPending } = useWalletState();
+  const { pathname } = useRouter();
   const size = useWindowSize();
+  const { onChangeIsPendingState } = useWalletState();
+
+  async function loadRatio() {
+    const _evmosPriceBps = await swapContract.EVMOSpriceBps();
+    const evmosPriceBps = convertUnitFrom(_evmosPriceBps, '0');
+    setUSDCRatio(Number(evmosPriceBps) / 10000);
+  }
 
   function onMoveToDashboard() {
     window.location.replace('/');
   }
 
   useEffect(() => {
+    swapContract = getContract(Contracts.MockSwap);
+    (async () => await loadRatio())();
     console.log('APP_ENV:: ', APP_ENV);
   }, []);
+
+  useEffect(() => {
+    onChangeIsPendingState(false);
+  }, [pathname]);
 
   if (isMobile) {
     return (
@@ -63,18 +81,13 @@ const Main: FC<MainProps> = ({ children, title }) => {
         <div className={s.coinPriceContainer}>
           <div className={s.coinPriceInfo}>
             <div className={s.coinPrice}>
-              <img className={s.coinTickerImg} src={'/img/logo/usdc.png'} alt={'usdc'} />
-              <p className={s.coinValue}>$ {usdcPrice.toFixed(2)}</p>
-            </div>
-            <div className={s.verticalDivider}></div>
-            <div className={s.coinPrice}>
-              <img className={s.coinTickerImg} src={'/img/logo/cosmos.png'} alt={'cosmos'} />
-              <p className={s.coinValue}>$ {cosmosPrice.toFixed(2)}</p>
-            </div>
-            <div className={s.verticalDivider}></div>
-            <div className={s.coinPrice}>
               <img className={s.coinTickerImg} src={'/img/logo/evmos.png'} alt={'evmos'} />
-              <p className={s.coinValue}>$ {evmosPrice.toFixed(2)}</p>
+              <p className={s.coinValue}>{1}</p>
+            </div>
+            <div className={s.verticalDivider}>:</div>
+            <div className={s.coinPrice}>
+              <img className={s.coinTickerImg} src={'/img/logo/usdc.png'} alt={'usdc'} />
+              <p className={s.coinValue}>{USDCRatio.toFixed(4)}</p>
             </div>
           </div>
           <MetaMask />

@@ -252,6 +252,7 @@ const useAdjust = (closeModal: VoidFunction) => {
       });
     } finally {
       setNoticePopupOpen(false);
+      setTimeout(() => onChangeIsPendingState(false), 15000);
     }
   }
 

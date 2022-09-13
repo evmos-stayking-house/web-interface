@@ -76,11 +76,13 @@ const Stake = () => {
                 Stake
               </div>
             )}
-            <div
-              className={cn(s.buttonGroup__withdrawBtn, { [s.buttonGroup__enabled]: true })}
-              onClick={() => openUnStakeModal()}>
-              Unstake
-            </div>
+            {hasPosition && (
+              <div
+                className={cn(s.buttonGroup__withdrawBtn, { [s.buttonGroup__enabled]: true })}
+                onClick={() => openUnStakeModal()}>
+                Unstake
+              </div>
+            )}
           </div>
         </div>
       </div>

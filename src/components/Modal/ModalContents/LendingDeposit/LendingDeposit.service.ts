@@ -49,6 +49,8 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
     } catch (e: any) {
       onChangeIsPendingState(false);
       enqueueSnackbar(e.toString(), { variant: 'error' });
+    } finally {
+      setTimeout(() => onChangeIsPendingState(false), 15000);
     }
   }
 
@@ -64,6 +66,8 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
         variant: 'warning',
         onClick: () => closeSnackbar(key)
       });
+    } finally {
+      setTimeout(() => onChangeIsPendingState(false), 15000);
     }
   }
 

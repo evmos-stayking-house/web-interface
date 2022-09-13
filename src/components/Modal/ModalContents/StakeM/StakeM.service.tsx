@@ -145,6 +145,8 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null, _yie
         variant: 'warning',
         onClick: () => closeSnackbar(key)
       });
+    } finally {
+      setTimeout(() => onChangeIsPendingState(false), 15000);
     }
   }
 

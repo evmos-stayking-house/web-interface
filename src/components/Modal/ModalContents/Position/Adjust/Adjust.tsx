@@ -216,7 +216,15 @@ const Adjust: FC<Props> = ({ closeModal }) => {
         </div>
       </div>
       <div className={s.btnWrapper}>
-        <Button className={s.adjustBtn} disabled={false} autoCapitalize={'false'} onClick={() => adjust()}>
+        <Button
+          className={s.adjustBtn}
+          disabled={Number(updatedPosition?.deptRatio) > Number(updatedPosition?.killFactor)}
+          style={{
+            backgroundColor:
+              Number(updatedPosition?.deptRatio) > Number(updatedPosition?.killFactor) ? 'gray' : '#111827'
+          }}
+          autoCapitalize={'false'}
+          onClick={() => adjust()}>
           Adjust Position
         </Button>
       </div>
