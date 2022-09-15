@@ -22,8 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           utcOffsetSec: 32400
         }
       ],
-      from: now,
-      to: now
+      from: 'now-2m',
+      to: 'now'
     })
   })
     .then(async (data) => {
