@@ -90,7 +90,7 @@ const useClosePosition = (closeModal: VoidFunction) => {
       const result = await stayKingContract.removePosition(contractsInfo[Contracts.tUSDC].address);
       closeModal();
       const key = enqueueSnackbar(
-        `[Your Asset Unstaked Successfully] You will be able to claim your total position amount and rewards after 7 days 
+        `[Your Asset Unstaked Successfully] You will be able to claim your total position amount and rewards after 14 days 
        from now. Please check your unlockable EVMOS reward in Dashboard menu. Transaction Hash: ${result['hash']}`,
         {
           variant: 'success',
