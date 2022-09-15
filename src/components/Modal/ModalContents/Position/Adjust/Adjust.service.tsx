@@ -154,8 +154,8 @@ const useAdjust = (closeModal: VoidFunction) => {
     const _lastAnnualRateBps: BigNumber = await vaultContract.lastAnnualRateBps();
     const _reservedBps: BigNumber = await stayKingContract.reservedBps();
     return (
-      Number(convertUnitFrom(_lastAnnualRateBps.toString(), '2')) +
-      Number(convertUnitFrom(_reservedBps.toString(), '2'))
+      Number(convertUnitFrom(_lastAnnualRateBps.toString(), '4')) +
+      Number(convertUnitFrom(_reservedBps.toString(), '4'))
     );
   }
 
