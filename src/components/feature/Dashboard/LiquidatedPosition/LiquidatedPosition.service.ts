@@ -43,7 +43,7 @@ const useActivePosition = () => {
 
   async function getKillFilter(): Promise<Array<any>> {
     const _blockHeight = await getProvider().getBlockNumber();
-    const filterFrom = stayKingContract.filters['Kill'](address);
+    const filterFrom = stayKingContract.filters['Kill'](`0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`, address);
     return stayKingContract.queryFilter(filterFrom, APP_ENV === 'local' ? -10 : _blockHeight - 9900, 'latest');
   }
 
@@ -75,8 +75,6 @@ const useActivePosition = () => {
         positionValue: equity + debtInBase
       });
     }
-
-    console.log(_liquidatedTxs);
     setLiquidatedTxs(_liquidatedTxs);
   }
 
