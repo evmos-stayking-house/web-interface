@@ -68,8 +68,8 @@ const useActivePosition = (address: string) => {
     const _lastAnnualRateBps: BigNumber = await vaultContract.lastAnnualRateBps();
     const _reservedBps: BigNumber = await stayKingContract.reservedBps();
     return (
-      Number(convertUnitFrom(_lastAnnualRateBps.toString(), '2')) +
-      Number(convertUnitFrom(_reservedBps.toString(), '2'))
+      Number(convertUnitFrom(_lastAnnualRateBps.toString(), '4')) +
+      Number(convertUnitFrom(_reservedBps.toString(), '4'))
     );
   }
 
@@ -81,6 +81,7 @@ const useActivePosition = (address: string) => {
     // const apy = calculateAPYFromAPR((_apr / 100).toFixed(2));
     const _borrowingInterest = await getInterestFromVault();
     const borrowingInterest = Number(_borrowingInterest) * debtPerEquity;
+    console.log(_apr, borrowingInterest);
     const apr = _apr * (debtPerEquity + 1);
     const totalApr = _apr * (debtPerEquity + 1) - borrowingInterest;
     const totalApy = calculateAPYFromAPR((totalApr / 100).toFixed(2));
