@@ -12,5 +12,5 @@ export const calculateAPYFromAPR = (apr: string) => {
 };
 
 export const goTxConfirm = (txHash: string) => {
-  window.open(`https://testnet.mintscan.io/evmos-testnet/txs/${txHash}`, '_blank');
+  window.open(`https://evm.evmos.dev/tx/${txHash}`, '_blank');
 };
