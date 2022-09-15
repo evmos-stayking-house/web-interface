@@ -61,7 +61,7 @@ const useStake = () => {
 
   async function loadYieldStaking(_leverage?: any) {
     const _result = await getStakingAPR();
-    const _apr = Number(_result.data.apr) - 15;
+    const _apr = Number(_result.data.apr) - 10;
     // const apy = calculateAPYFromAPR((_apr / 100).toFixed(2));
     const lev = _leverage ? Number(_leverage) : 1;
     const _borrowingInterest = await getInterestFromVault();

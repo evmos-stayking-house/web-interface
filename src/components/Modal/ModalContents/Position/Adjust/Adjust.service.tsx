@@ -163,7 +163,7 @@ const useAdjust = (closeModal: VoidFunction) => {
     let debtPerEquity = equity ? Number((debt / equity).toFixed(2)) : 1;
     if (debtPerEquity < 1) debtPerEquity = 1;
     const _result = await getStakingAPR();
-    const _apr = Number(_result.data.apr) - 15;
+    const _apr = Number(_result.data.apr) - 10;
     // const apy = calculateAPYFromAPR((_apr / 100).toFixed(2));
     const _borrowingInterest = await getInterestFromVault();
     const borrowingInterest = Number(_borrowingInterest) * debtPerEquity;

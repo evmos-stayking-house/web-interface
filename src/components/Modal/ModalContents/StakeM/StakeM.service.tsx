@@ -66,7 +66,7 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null, _yie
 
   async function loadYieldStaking(_leverage?: any) {
     const _result = await getStakingAPR();
-    const _apr = Number(_result.data.apr) - 15;
+    const _apr = Number(_result.data.apr) - 10;
     const lev = _leverage ? Number(_leverage) : 1;
     const _borrowingInterest = await getInterestFromVault();
     const borrowingInterest = Number(_borrowingInterest) * (lev - 1);
