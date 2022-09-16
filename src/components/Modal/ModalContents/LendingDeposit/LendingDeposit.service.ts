@@ -56,8 +56,6 @@ const useLendingDeposit = (closeModal: VoidFunction) => {
     } catch (e: any) {
       onChangeIsPendingState(false);
       enqueueSnackbar('[Approved Failed] ' + e.toString(), { variant: 'error' });
-    } finally {
-      setTimeout(() => onChangeIsPendingState(false), 15000);
     }
   }
 
