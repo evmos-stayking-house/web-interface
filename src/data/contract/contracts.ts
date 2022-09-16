@@ -54,7 +54,7 @@ const TEST_NET_CONTRACTS = {
     abi: ERC20
   },
   uEVMOS: {
-    address: '0xedB25Fee105C80Ab43235e016962ffd29Fe616bC',
+    address: '0x20E3f88438ef008256BA40e5D265fb49ADc7fBeF',
     abi: UnbondedEvmos
   },
   MockSwap: {
