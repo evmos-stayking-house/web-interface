@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           utcOffsetSec: 32400
         }
       ],
-      from: 'now-2m',
+      from: 'now-5m',
       to: 'now'
     })
   })
