@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       res.status(200).json({
         data: {
           time: now,
-          apr: result?.results?.A.frames[0].data.values[1][0] || 266
+          apr: result?.results?.A.frames[0].data.values[1][0] || 192.5
         }
       });
     })
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       res.status(200).json({
         data: {
           time: now,
-          apr: 266
+          apr: 192.5
         }
       });
     });
