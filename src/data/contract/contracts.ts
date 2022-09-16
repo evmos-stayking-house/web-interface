@@ -34,11 +34,11 @@ const LOCAL_NET_CONTRACTS = {
 
 const TEST_NET_CONTRACTS = {
   stayKing: {
-    address: '0x18A1Af12338d5a0fFF6aADb4364dBd8efF58f3f6',
+    address: '0x5c16AD45ec86A50a59b4fe7d9B205aCa2100de2f',
     abi: Stayking
   },
   vault: {
-    address: '0x33061E03aa8082d03f0aA66cDCf8159c976fc806',
+    address: '0xa6c036c12b65703Bd7C0e4F42Dc0E75f74675C64',
     abi: Vault
   },
   tATOM: {
