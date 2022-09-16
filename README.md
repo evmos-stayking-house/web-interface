@@ -1,7 +1,6 @@
 
 ##  [Submodule] web service(user interface with StayKing contracts on EVMOS chain) of StayKing House
 
----
 It is a web service that allows users to interact with DeFi contracts on EVMOS chain using Chrome browser and Metamask wallet
  
 
