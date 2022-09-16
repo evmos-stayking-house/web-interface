@@ -40,6 +40,7 @@ const useLendingWithdraw = (closeModal: VoidFunction) => {
         variant: 'warning',
         onClick: () => closeSnackbar(key)
       });
+    } finally {
     }
   }
 

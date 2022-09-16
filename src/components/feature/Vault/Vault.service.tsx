@@ -47,10 +47,9 @@ const useVault = () => {
   }
 
   async function getInterestRate() {
-    const _aprBPSOfVault: BigNumber = await vaultContract.lastAnnualRateBps();
-    const aprBPSOfVault = convertUnitFrom(_aprBPSOfVault.toString(), '6');
-    console.log('apy ::: ', aprBPSOfVault);
-    setInterestRate(calculateAPYFromAPR(aprBPSOfVault).toFixed(1));
+    const _utilizationRateBps = await vaultContract.utilizationRateBps();
+    const utilizationRateBps = convertUnitFrom(_utilizationRateBps.toString(), '2');
+    setInterestRate((Number(utilizationRateBps) / 3).toFixed(2));
   }
 
   async function getTotalSupply() {

@@ -51,12 +51,9 @@ const useStake = () => {
   }
 
   async function getInterestFromVault() {
-    const _lastAnnualRateBps: BigNumber = await vaultContract.lastAnnualRateBps();
-    const _reservedBps: BigNumber = await stayKingContract.reservedBps();
-    return (
-      Number(convertUnitFrom(_lastAnnualRateBps.toString(), '4')) +
-      Number(convertUnitFrom(_reservedBps.toString(), '4'))
-    );
+    const _utilizationRateBps = await vaultContract.utilizationRateBps();
+    const utilizationRateBps = convertUnitFrom(_utilizationRateBps.toString(), '2');
+    return (Number(utilizationRateBps) / 3).toFixed(2);
   }
 
   async function loadYieldStaking(_leverage?: any) {
