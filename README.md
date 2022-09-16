@@ -1,17 +1,27 @@
-# Vault Project
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+##  [Submodule] web service(user interface with StayKing contracts on EVMOS chain) of StayKing House
+
+---
+It is a web service that allows users to interact with DeFi contracts on EVMOS chain using Chrome browser and Metamask wallet
+ 
 
 
-## 폴더 구조
-    .
-    ├── public
-    ├── src                   
-    │   ├── components    # 컴포넌트
-    │   │   ├── common    # 재사용 가능성이 있는 컴포넌트
-    │   │   ├── feature   # 특정 기능을 포함하는 일회성 컴포넌트
-    │   │   └── layout    # 페이지 레이아웃을 구성하는 컴포넌트
-    │   ├── hooks         # hooks 모음
-    │   ├── pages         # route에 대응되는 componenet (페이지 단위)
-    │   └── styles        # 공통 스타일 + pages 스타일      
-    └── ...
-> 일부 
+## How to work
+
+- Testnet
+    - https://evmos.stayking.xyz
+
+      - You can test with our service with test accounts we provided below
+        - Lender ( Bob ) PK
+            ```
+            53242286ee73afefa2bd5522e2937b13f46a71f9fb7ab186e12d5b55818b029b
+            ```
+        - Staker ( Alice ) PK
+            ```
+            491bbf9237c55c649d41f5a105cc89e3bcba1337af236d4f681491e2061489f1
+            ```
+      - If there is no tEVMOS or USDC token in the accounts above, please email us `gloryan@icloud.com`. we'll fill the tokens in the accounts
+- Localnet
+  - you first go [defi-contract](https://github.com/evmos-stayking-house/defi-contract) submodule and run commands `npm run node ` and `npm deploy:localhost` 
+  - then, you should start with `./start.sh` in the root folder and it will start server with port `3101`
+  - you can connect a web `http://localhost:3101` locally

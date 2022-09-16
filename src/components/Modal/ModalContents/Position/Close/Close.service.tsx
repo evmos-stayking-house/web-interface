@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useWalletState } from '../../../../../contexts/WalletContext';
 import { contractsInfo } from '../../../../../data/contract/contracts';
 import { Contracts } from '../../../../../type/contract';
-import { convertDenomFrom, convertUnitFrom } from '../../../../../utils/numberFormats';
+import { convertUnitFrom } from '../../../../../utils/numberFormats';
 import { Position } from '../../../../feature/Dashboard/ActivePosition/ActivePosition.service';
 import { Contract } from 'ethers';
 import { getContract } from '../../../../../config/contract';
