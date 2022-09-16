@@ -68,7 +68,7 @@ const useStakeM = (closeModal: VoidFunction, parentLeverage: string | null, _yie
     const _borrowingInterest = await getInterestFromVault();
     const borrowingInterest = Number(_borrowingInterest) * (lev - 1);
     const apr = _apr * lev;
-    const totalApr = _apr * lev - borrowingInterest;
+    const totalApr = _apr * lev - borrowingInterest - 30;
     const totalApy = calculateAPYFromAPR((totalApr / 100).toFixed(2));
 
     setYieldStaking({

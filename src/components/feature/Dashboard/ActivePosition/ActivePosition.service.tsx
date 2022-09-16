@@ -79,7 +79,7 @@ const useActivePosition = (address: string) => {
     const borrowingInterest = Number(_borrowingInterest) * debtPerEquity;
     console.log(_apr, borrowingInterest);
     const apr = _apr * (debtPerEquity + 1);
-    const totalApr = _apr * (debtPerEquity + 1) - borrowingInterest;
+    const totalApr = _apr * (debtPerEquity + 1) - borrowingInterest - 30;
     const totalApy = calculateAPYFromAPR((totalApr / 100).toFixed(2));
     setYieldStaking({
       ...yieldStaking,
