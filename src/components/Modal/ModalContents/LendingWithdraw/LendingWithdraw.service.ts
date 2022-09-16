@@ -19,7 +19,7 @@ const useLendingWithdraw = (closeModal: VoidFunction) => {
   const [ibTokenWithdraw, setIbTokenWithdraw] = useState<string>('0');
 
   function setMaxAmount() {
-    setAmount(ibTokenBalance);
+    setIbTokenWithdraw(ibTokenBalance);
   }
 
   async function withdraw() {

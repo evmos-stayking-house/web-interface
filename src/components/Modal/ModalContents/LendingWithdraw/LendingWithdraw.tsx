@@ -31,7 +31,7 @@ const LendingWithdraw: FC<Props> = ({ title, closeModal }) => {
       <Form>
         <section className={s.depositTokenContainer} onBlur={() => shareToAmount()}>
           <Form.Item label="" className={s.input}>
-            <InputNumber max={'1000'} setInputValue={setIbTokenWithdraw} inputValue={ibTokenWithdraw} />
+            <InputNumber max={ibTokenBalance} setInputValue={setIbTokenWithdraw} inputValue={ibTokenWithdraw} />
           </Form.Item>
           <div className={s.assetName}>ib{title}</div>
           <button
