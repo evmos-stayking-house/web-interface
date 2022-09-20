@@ -47,9 +47,20 @@ const useVault = () => {
   }
 
   async function getInterestRate() {
-    const _utilizationRateBps = await vaultContract.utilizationRateBps();
-    const utilizationRateBps = convertUnitFrom(_utilizationRateBps.toString(), '4');
-    setInterestRate(calculateAPYFromAPR(String(Number(utilizationRateBps) / 3)).toFixed(2));
+    const _stakeAPR = await getStakingAPR();
+    const stakeAPR = (Number(_stakeAPR.data.apr) - 10) / 100;
+    const _accruedRateBps = await vaultContract.getAccruedRateBps();
+    const _baseBps = _accruedRateBps.baseBps;
+    const _bonusBps = _accruedRateBps.bonusBps;
+    const baseBps = convertUnitFrom(_baseBps, '4');
+    const bonusBps = convertUnitFrom(_bonusBps, '4');
+    const apr = Number(baseBps) + Number(bonusBps) * stakeAPR;
+    console.log(baseBps, bonusBps, stakeAPR);
+    setInterestRate(calculateAPYFromAPR(String(apr)).toFixed(2));
+  }
+
+  async function getStakingAPR() {
+    return fetch(`/api/yield/evmos`).then((res) => res.json());
   }
 
   async function getTotalSupply() {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { IWalletContext, Props } from './interfaces';
+import { getProvider } from '../config/contract';
 
 const defaultContext: IWalletContext = {
   address: '',
