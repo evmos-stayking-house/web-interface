@@ -474,6 +474,24 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getAccruedRateBps",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "baseBps",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "bonusBps",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
