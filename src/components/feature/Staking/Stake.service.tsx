@@ -64,8 +64,8 @@ const useStake = () => {
     const borrowingInterest = Number(_borrowingInterest) * (lev - 1);
     const apr = _apr * lev;
     const totalApr = _apr * lev - borrowingInterest - 30;
+    console.log(totalApr);
     const totalApy = calculateAPYFromAPR((totalApr / 100).toFixed(2));
-
     setYieldStaking({
       ...yieldStaking,
       apy: totalApy.toFixed(2),
