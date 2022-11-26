@@ -19,7 +19,7 @@ const InputText: FC<InputTextProps> = ({ placeholder, value, handleChange }) => 
       <input type="text" onChange={setValue} value={value} placeholder={placeholder} />
 
       <div className={s.deleteBtn} onClick={() => handleChange('')}>
-        <Image src="/img/common/x-circle-white.svg" layout="fill" />
+        <Image src="/img/common/x-circle-white.svg" alt="aa" layout="fill" />
       </div>
     </InputWrapper>
   );

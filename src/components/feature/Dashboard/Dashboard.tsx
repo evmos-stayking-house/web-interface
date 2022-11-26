@@ -92,7 +92,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div className={s.balanceBox__right}>
-              <Image width={64} height={64} src={'/img/logo/evmos.png'} />
+              <Image width={64} height={64} alt="aa" src={'/img/logo/evmos.png'} />
             </div>
           </div>
           {/*  Space */}
@@ -107,7 +107,7 @@ const Dashboard = () => {
               <p className={s.description}>~ {numberFormat(tokenAmount, 3)}&nbsp;USDC</p>
             </div>
             <div className={s.balanceBox__right}>
-              <Image width={64} height={64} src={'/img/logo/usdc.png'} />
+              <Image width={64} height={64} alt="aa" src={'/img/logo/usdc.png'} />
             </div>
           </div>
         </div>

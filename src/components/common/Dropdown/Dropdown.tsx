@@ -29,14 +29,16 @@ const Dropdown: FC<DropdownProps> = ({ placeholder, list, onChange, selectedId }
           <span className={s.triggerText}>{placeholder}</span>
         )}
         <div className={s.arrowDown}>
-          <Image src="/img/common/arrow-down.svg" layout="fill" />
+          <Image src="/img/common/arrow-down.svg" alt="aa" layout="fill" />
         </div>
       </div>
 
       {display && (
         <ul ref={ref} className={s.listWrap}>
           <li>
-            <div className={s.listItem}><span>choose</span></div>
+            <div className={s.listItem}>
+              <span>choose</span>
+            </div>
           </li>
           {list.map((el) => (
             <li key={el.key} onClick={() => handleSelect(el)}>

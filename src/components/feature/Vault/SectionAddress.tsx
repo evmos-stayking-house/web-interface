@@ -20,7 +20,7 @@ const SectionAddress: FC<SectionAddressProps> = ({ address, setAddress }) => {
       <div className={s.addressToggle} onClick={toggleExpand}>
         <span>Change Receiver Address</span>
         <div className={s.arrowDown}>
-          <Image src="/img/common/arrow-down.svg" layout="fill" />
+          <Image src="/img/common/arrow-down.svg" alt="aa" layout="fill" />
         </div>
       </div>
 
